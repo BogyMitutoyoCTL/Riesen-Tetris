@@ -20,11 +20,10 @@ class Painter:
         print("--------------------------")
 
 
-tetrisfield = Field(20, 10)
+tetrisfield = Field(10, 20)
 
 painter = Painter()
 painter.console(tetrisfield)
 
-tetrisfield.field[0][0][0]=1
-
+tetrisfield.set_pixel(9, 19, 1)
 painter.console(tetrisfield)
