@@ -2,7 +2,6 @@ import numpy
 
 blocks = [
 
-
     [[0, 1, 0, 0],
      [1, 1, 1, 0],
      [0, 0, 0, 0],
@@ -58,30 +57,22 @@ class Block:
 
     def rotateleft(self):
         m = numpy.array(self.pixel)
-        m =  numpy.rot90 (m)
+        m = numpy.rot90(m)
         self.pixel = m.tolist()
 
+    def rotateright(self):
+        self.rotateleft()
+        self.rotateleft()
+        self.rotateleft()
 
 
-
-
-
-
-
-
-
-
-a = Block(blocks[6])
+a = Block(blocks[4])
 a.describe()
-a.rotateleft()
+a.rotateright()
 a.describe()
-a.rotateleft()
+a.rotateright()
 a.describe()
-a.rotateleft()
+a.rotateright()
 a.describe()
-a.rotateleft()
+a.rotateright()
 a.describe()
-
-
-
-
