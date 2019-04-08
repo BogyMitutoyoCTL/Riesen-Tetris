@@ -1,4 +1,5 @@
 from block import blocks
+from random import random
 
 class Field:
     def __init__(self, width, height):
@@ -23,13 +24,12 @@ class Field:
                 self.field[y].append([0, 0, 0])
 
     def set_block(self):
-        blocktodraw = blocks[5]
-        x = 0
+        blocktodraw = blocks[int(random()*7)]
         y = 0
         for line in blocktodraw:
-            x = 0
+            x = 3
             for column in line:
                 if column != 0:
-                    self.set_pixel(x, y, blocktodraw[y][x])
+                    self.set_pixel(x, y, blocktodraw[y][x-3])
                 x = x+1
             y = y+1
