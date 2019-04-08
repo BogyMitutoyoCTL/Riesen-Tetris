@@ -64,15 +64,3 @@ class Block:
         self.rotateleft()
         self.rotateleft()
         self.rotateleft()
-
-
-a = Block(blocks[4])
-a.describe()
-a.rotateright()
-a.describe()
-a.rotateright()
-a.describe()
-a.rotateright()
-a.describe()
-a.rotateright()
-a.describe()

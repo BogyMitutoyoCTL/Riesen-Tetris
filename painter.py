@@ -22,8 +22,7 @@ class Painter:
 
 tetrisfield = Field(10, 20)
 
-painter = Painter()
-painter.console(tetrisfield)
 
-tetrisfield.set_pixel(9, 19, 1)
+painter = Painter()
+tetrisfield.set_block()
 painter.console(tetrisfield)

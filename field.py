@@ -1,3 +1,5 @@
+from block import blocks
+
 class Field:
     def __init__(self, width, height):
         self.width = width
@@ -20,11 +22,14 @@ class Field:
             for x in range(0, self.width):
                 self.field[y].append([0, 0, 0])
 
-
-
-tetrisfield = Field(10, 20)
-tetrisfield.set_pixel(0, 19, 1)
-
-print(tetrisfield.field)
-#print(tetrisfield.field[0][2])
-
+    def set_block(self):
+        blocktodraw = blocks[5]
+        x = 0
+        y = 0
+        for line in blocktodraw:
+            x = 0
+            for column in line:
+                if column != 0:
+                    self.set_pixel(x, y, blocktodraw[y][x])
+                x = x+1
+            y = y+1
