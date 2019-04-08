@@ -55,6 +55,7 @@ painter = RGB_Field_Painter()
 painter.draw(tetrisfield)
 
 tetrisfield.set_pixel(0, 19, 1)
+tetrisfield.set_block()
 painter.draw(tetrisfield)
 
 time.sleep(10)
