@@ -19,12 +19,3 @@ class Field:
             self.field.append([])
             for x in range(0, self.width):
                 self.field[y].append([0, 0, 0])
-
-
-
-tetrisfield = Field(10, 20)
-tetrisfield.set_pixel(0, 19, 1)
-
-print(tetrisfield.field)
-#print(tetrisfield.field[0][2])
-
