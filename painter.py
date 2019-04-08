@@ -1,6 +1,29 @@
-class Painter:
-    def __init__(self):
-        # nothing
+from field import Field
 
-    def led_field(self):
-        # coming soon
+
+class Painter:
+    # def __init__(self):
+
+    # def led_field(self):
+
+    def console(self, field_to_print: Field):
+        print("Feldbreite: " + str(field_to_print.width) + "; Höhe: " + str(field_to_print.height))
+        text = ""
+        for j in range(0, field_to_print.height):
+            for i in range(0, field_to_print.width):
+                if (field_to_print.field[j][i][0] + field_to_print.field[j][i][1] + field_to_print.field[j][i][2]) > 0:
+                    text += "x"
+                else:
+                    text += "_"
+            text += "\n"
+        print(text)
+        print("--------------------------")
+
+
+tetrisfield = Field(10, 20)
+
+painter = Painter()
+painter.console(tetrisfield)
+
+tetrisfield.set_pixel(9, 19, 1)
+painter.console(tetrisfield)
