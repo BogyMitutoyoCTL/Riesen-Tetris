@@ -55,4 +55,4 @@ while True:
     painter.draw(tetrisfield)
 
     input()
-    tetrisfield.draw_field()
+    tetrisfield.generate_field()
