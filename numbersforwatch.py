@@ -69,4 +69,6 @@ class Number:
     def __init__(self, color, number):
         self.color = color
         self.number = numbers[number]
-        six = Number([0, 255, 0], 6)
+
+
+six = Number([0, 255, 0], 6)

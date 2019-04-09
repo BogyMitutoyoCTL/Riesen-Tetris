@@ -1,6 +1,6 @@
 from block import blocks
 from random import random
-from numbersforwatch import Number
+from numbersforwatch import six
 
 class Field:
     def __init__(self, width, height):
@@ -24,8 +24,8 @@ class Field:
             for x in range(0, self.width):
                 self.field[y].append([0, 0, 0])
 
-    def set_colorpixel(self, x, y, red, green, blue):
-        self.field[y][x] = [red, green, blue]
+    def set_colorpixel(self, x, y, color):
+        self.field[y][x] = color
 
 
     def set_block(self):
@@ -43,10 +43,10 @@ class Field:
     def set_number(self):
         numbertoshow = six
         y = 0
-        for line in numbertoshow:
+        for line in numbertoshow.number:
             x = 3
             for column in line:
                 if column != 0:
-                    self.set_pixel(x, y, numbertoshow[y][x-3]-1)
+                    self.set_colorpixel(x, y, numbertoshow.color)
                 x = x+1
             y = y+1
