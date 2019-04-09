@@ -15,6 +15,12 @@ class Highscoreentry:
     def __repr__(self):
         return str(self.point)
 
+    def __lt__(self, other):
+        return self.point < other.point
+
+    def __gt__(self, other):
+        return self.point > other.point
+
 
 class Highscorelist:
     def __init__(self):
@@ -23,6 +29,7 @@ class Highscorelist:
     def add_entry(self, entry):
         self.highscores.append(entry)
         self.highscores[10:20] = []
+        self.highscores.sort(reverse=True)
         print(self.highscores)
 
 
