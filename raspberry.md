@@ -10,6 +10,7 @@ Damit das Riesen-Tetris programmierbar und spielbar wird, müssen einige Dinge b
 6. Die Pygame-Bibliothek braucht ebenfalls Funktionen vom Betriebssystem.
 7. PyCharm kann das Git Passwort speichern. Allerdings funktioniert auf dem Raspberry die Unterstützung der Keychain nicht.
 8. Sollte die SD Karte vom Raspberry voll sein könnt ihr auch einige Sachen darauf löschen, die wir nicht brauchen.
+9. PyCharm mit "sudo" laufen lassen, damit kein Fehler "Permission denied" kommt wenn ihr auf LED Matrix zugreifen wollt...
 
 zu 1.) mit `sudo raspi-config` kann das Konfigurationsprogramm für den Raspberry gestartet werden. Unter dem Punkt "Interfacing" gibt es den Punkt "SPI". SPI muss aktiviert werden.
 
@@ -29,4 +30,6 @@ zu 6.) Mit `sudo apt-get install python-dev libsdl-image1.2-dev libsdl-mixer1.2-
 
 zu 7.) PyCharm kann die Passwörter auch in einer KeePass-Datei speichern. Diese Option lässt sich unter "Settings/Appearence/System Settings/Passwords" umstellen.
 
-z. 8.) hier könnt ihr lesen wie ihr wieder Platz auf der SD Karte schafft: https://raspberry.tips/faq/raspberry-pi-speicherplatz-voll-sd-karte-aufraeumen
+zu 8.) hier könnt ihr lesen wie ihr wieder Platz auf der SD Karte schafft: https://raspberry.tips/faq/raspberry-pi-speicherplatz-voll-sd-karte-aufraeumen
+
+zu 9.) Um PyCharm mit "sudo" zu starten, müsst ihr die Schaltfläche ändern, mit der ihr PyCharm aufruft. Im Schaltflächen Editor gibt es 3 Zeilen, die ihr seht wenn Ihr die Schaltfläche bearbeitet. In der mittleren Zeile steht der Programmaufruf. Dort schreibt ihr einfach "sudo" davor. (ohne Anführungszeichen natürlich)
