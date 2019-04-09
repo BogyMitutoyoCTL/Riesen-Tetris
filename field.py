@@ -12,7 +12,7 @@ class Field:
     def set_all_pixels_to_black(self):
         for y in range(0, self.height):
             for x in range(0, self.width):
-                self.set_pixel(x, y, 0)
+                self.field[y][x] = [0, 0, 0]
 
     def set_pixel(self, x, y, color):
         self.field[y][x] = self.colors[color]

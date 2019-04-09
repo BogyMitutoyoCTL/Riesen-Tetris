@@ -7,7 +7,6 @@ from luma.core.virtual import viewport
 from luma.core.legacy.font import proportional, LCD_FONT
 
 from field import Field
-from field_matrix import Field_Matrix
 import time
 
 
@@ -39,8 +38,6 @@ class RGB_Field_Painter:
             draw.point((11, 0), fill="orange")
             draw.point((4, 4), fill=(255, 0, 0))
             draw.point((19, 0), fill=(0, 255, 0))
-            # draw.ellipse((3, 5), fill=None, outline="green", width=2)
-        time.sleep(100)
 
     def draw(self, field_to_print: Field):
         with canvas(self.device) as draw:
