@@ -1,3 +1,5 @@
+from random import random
+
 from luma.core.render import canvas
 from luma.led_matrix.device import ws2812
 from luma.led_matrix.device import max7219
@@ -6,8 +8,8 @@ from luma.core.interface.serial import spi, noop
 from luma.core.virtual import viewport
 from luma.core.legacy.font import proportional, LCD_FONT
 
+from block import Block, blocks
 from field import Field
-import time
 
 
 class Console_Painter:
@@ -59,31 +61,34 @@ class Led_Matrix_Painter:
         with canvas(self.virtual) as draw:
             legacy.text(draw, (0, 0), text, fill="white", font=proportional(LCD_FONT))
 
-    def show_matrix(self, field_to_print: Field):
+    def draw(self, field_to_print: Field):
         with canvas(self.virtual) as draw:
             for i in range(len(field_to_print.field)):
                 for j in range(len(field_to_print.field[0])):
                     if field_to_print.field[i][j][0]+field_to_print.field[i][j][1]+field_to_print.field[i][j][2] > 0:
-                        draw.point((i, j), fill="white")
+                        draw.point((j, i), fill="white")
                     else:
-                        draw.point((i, j), fill="black")
+                        draw.point((j, i), fill="black")
 
 
-field_tetris = Field(10, 20)
-
-painter = RGB_Field_Painter()
-painter.draw(field_tetris)
-
+field_leds = Field(10, 20)
 field_matrix = Field(32, 8)
+
+rgb_field_painter = RGB_Field_Painter()
 led_matrix_painter = Led_Matrix_Painter()
-led_matrix_painter.show_Text(text="12345")
+
+block = Block(blocks[int(random()*6)])
 
 while True:
-    field_tetris.set_block(6, 10)
-    painter.draw(field_tetris)
+    field_leds.set_block(block, 6, 10)
+    rgb_field_painter.draw(field_leds)
+
+    field_matrix.set_block(block.double_size(), 24, 1)
+    led_matrix_painter.draw(field_matrix)
 
     input()
-    field_tetris.set_all_pixels_to_black()
+
+    block = Block(blocks[int(random()*6)])
+
+    field_leds.set_all_pixels_to_black()
     field_matrix.set_all_pixels_to_black()
-    #field_matrix.set_block_doppel_size(0, 5)
-    led_matrix_painter.show_matrix(field_matrix)
