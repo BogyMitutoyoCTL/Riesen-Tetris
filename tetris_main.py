@@ -22,10 +22,11 @@ class Tetris_Main:
         self.block_future = Block(blocks[0])
 
         # Blockeigenschaften
-        self.random_number_today = int(random()*6)
-        self.random_number_future = int(random()*6)
-        self.rotation_today = int(random() * 4)
-        self.rotation_future = int(random() * 4)
+        self.random_number_today = int(random() * 6)
+        self.random_number_future = int(random() * 6)
+        # self.rotation_today = int(random() * 4)
+        self.rotation_today = 0
+        self.rotation_future = 0
 
         # Positionen block_today
         self.position_block_today_x = 3
@@ -33,10 +34,10 @@ class Tetris_Main:
 
     def new_block(self):
         self.random_number_today = self.random_number_future
-        self.random_number_future = int(random()*6)
+        self.random_number_future = int(random() * 6)
 
         self.rotation_today = self.rotation_future
-        self.rotation_future = int(random() * 4)
+        self.rotation_future = 0
 
         # todo: ändere die Parameter, damit die Blöcke wirklich am Rand erscheinen
         self.position_block_today_x = 3
@@ -70,6 +71,10 @@ class Tetris_Main:
         self.field_matrix.set_all_pixels_to_black()
 
     def move_block_today_one_step_down(self):
+        if self.field_leds.test_for_collision(Block(blocks[self.random_number_today]), self.position_block_today_x,
+                                              self.position_block_today_y + 1):
+            print()
+            input()
         self.position_block_today_y += 1
 
 
@@ -77,7 +82,7 @@ def console_listener():
     while True:
         tetris_main.refresh_painter()
 
-        time.sleep(1)
+        time.sleep(0.2)
 
         tetris_main.delete_block_today()
         tetris_main.move_block_today_one_step_down()
@@ -85,6 +90,8 @@ def console_listener():
 
 tetris_main = Tetris_Main()
 tetris_main.set_all_fields_black()
+
+tetris_main.field_leds.set_pixel(5, 7, 1)
 
 _thread.start_new_thread(console_listener(), ())
 
