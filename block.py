@@ -65,7 +65,7 @@ class Block:
 
     def double_size(self):
         img = Image.fromarray(numpy.array(self.pixels))
-        img = img.resize((len(self.pixels[0])*2, len(self.pixels)*2), Image.NEAREST)
+        img = img.resize((self.width*2, self.height*2), Image.NEAREST)
 
         ret = numpy.array(img)
         return Block(ret, self.color)
