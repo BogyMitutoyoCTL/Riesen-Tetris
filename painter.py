@@ -8,7 +8,7 @@ from luma.core.legacy.font import proportional, LCD_FONT
 
 from field import Field
 import time
-
+from numbersforwatch import number
 
 class Console_Painter:
     def draw(self, field_to_print: Field):
@@ -79,9 +79,11 @@ led_matrix = Led_Matrix()
 led_matrix.show_Text(text="12345")
 
 while True:
-    field_tetris.set_block()
+    field_tetris.set_number()
     painter.draw(field_tetris)
 
     input()
     field_tetris.set_all_pixels_to_black()
     led_matrix.show_matrix(field_matrix)
+
+
