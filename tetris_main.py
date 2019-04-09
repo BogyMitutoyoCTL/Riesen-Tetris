@@ -1,3 +1,5 @@
+import time
+import _thread
 from random import random
 
 from field import Field
@@ -47,7 +49,6 @@ class Tetris_Main:
 
         # Blöcke drehen
         for i in range(0, self.rotation_today):
-            print("drehung")
             self.block_today.rotateleft()
         for i in range(self.rotation_future):
             self.block_future.rotateleft()
@@ -68,14 +69,26 @@ class Tetris_Main:
         self.field_leds.set_all_pixels_to_black()
         self.field_matrix.set_all_pixels_to_black()
 
+    def move_block_today_one_step_down(self):
+        self.position_block_today_y += 1
+
+
+def console_listener():
+    while True:
+        tetris_main.refresh_painter()
+
+        time.sleep(1)
+
+        tetris_main.delete_block_today()
+        tetris_main.move_block_today_one_step_down()
+
 
 tetris_main = Tetris_Main()
 tetris_main.set_all_fields_black()
 
+_thread.start_new_thread(console_listener(), ())
+
 while True:
-    tetris_main.refresh_painter()
-
     input()
-
-    tetris_main.delete_block_today()
     tetris_main.new_block()
+    tetris_main.refresh_painter()

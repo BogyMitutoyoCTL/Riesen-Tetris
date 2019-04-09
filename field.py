@@ -1,5 +1,5 @@
 from block import Block
-from numbersforwatch import six
+#from numbersforwatch import six
 
 
 class Field:
@@ -39,6 +39,8 @@ class Field:
                                        block_to_draw.pixels[line_number][column_number] - 1)
                 column_number = column_number + 1
             line_number = line_number + 1
+
+    #def test_for_collision(self, block_to_draw: Block, x=3, y=0):
 
     def remove_block(self, block_to_draw: Block, x=3, y=0):
         line_number = 0
