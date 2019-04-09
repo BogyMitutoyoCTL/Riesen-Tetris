@@ -1,5 +1,6 @@
-from block import Block
-
+from block import blocks, Block
+from random import random
+from numbersforwatch import Number
 
 class Field:
     def __init__(self, width, height):
@@ -35,3 +36,14 @@ class Field:
                                        block_to_draw.pixels[line_number][column_number] - 1)
                 column_number = column_number + 1
             line_number = line_number + 1
+
+    def set_number(self):
+        numbertoshow = six
+        y = 0
+        for line in numbertoshow:
+            x = 3
+            for column in line:
+                if column != 0:
+                    self.set_pixel(x, y, numbertoshow[y][x-3]-1)
+                x = x+1
+            y = y+1
