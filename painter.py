@@ -69,26 +69,3 @@ class Led_Matrix_Painter:
                         draw.point((j, i), fill="white")
                     else:
                         draw.point((j, i), fill="black")
-
-
-field_leds = Field(10, 20)
-field_matrix = Field(32, 8)
-
-rgb_field_painter = RGB_Field_Painter()
-led_matrix_painter = Led_Matrix_Painter()
-
-block = Block(blocks[int(random()*6)])
-
-while True:
-    field_leds.set_block(block, 6, 10)
-    rgb_field_painter.draw(field_leds)
-
-    field_matrix.set_block(block.double_size(), 24, 1)
-    led_matrix_painter.draw(field_matrix)
-
-    input()
-
-    block = Block(blocks[int(random()*6)])
-
-    field_leds.set_all_pixels_to_black()
-    field_matrix.set_all_pixels_to_black()
