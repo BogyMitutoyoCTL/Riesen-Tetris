@@ -1,3 +1,5 @@
+from field import Field
+
 
 numbers = [
 
@@ -69,13 +71,3 @@ class Number:
     def __init__(self, color, number):
         self.color = color
         self.number = numbers[number]
-        self.zero = Number([255, 255, 255], 0)
-        self.one = Number([51, 255, 255], 1)
-        self.two = Number([255, 0, 0], 2)
-        self.three = Number([50, 255, 50], 3)
-        self.four = Number([127, 0, 255], 4)
-        self.five = Number([255, 255, 0], 5)
-        self.six = Number([0, 255, 0], 6)
-        self.seven = Number([255, 0, 255], 7)
-        self.eight = Number([0, 153, 0], 8)
-        self.nine = Number([255, 135, 0], 9)

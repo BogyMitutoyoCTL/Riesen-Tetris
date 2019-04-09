@@ -8,9 +8,9 @@ from luma.core.interface.serial import spi, noop
 from luma.core.virtual import viewport
 from luma.core.legacy.font import proportional, LCD_FONT
 
-from block import Block, blocks
+from block import Block, blocks, block_colors
 from field import Field
-
+from numbersforwatch import Number
 
 class Console_Painter:
     def draw(self, field_to_print: Field):
@@ -69,3 +69,28 @@ class Led_Matrix_Painter:
                         draw.point((j, i), fill="white")
                     else:
                         draw.point((j, i), fill="black")
+
+
+field_leds = Field(10, 20)
+field_matrix = Field(32, 8)
+
+rgb_field_painter = RGB_Field_Painter()
+led_matrix_painter = Led_Matrix_Painter()
+
+
+
+while True:
+    field_leds.set_all_pixels_to_black()
+    field_matrix.set_all_pixels_to_black()
+    rnd = int(random() * 6)
+    block = Block(blocks[rnd], block_colors[rnd])
+    field_leds.set_block(block)
+    rgb_field_painter.draw(field_leds)
+
+    field_matrix.set_block(block.double_size(), 24, 1)
+    led_matrix_painter.draw(field_matrix)
+
+    input()
+
+
+

@@ -38,23 +38,20 @@ blocks = [
      [0, 7, 7, 0],
      [0, 0, 0, 0]]]
 
+block_colors = [[170, 0, 255], [255, 225, 0], [0, 255, 245], [20, 255, 0], [255, 0, 0], [255, 165, 0],
+                [0, 40, 255]]
+
+number_colors = [[255, 255, 255], [51, 255, 255], [255, 0, 0], [50, 255, 50], [127, 0, 255], [255, 255, 0], [0, 255, 0],
+                 [255, 0, 255], [0, 153, 0], [255, 135, 0]]
+
 
 class Block:
-    def describe(self):
-        for line in self.pixels:
-            for column in line:
-                if column == 0:
-                    print(" ", end="")
-                else:
-                    print(1, end="")
 
-            print()
-        print()
-
-    def __init__(self, pixel: list):
+    def __init__(self, pixel: list, color):
         self.pixels = pixel
         self.height = (len(self.pixels))
         self.width = (len(self.pixels[0]))
+        self.color = color
 
     def rotateleft(self):
         m = numpy.array(self.pixels)
@@ -71,4 +68,4 @@ class Block:
         img = img.resize((len(self.pixels[0])*2, len(self.pixels)*2), Image.NEAREST)
 
         ret = numpy.array(img)
-        return Block(ret)
+        return Block(ret, self.color)
