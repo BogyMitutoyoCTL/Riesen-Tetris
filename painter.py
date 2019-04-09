@@ -48,7 +48,7 @@ class RGB_Field_Painter:
                                      field_to_print.field[i][j][2]))
 
 
-class Led_Matrix:
+class Led_Matrix_Painter:
     def __init__(self):
         self.serial = spi(port=0, device=0, gpio=noop())
         self.device = max7219(self.serial, rotate=2, width=8, height=8, cascaded=4, block_orientation=-90)
@@ -75,13 +75,15 @@ painter = RGB_Field_Painter()
 painter.draw(field_tetris)
 
 field_matrix = Field(32, 8)
-led_matrix = Led_Matrix()
-led_matrix.show_Text(text="12345")
+led_matrix_painter = Led_Matrix_Painter()
+led_matrix_painter.show_Text(text="12345")
 
 while True:
-    field_tetris.set_block()
+    field_tetris.set_block(6, 10)
     painter.draw(field_tetris)
 
     input()
     field_tetris.set_all_pixels_to_black()
-    led_matrix.show_matrix(field_matrix)
+    field_matrix.set_all_pixels_to_black()
+    #field_matrix.set_block_doppel_size(0, 5)
+    led_matrix_painter.show_matrix(field_matrix)

@@ -1,5 +1,6 @@
 from block import blocks
 from random import random
+from array_vervielfachen import Array_Vervielfachen
 
 class Field:
     def __init__(self, width, height):
@@ -23,13 +24,20 @@ class Field:
             for x in range(0, self.width):
                 self.field[y].append([0, 0, 0])
 
-    def set_block(self):
+    def set_block(self, x=0, y=0):
         blocktodraw = blocks[int(random()*7)]
-        y = 0
+        line_number = 0
         for line in blocktodraw:
-            x = 3
+            column_number = 0
             for column in line:
                 if column != 0:
-                    self.set_pixel(x, y, blocktodraw[y][x-3]-1)
-                x = x+1
-            y = y+1
+                    self.set_pixel(column_number+x, line_number+y, blocktodraw[line_number][column_number]-1)
+                column_number = column_number+1
+            line_number = line_number+1
+
+
+
+    def set_block_doppel_size(self, x=0, y=0):
+        array_vervielfachen = Array_Vervielfachen()
+        blocktodraw = array_vervielfachen.resize_dopple(blocks[int(random()*7)])
+
