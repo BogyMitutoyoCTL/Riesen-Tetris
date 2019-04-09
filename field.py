@@ -9,7 +9,7 @@ class Field:
         self.generate_field()
         self.colorkey = [[0, 0, 0], [170, 0, 255], [255, 225, 0], [0, 255, 245], [20, 255, 0], [255, 0, 0], [255, 165, 0], [0, 40, 255]]
 
-    def draw_field(self):
+    def set_all_pixels_to_black(self):
         for y in range(0, self.height):
             for x in range(0, self.width):
                 self.set_pixel(x, y, 0)

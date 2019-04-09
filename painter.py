@@ -1,7 +1,13 @@
 from luma.core.render import canvas
 from luma.led_matrix.device import ws2812
+from luma.led_matrix.device import max7219
+from luma.core import legacy
+from luma.core.interface.serial import spi, noop
+from luma.core.virtual import viewport
+from luma.core.legacy.font import proportional, LCD_FONT
 
 from field import Field
+from field_matrix import Field_Matrix
 import time
 
 
@@ -45,14 +51,40 @@ class RGB_Field_Painter:
                                      field_to_print.field[i][j][2]))
 
 
-tetrisfield = Field(10, 20)
+class Led_Matrix:
+    def __init__(self):
+        self.serial = spi(port=0, device=0, gpio=noop())
+        self.device = max7219(self.serial, rotate=2, width=8, height=8, cascaded=4, block_orientation=-90)
+
+        self.virtual = viewport(self.device, width=500, height=8)
+
+    def show_Text(self, text: str):
+        with canvas(self.virtual) as draw:
+            legacy.text(draw, (0, 0), text, fill="white", font=proportional(LCD_FONT))
+
+    def show_matrix(self, field_to_print: Field):
+        with canvas(self.virtual) as draw:
+            for i in range(len(field_to_print.field)):
+                for j in range(len(field_to_print.field[0])):
+                    if field_to_print.field[i][j][0]+field_to_print.field[i][j][1]+field_to_print.field[i][j][2] > 0:
+                        draw.point((i, j), fill="white")
+                    else:
+                        draw.point((i, j), fill="black")
+
+
+field_tetris = Field(10, 20)
 
 painter = RGB_Field_Painter()
-painter.draw(tetrisfield)
+painter.draw(field_tetris)
+
+field_matrix = Field(32, 8)
+led_matrix = Led_Matrix()
+led_matrix.show_Text(text="12345")
 
 while True:
-    tetrisfield.set_block()
-    painter.draw(tetrisfield)
+    field_tetris.set_block()
+    painter.draw(field_tetris)
 
     input()
-    tetrisfield.draw_field()
+    field_tetris.set_all_pixels_to_black()
+    led_matrix.show_matrix(field_matrix)
