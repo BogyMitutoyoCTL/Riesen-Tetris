@@ -10,7 +10,6 @@ from luma.core.legacy.font import proportional, LCD_FONT
 
 from block import Block, blocks, block_colors
 from field import Field
-from numbersforwatch import Number
 
 class Console_Painter:
     def draw(self, field_to_print: Field):
@@ -45,9 +44,10 @@ class RGB_Field_Painter:
         with canvas(self.device) as draw:
             for j in range(0, field_to_print.width):
                 for i in range(0, field_to_print.height):
-                    draw.point((i, j),
-                               fill=(field_to_print.field[i][j][0], field_to_print.field[i][j][1],
-                                     field_to_print.field[i][j][2]))
+                    r = field_to_print.field[i][j][0]
+                    g = field_to_print.field[i][j][1]
+                    b = field_to_print.field[i][j][2]
+                    draw.point((i, j),                             fill=(r, g,                                     b))
 
 
 class Led_Matrix_Painter:
@@ -70,27 +70,27 @@ class Led_Matrix_Painter:
                     else:
                         draw.point((j, i), fill="black")
 
+if __name__=="__main__":
+    field_leds = Field(10, 20)
+    field_matrix = Field(32, 8)
 
-field_leds = Field(10, 20)
-field_matrix = Field(32, 8)
-
-rgb_field_painter = RGB_Field_Painter()
-led_matrix_painter = Led_Matrix_Painter()
+    rgb_field_painter = RGB_Field_Painter()
+    led_matrix_painter = Led_Matrix_Painter()
 
 
 
-while True:
-    field_leds.set_all_pixels_to_black()
-    field_matrix.set_all_pixels_to_black()
-    rnd = int(random() * 6)
-    block = Block(blocks[rnd], block_colors[rnd])
-    field_leds.set_block(block)
-    rgb_field_painter.draw(field_leds)
+    while True:
+        field_leds.set_all_pixels_to_black()
+        field_matrix.set_all_pixels_to_black()
+        rnd = int(random() * 6)
+        block = Block(blocks[rnd], block_colors[rnd])
+        field_leds.set_block(block)
+        rgb_field_painter.draw(field_leds)
 
-    field_matrix.set_block(block.double_size(), 24, 1)
-    led_matrix_painter.draw(field_matrix)
+        field_matrix.set_block(block.double_size(), 24, 1)
+        led_matrix_painter.draw(field_matrix)
 
-    input()
+        input()
 
 
 
