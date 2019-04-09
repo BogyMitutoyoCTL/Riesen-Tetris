@@ -64,7 +64,7 @@ class Field:
             for column in line:
                 if column != 0:
                     if block_to_draw.pixels[line_number][column_number] > 0:
-                        self.set_pixel(column_number + x, line_number + y, 7)
+                        self.set_pixel(column_number + x, line_number + y, [0,0,0])
                 column_number = column_number + 1
             line_number = line_number + 1
 

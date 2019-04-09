@@ -4,7 +4,7 @@ from random import random
 
 from field import Field
 from painter import RGB_Field_Painter, Led_Matrix_Painter, Console_Painter
-from block import Block, blocks
+from block import Block, blocks, block_colors
 
 
 class Tetris_Main:
@@ -18,8 +18,8 @@ class Tetris_Main:
         self.led_matrix_painter = Led_Matrix_Painter()
 
         # block erstellen
-        self.block_today = Block(blocks[0])
-        self.block_future = Block(blocks[0])
+        self.block_today = Block(blocks[0], block_colors[0])
+        self.block_future = Block(blocks[0], block_colors[0])
 
         # Blockeigenschaften
         self.random_number_today = int(random() * 6)
@@ -45,8 +45,8 @@ class Tetris_Main:
 
     def refresh_painter(self):
         # Blöcke aussuchen
-        self.block_today = Block(blocks[self.random_number_today])
-        self.block_future = Block(blocks[self.random_number_future])
+        self.block_today = Block(blocks[self.random_number_today], block_colors[self.random_number_today])
+        self.block_future = Block(blocks[self.random_number_future], block_colors[self.random_number_future])
 
         # Blöcke drehen
         for i in range(0, self.rotation_today):
@@ -71,7 +71,7 @@ class Tetris_Main:
         self.field_matrix.set_all_pixels_to_black()
 
     def move_block_today_one_step_down(self):
-        if self.field_leds.test_for_collision(Block(blocks[self.random_number_today]), self.position_block_today_x,
+        if self.field_leds.test_for_collision(Block(blocks[self.random_number_today], block_colors[self.random_number_today]), self.position_block_today_x,
                                               self.position_block_today_y + 1):
             print()
             input()
@@ -91,7 +91,7 @@ def console_listener():
 tetris_main = Tetris_Main()
 tetris_main.set_all_fields_black()
 
-tetris_main.field_leds.set_pixel(5, 7, 1)
+tetris_main.field_leds.set_pixel(5, 7, [255,255,0])
 
 _thread.start_new_thread(console_listener(), ())
 
