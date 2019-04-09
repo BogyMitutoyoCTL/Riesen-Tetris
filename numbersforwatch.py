@@ -62,9 +62,11 @@ numbers = [
      [10, 10, 10, 10]]
 ]
 
-class Zahl:
+class Number:
+    color = []
+    number = 0
 
-    def __init__(self, pixel):
-        self.pixel = pixel
-        self.height = (len(self.pixel))
-        self.width = (len(self.pixel[0]))
+    def __init__(self, color, number):
+        self.color = color
+        self.number = numbers[number]
+        six = Number([0, 255, 0], 6)
