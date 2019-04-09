@@ -9,6 +9,7 @@ Damit das Riesen-Tetris programmierbar und spielbar wird, müssen einige Dinge b
 5. PyCharm brauche eine neuere Java-Version.
 6. Die Pygame-Bibliothek braucht ebenfalls Funktionen vom Betriebssystem.
 7. PyCharm kann das Git Passwort speichern. Allerdings funktioniert auf dem Raspberry die Unterstützung der Keychain nicht.
+8. Sollte die SD Karte vom Raspberry voll sein könnt ihr auch einige Sachen darauf löschen, die wir nicht brauchen.
 
 zu 1.) mit `sudo raspi-config` kann das Konfigurationsprogramm für den Raspberry gestartet werden. Unter dem Punkt "Interfacing" gibt es den Punkt "SPI". SPI muss aktiviert werden.
 
@@ -27,3 +28,5 @@ zu 5.) Hier gibt es zwei Möglichkeiten: a) [Oracle Java auf eine neuere Version
 zu 6.) Mit `sudo apt-get install python-dev libsdl-image1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev   libsdl1.2-dev libsmpeg-dev python-numpy subversion libportmidi-dev ffmpeg libswscale-dev libavformat-dev libavcodec-dev` werden die nötigen Abhängigkeiten für PyGame installiert.
 
 zu 7.) PyCharm kann die Passwörter auch in einer KeePass-Datei speichern. Diese Option lässt sich unter "Settings/Appearence/System Settings/Passwords" umstellen.
+
+z. 8.) hier könnt ihr lesen wie ihr wieder Platz auf der SD Karte schafft: https://raspberry.tips/faq/raspberry-pi-speicherplatz-voll-sd-karte-aufraeumen
