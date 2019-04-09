@@ -1,5 +1,4 @@
 from block import Block
-from block import block_colors
 from block import number_colors
 
 class Field:
@@ -16,7 +15,7 @@ class Field:
                 self.field[y][x] = [0, 0, 0]
 
     def set_pixel(self, x, y, color):
-        self.field[y][x] = block_colors[color]
+        self.field[y][x] = color
 
     def generate_field(self):
         for y in range(0, self.height):
@@ -35,7 +34,7 @@ class Field:
                 if column != 0:
                     if block_to_draw.pixels[line_number][column_number] > 0:
                         self.set_pixel(column_number + x, line_number + y,
-                                       block_to_draw.pixels[line_number][column_number] - 1)
+                                       block_to_draw.color)
                 column_number = column_number + 1
             line_number = line_number + 1
 
