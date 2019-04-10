@@ -20,4 +20,5 @@ for m in range(5, 50):
 
         rgb_field_painter.draw(field_leds)
         time.sleep(0.05)
+input()
 

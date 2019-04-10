@@ -7,6 +7,7 @@ class Field:
         self.height = height
         self.field = []
         self.generate_field()
+        self.lines_to_delete = []
 
     def set_all_pixels_to_black(self):
         for y in range(0, self.height):
@@ -52,7 +53,7 @@ class Field:
 
     def test_for_collision(self, block_to_draw: Block, x, y):
         ret = 0
-        line_begin = len(block_to_draw.pixels[0])-1
+        line_begin = len(block_to_draw.pixels[0]) - 1
         line_end = 0
         for x_count_pixel in range(0, len(block_to_draw.pixels[0])):
             line_count = 0
@@ -68,8 +69,8 @@ class Field:
         for y_count in range(0, len(block_to_draw.pixels)):
             for x_count in range(0, len(block_to_draw.pixels[0])):
                 if block_to_draw.pixels[y_count][x_count] > 0:
-                    if y+y_count < 0:
-                        print("Not in field: y="+str(y_count)+", x="+str(x_count))
+                    if y + y_count < 0:
+                        print("Not in field: y=" + str(y_count) + ", x=" + str(x_count))
                     elif y + y_count > self.height - 1:
                         print("Kollision Boden an Block.pixel: x=" + str(x_count) + ", y=" + str(y_count))
                         ret += 1
@@ -87,20 +88,22 @@ class Field:
         return ret
 
     def test_for_full_lines(self):
+        self.lines_to_delete = []
         for y in range(0, self.height):
             counter = 0
             for x in range(0, self.width):
                 if self.field[y][x][0] + self.field[y][x][1] + self.field[y][x][2] > 0:
                     counter += 1
-
             if counter == self.width:
-                self.delete_line(y)
+                self.lines_to_delete.append(y)
+        self.delete_line(self.lines_to_delete)
 
-    def delete_line(self, line: int):
-        for y in range(line, 0, -1):
-            self.field[y] = self.field[y-1]
+    def delete_line(self, lines: list):
+        for i in range(0, len(lines)):
+            line = lines[i]
+            for y in range(line, 0, -1):
+                self.field[y] = self.field[y - 1]
 
-        self.field[0] = []
-        for _ in range(0, self.width):
-            self.field[0].append([0, 0, 0])
-
+            self.field[0] = []
+            for _ in range(0, self.width):
+                self.field[0].append([0, 0, 0])
