@@ -66,3 +66,17 @@ class Block:
 
         ret = numpy.array(img)
         return Block(ret, self.color)
+
+    def get_rotated_left(self):
+        m = numpy.array(self.pixels)
+        m = numpy.rot90(m)
+        ret = m.tolist()
+        return ret
+
+    def get_rotated_right(self):
+        m = numpy.array(self.pixels)
+        m = numpy.rot90(m)
+        m = numpy.rot90(m)
+        m = numpy.rot90(m)
+        ret = m.tolist()
+        return ret
