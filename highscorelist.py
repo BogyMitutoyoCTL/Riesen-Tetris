@@ -54,7 +54,6 @@ if __name__ == "__main__":
         x = Highscoreentry(today, "Florian", i)
         tetrishighscores.add_entry(x)
     tetrishighscores.save()
-    tetrishighscores.save()
     print(tetrishighscores.highscores)
 
     x = Highscorelist('tetrisscores')
