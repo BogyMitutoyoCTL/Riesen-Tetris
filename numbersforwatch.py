@@ -66,7 +66,7 @@ number_pixels = [
      [10, 10, 10, 10]]
 ]
 
-number_colors = [[255, 255, 255], [51, 255, 255], [255, 0, 0], [50, 255, 50], [127, 0, 255], [190, 125, 255], [0, 255, 0],
+number_colors = [[255, 255, 255], [0, 204, 204], [255, 0, 0], [51, 0, 0], [127, 0, 255], [255, 125, 255], [0, 102, 51],
                  [255, 0, 255], [0, 0, 255], [153, 0, 76]]
 
 
@@ -121,9 +121,7 @@ class Clock:
 
 field_leds = Field(10, 20)
 rgb_field_painter = RGB_Field_Painter()
-
 clock = Clock(field_leds)
-
 while True:
     clock.get_time()
     rgb_field_painter.draw(field_leds)
