@@ -31,35 +31,52 @@ class Field:
             column_number = 0
             for column in line:
                 if column != 0:
-                    if block_to_draw.pixels[line_number][column_number] > 0:
-                        self.set_pixel(column_number + x, line_number + y,
-                                       block_to_draw.color)
+                    if line_number + y >= 0:
+                        if block_to_draw.pixels[line_number][column_number] > 0:
+                            self.set_pixel(column_number + x, line_number + y,
+                                           block_to_draw.color)
                 column_number = column_number + 1
             line_number = line_number + 1
 
-    def remove_block(self, block_to_draw: Block, x=3, y=0):
+    def remove_block(self, block_to_draw: Block, x, y):
         line_number = 0
         for line in block_to_draw.pixels:
             column_number = 0
             for column in line:
                 if column != 0:
-                    if block_to_draw.pixels[line_number][column_number] > 0:
-                        self.set_pixel(column_number + x, line_number + y, [0, 0, 0])
+                    if line_number + y >= 0:
+                        if block_to_draw.pixels[line_number][column_number] > 0:
+                            self.set_pixel(column_number + x, line_number + y, [0, 0, 0])
                 column_number = column_number + 1
             line_number = line_number + 1
 
-    def test_for_collision(self, block_to_draw: Block, x=3, y=0):
+    def test_for_collision(self, block_to_draw: Block, x, y):
         ret = 0
+        line_begin = len(block_to_draw.pixels[0])-1
+        line_end = 0
+        for x_count_pixel in range(0, len(block_to_draw.pixels[0])):
+            line_count = 0
+            for y_count_pixel in range(0, len(block_to_draw.pixels)):
+                if block_to_draw.pixels[y_count_pixel][x_count_pixel] > 0:
+                    line_count += 1
+            if line_count > 0:
+                if line_begin > x_count_pixel:
+                    line_begin = x_count_pixel
+                if line_end < x_count_pixel:
+                    line_end = x_count_pixel
+
         for y_count in range(0, len(block_to_draw.pixels)):
             for x_count in range(0, len(block_to_draw.pixels[0])):
                 if block_to_draw.pixels[y_count][x_count] > 0:
-                    if y + y_count > self.height - 1:
+                    if y+y_count < 0:
+                        print("Not in field: y="+str(y_count)+", x="+str(x_count))
+                    elif y + y_count > self.height - 1:
                         print("Kollision Boden an Block.pixel: x=" + str(x_count) + ", y=" + str(y_count))
                         ret += 1
-                    elif x + x_count < 0:
+                    elif x + line_begin < 0:
                         print("Kollision linker Rand an Block.pixel: x=" + str(x_count) + ", y=" + str(y_count))
                         ret += 1
-                    elif x + x_count > self.width - 1:
+                    elif x + line_end > self.width - 1:
                         print("Kollision rechter Rand an Block.pixel: x=" + str(x_count) + ", y=" + str(y_count))
                         ret += 1
                     elif self.field[y + y_count][x + x_count][0] + self.field[y + y_count][x + x_count][1] + \
@@ -74,7 +91,6 @@ class Field:
             counter = 0
             for x in range(0, self.width):
                 if self.field[y][x][0] + self.field[y][x][1] + self.field[y][x][2] > 0:
-                    print(str(y)+":y , x:"+str(x))
                     counter += 1
 
             if counter == self.width:
