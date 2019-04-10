@@ -43,7 +43,6 @@ block_colors = [[170, 0, 255], [255, 225, 0], [0, 255, 245], [20, 255, 0], [255,
 
 
 class Block:
-
     def __init__(self, pixel: list, color):
         self.pixels = pixel
         self.height = (len(self.pixels))

@@ -29,7 +29,7 @@ class Console_Painter:
 class RGB_Field_Painter:
     def __init__(self):
         self.device = ws2812(width=10, height=20, rotate=1)
-        self.device.contrast(255)
+        self.device.contrast(150)
 
     def draw_a_test(self):
         with canvas(self.device) as draw:

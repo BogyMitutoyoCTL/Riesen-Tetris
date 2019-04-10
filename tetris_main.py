@@ -27,9 +27,8 @@ class Tetris_Main:
         # Blockeigenschaften
         self.random_number_today = int(random() * 6)
         self.random_number_future = int(random() * 6)
-        # self.rotation_today = int(random() * 4)
-        self.rotation_today = 0
-        self.rotation_future = 0
+        self.rotation_today = int(random() * 4)
+        self.rotation_future = int(random() * 4)
 
         # Positionen block_today
         self.position_block_today_x = 3
@@ -41,15 +40,21 @@ class Tetris_Main:
         screen = pygame.display.set_mode((200, 200))
 
     def new_block(self):
+        self.check_for_full_lines()
+
         self.random_number_today = self.random_number_future
         self.random_number_future = int(random() * 6)
 
         self.rotation_today = self.rotation_future
-        self.rotation_future = 0
+        self.rotation_future = int(random() * 4)
 
         # todo: ändere die Parameter, damit die Blöcke wirklich am Rand erscheinen
         self.position_block_today_x = 3
         self.position_block_today_y = 0
+
+    def check_for_full_lines(self):
+        print("Test for full lines")
+        self.field_leds.test_for_full_lines()
 
     def refresh_blocks(self):
         # Blöcke aussuchen
@@ -87,11 +92,11 @@ class Tetris_Main:
                 self.block_today,
                 self.position_block_today_x,
                 self.position_block_today_y + 1):
+            print("Kollision erkannt -> neuer Block")
             self.refresh_painter()
             self.new_block()
             self.refresh_blocks()
             self.refresh_painter()
-            print("Kollision erkannt -> neuer Block")
         else:
             self.position_block_today_y += 1
             self.refresh_blocks()
@@ -202,7 +207,15 @@ class Tetris_Main:
 tetris_main = Tetris_Main()
 tetris_main.set_all_fields_black()
 
-# tetris_main.field_leds.set_pixel(5, 18, [255, 255, 0])
+tetris_main.field_leds.set_pixel(0, 19, [255, 255, 0])
+tetris_main.field_leds.set_pixel(1, 19, [255, 255, 0])
+tetris_main.field_leds.set_pixel(2, 19, [255, 255, 0])
+tetris_main.field_leds.set_pixel(3, 19, [255, 255, 0])
+tetris_main.field_leds.set_pixel(4, 19, [255, 255, 0])
+tetris_main.field_leds.set_pixel(6, 19, [255, 255, 0])
+tetris_main.field_leds.set_pixel(7, 19, [255, 255, 0])
+tetris_main.field_leds.set_pixel(8, 19, [255, 255, 0])
+tetris_main.field_leds.set_pixel(9, 19, [255, 255, 0])
 
 thread_for_control = threading.Thread(target=tetris_main.control)       # ohne () nach target=tetris_main.control
 thread_for_control.daemon = True
