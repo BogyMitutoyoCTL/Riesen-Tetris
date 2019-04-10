@@ -13,8 +13,8 @@ blocks = [
      [0, 2, 2, 0],
      [0, 0, 0, 0]],
 
-    [[3, 3, 3, 3],
-     [0, 0, 0, 0],
+    [[0, 0, 0, 0],
+     [3, 3, 3, 3],
      [0, 0, 0, 0],
      [0, 0, 0, 0]],
 
@@ -79,3 +79,15 @@ class Block:
         m = numpy.rot90(m)
         ret = m.tolist()
         return ret
+
+    def get_line_of_first_pixel(self):
+        count = 0
+        for y in range(self.height - 1, -1, -1):
+            for x in range(0, self.width):
+                if self.pixels[y][x] > 0:
+                    print("pixel used: y=" + str(y) + ", x=" + str(x))
+                    count += 1
+            if count > 0:
+                print("first pixel line: " + str(y))
+                return y
+        return 0

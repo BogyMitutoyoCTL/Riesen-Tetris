@@ -11,6 +11,7 @@ from luma.core.legacy.font import proportional, LCD_FONT
 from block import Block, blocks, block_colors
 from field import Field
 
+
 class Console_Painter:
     def draw(self, field_to_print: Field):
         print("Feldbreite: " + str(field_to_print.width) + "; Höhe: " + str(field_to_print.height))
@@ -47,7 +48,7 @@ class RGB_Field_Painter:
                     r = field_to_print.field[i][j][0]
                     g = field_to_print.field[i][j][1]
                     b = field_to_print.field[i][j][2]
-                    draw.point((i, j),                             fill=(r, g,                                     b))
+                    draw.point((i, j), fill=(r, g, b))
 
 
 class Led_Matrix_Painter:
@@ -65,19 +66,19 @@ class Led_Matrix_Painter:
         with canvas(self.virtual) as draw:
             for i in range(len(field_to_print.field)):
                 for j in range(len(field_to_print.field[0])):
-                    if field_to_print.field[i][j][0]+field_to_print.field[i][j][1]+field_to_print.field[i][j][2] > 0:
+                    if field_to_print.field[i][j][0] + field_to_print.field[i][j][1] + field_to_print.field[i][j][
+                        2] > 0:
                         draw.point((j, i), fill="white")
                     else:
                         draw.point((j, i), fill="black")
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     field_leds = Field(10, 20)
     field_matrix = Field(32, 8)
 
     rgb_field_painter = RGB_Field_Painter()
     led_matrix_painter = Led_Matrix_Painter()
-
-
 
     while True:
         field_leds.set_all_pixels_to_black()
@@ -91,6 +92,3 @@ if __name__=="__main__":
         led_matrix_painter.draw(field_matrix)
 
         input()
-
-
-
