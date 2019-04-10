@@ -8,9 +8,9 @@ blocks = [
      [0, 0, 0, 0],
      [0, 0, 0, 0]],
 
-    [[0, 2, 2, 0],
+    [[0, 0, 0, 0],
      [0, 2, 2, 0],
-     [0, 0, 0, 0],
+     [0, 2, 2, 0],
      [0, 0, 0, 0]],
 
     [[0, 0, 0, 0],
@@ -65,7 +65,7 @@ class Block:
 
     def double_size(self):
         img = Image.fromarray(numpy.array(self.pixels))
-        img = img.resize((self.width*2, self.height*2), Image.NEAREST)
+        img = img.resize((self.width * 2, self.height * 2), Image.NEAREST)
 
         ret = numpy.array(img)
         return Block(ret, self.color)

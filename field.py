@@ -44,7 +44,13 @@ class Field:
             for x_count in range(0, len(block_to_draw.pixels[0])):
                 if block_to_draw.pixels[y_count][x_count] > 0:
                     if y+y_count > self.height-1:
-                        print("Kollision Boden")
+                        print("Kollision Boden an Block.pixel: x="+str(x_count)+", y="+str(y_count))
+                        ret += 1
+                    elif x+x_count < 0:
+                        print("Kollision linker Rand an Block.pixel: x="+str(x_count)+", y="+str(y_count))
+                        ret += 1
+                    elif x+x_count > self.width-1:
+                        print("Kollision rechter Rand an Block.pixel: x="+str(x_count)+", y="+str(y_count))
                         ret += 1
                     elif self.field[y+y_count][x+x_count][0] + self.field[y+y_count][x+x_count][1] + \
                             self.field[y+y_count][x+x_count][2] != 0:
