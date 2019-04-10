@@ -1,4 +1,5 @@
 import numpy
+from PIL import Image
 
 blocks = [
 
@@ -17,14 +18,14 @@ blocks = [
      [0, 0, 0, 0],
      [0, 0, 0, 0]],
 
-    [[4, 0, 0, 0],
-     [4, 4, 0, 0],
-     [0, 4, 0, 0],
+    [[0, 4, 0, 0],
+     [0, 4, 4, 0],
+     [0, 0, 4, 0],
      [0, 0, 0, 0]],
 
-    [[0, 5, 0, 0],
-     [5, 5, 0, 0],
-     [5, 0, 0, 0],
+    [[0, 0, 5, 0],
+     [0, 5, 5, 0],
+     [0, 5, 0, 0],
      [0, 0, 0, 0]],
 
     [[0, 6, 0, 0],
@@ -32,47 +33,49 @@ blocks = [
      [0, 6, 6, 0],
      [0, 0, 0, 0]],
 
-    [[0, 7, 0, 0],
-     [0, 7, 0, 0],
-     [7, 7, 0, 0],
+    [[0, 0, 7, 0],
+     [0, 0, 7, 0],
+     [0, 7, 7, 0],
      [0, 0, 0, 0]]]
+
+block_colors = [[170, 0, 255], [255, 225, 0], [0, 255, 245], [20, 255, 0], [255, 0, 0], [255, 165, 0],
+                [0, 40, 255]]
 
 
 class Block:
-    def describe(self):
-        for line in self.pixel:
-            for column in line:
-                if column == 0:
-                    print(" ", end="")
-                else:
-                    print(1, end="")
-
-            print()
-        print()
-
-    def __init__(self, pixel):
-        self.pixel = pixel
-        self.height = (len(self.pixel))
-        self.width = (len(self.pixel[0]))
+    def __init__(self, pixel: list, color):
+        self.pixels = pixel
+        self.height = (len(self.pixels))
+        self.width = (len(self.pixels[0]))
+        self.color = color
 
     def rotateleft(self):
-        m = numpy.array(self.pixel)
+        m = numpy.array(self.pixels)
         m = numpy.rot90(m)
-        self.pixel = m.tolist()
+        self.pixels = m.tolist()
 
     def rotateright(self):
         self.rotateleft()
         self.rotateleft()
         self.rotateleft()
 
+    def double_size(self):
+        img = Image.fromarray(numpy.array(self.pixels))
+        img = img.resize((self.width * 2, self.height * 2), Image.NEAREST)
 
-a = Block(blocks[4])
-a.describe()
-a.rotateright()
-a.describe()
-a.rotateright()
-a.describe()
-a.rotateright()
-a.describe()
-a.rotateright()
-a.describe()
+        ret = numpy.array(img)
+        return Block(ret, self.color)
+
+    def get_rotated_left(self):
+        m = numpy.array(self.pixels)
+        m = numpy.rot90(m)
+        ret = m.tolist()
+        return ret
+
+    def get_rotated_right(self):
+        m = numpy.array(self.pixels)
+        m = numpy.rot90(m)
+        m = numpy.rot90(m)
+        m = numpy.rot90(m)
+        ret = m.tolist()
+        return ret
