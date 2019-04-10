@@ -8,9 +8,9 @@ blocks = [
      [0, 0, 0, 0],
      [0, 0, 0, 0]],
 
-    [[0, 2, 2, 0],
+    [[0, 0, 0, 0],
      [0, 2, 2, 0],
-     [0, 0, 0, 0],
+     [0, 2, 2, 0],
      [0, 0, 0, 0]],
 
     [[3, 3, 3, 3],
@@ -62,7 +62,21 @@ class Block:
 
     def double_size(self):
         img = Image.fromarray(numpy.array(self.pixels))
-        img = img.resize((self.width*2, self.height*2), Image.NEAREST)
+        img = img.resize((self.width * 2, self.height * 2), Image.NEAREST)
 
         ret = numpy.array(img)
         return Block(ret, self.color)
+
+    def get_rotated_left(self):
+        m = numpy.array(self.pixels)
+        m = numpy.rot90(m)
+        ret = m.tolist()
+        return ret
+
+    def get_rotated_right(self):
+        m = numpy.array(self.pixels)
+        m = numpy.rot90(m)
+        m = numpy.rot90(m)
+        m = numpy.rot90(m)
+        ret = m.tolist()
+        return ret

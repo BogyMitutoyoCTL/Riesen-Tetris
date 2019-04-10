@@ -1,5 +1,4 @@
 import time
-import _thread
 import threading
 import pygame
 from pygame.constants import K_ESCAPE
@@ -37,6 +36,9 @@ class Tetris_Main:
         self.position_block_today_y = 0
 
         self.refresh_blocks()
+
+        pygame.init()
+        screen = pygame.display.set_mode((200, 200))
 
     def new_block(self):
         self.random_number_today = self.random_number_future
@@ -95,20 +97,98 @@ class Tetris_Main:
             self.refresh_blocks()
             self.refresh_painter()
 
+    def move_block_today_one_step_left(self):
+        self.delete_block_today()
+
+        if self.field_leds.test_for_collision(
+                self.block_today,
+                self.position_block_today_x-1,
+                self.position_block_today_y):
+            print("Kollision erkannt -> keine Bewegung nach links")
+        else:
+            self.position_block_today_x -= 1
+            self.refresh_blocks()
+            self.refresh_painter()
+
+    def move_block_today_one_step_right(self):
+        self.delete_block_today()
+
+        if self.field_leds.test_for_collision(
+                self.block_today,
+                self.position_block_today_x+1,
+                self.position_block_today_y):
+            print("Kollision erkannt -> keine Bewegung nach rechts")
+        else:
+            self.position_block_today_x += 1
+            self.refresh_blocks()
+            self.refresh_painter()
+
+    def rotate_block_today_left(self):
+        self.delete_block_today()
+        block_today_for_test = Block(self.block_today.get_rotated_left(), 0)
+
+        if self.field_leds.test_for_collision(
+                block_today_for_test,
+                self.position_block_today_x,
+                self.position_block_today_y):
+            print("Kollision erkannt -> keine Rotation nach links")
+        else:
+            self.rotation_today += 1
+            if self.rotation_today >= 4:
+                self.rotation_today -= 4
+            self.refresh_blocks()
+            self.refresh_painter()
+
+    def rotate_block_today_right(self):
+        self.delete_block_today()
+        block_today_for_test = Block(self.block_today.get_rotated_right(), 0)
+
+        if self.field_leds.test_for_collision(
+                block_today_for_test,
+                self.position_block_today_x,
+                self.position_block_today_y):
+            print("Kollision erkannt -> keine Rotation nach rechts")
+        else:
+            self.rotation_today -= 1
+            if self.rotation_today < 0:
+                self.rotation_today += 4
+            self.refresh_blocks()
+            self.refresh_painter()
+
     def tick(self):
         self.move_block_today_one_step_down()
         self.refresh_painter()
-        time.sleep(0.3)
 
     def control(self):
-        pygame.event.pump()
-        keys = pygame.key.get_pressed()
-        if keys[K_n]:   # neuer Block
-            print("Taste gedrückt")
-            self.new_block()
-            self.refresh_blocks()
-            self.refresh_painter()
-            self.control_wait_for_release(K_n)
+        while True:
+            pygame.event.pump()
+            keys = pygame.key.get_pressed()
+            if keys[K_n]:   # neuer Block
+                print("Taste gedrückt")
+                self.new_block()
+                self.refresh_blocks()
+                self.refresh_painter()
+                self.control_wait_for_release(K_n)
+            elif keys[K_q]:   # rotate left
+                print("Taste gedrückt")
+                self.rotate_block_today_left()
+                self.control_wait_for_release(K_q)
+            elif keys[K_e]:   # rotate right
+                print("Taste gedrückt")
+                self.rotate_block_today_right()
+                self.control_wait_for_release(K_e)
+            elif keys[K_a]:   # move left
+                print("Taste gedrückt")
+                self.move_block_today_one_step_left()
+                self.control_wait_for_release(K_a)
+            elif keys[K_d]:   # move right
+                print("Taste gedrückt")
+                self.move_block_today_one_step_right()
+                self.control_wait_for_release(K_d)
+            elif keys[K_s]:   # move down
+                print("Taste gedrückt")
+                self.tick()
+                self.control_wait_for_release(K_s)
 
     def control_wait_for_release(self, key):
         pygame.event.pump()
@@ -124,12 +204,10 @@ tetris_main.set_all_fields_black()
 
 # tetris_main.field_leds.set_pixel(5, 18, [255, 255, 0])
 
+thread_for_control = threading.Thread(target=tetris_main.control)       # ohne () nach target=tetris_main.control
+thread_for_control.daemon = True
+thread_for_control.start()
 
-pygame.init()
-screen = pygame.display.set_mode((200, 200))
-
-number = 0
-done = False
 while True:
     tetris_main.tick()
-    tetris_main.control()
+    time.sleep(0.7)
