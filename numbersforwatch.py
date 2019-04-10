@@ -2,7 +2,7 @@ from block import Block
 from field import Field
 from painter import RGB_Field_Painter
 from datetime import datetime, date
-
+import time
 number_pixels = [
 
     [[1, 1, 1, 1],
@@ -11,11 +11,11 @@ number_pixels = [
      [1, 0, 0, 1],
      [1, 1, 1, 1]],
 
-    [[0, 2, 0, 0],
-     [0, 2, 0, 0],
-     [0, 2, 0, 0],
-     [0, 2, 0, 0],
-     [0, 2, 0, 0]],
+    [[0, 0, 2, 0],
+     [0, 0, 2, 0],
+     [0, 0, 2, 0],
+     [0, 0, 2, 0],
+     [0, 0, 2, 0]],
 
     [[3, 3, 3, 3],
      [0, 0, 0, 3],
@@ -66,8 +66,8 @@ number_pixels = [
      [10, 10, 10, 10]]
 ]
 
-number_colors = [[255, 255, 255], [51, 255, 255], [255, 0, 0], [50, 255, 50], [127, 0, 255], [255, 255, 0], [0, 255, 0],
-                 [255, 0, 255], [0, 153, 0], [255, 135, 0]]
+number_colors = [[255, 255, 255], [51, 255, 255], [255, 0, 0], [50, 255, 50], [127, 0, 255], [190, 125, 255], [0, 255, 0],
+                 [255, 0, 255], [0, 0, 255], [153, 0, 76]]
 
 
 class Number:
@@ -75,6 +75,7 @@ class Number:
         self.pixel = number_pixels[number]
         self.color = number_colors[number]
         self.block = Block(self.pixel, self.color)
+
 
 class Clock:
     def __init__(self, field_for_clock):
@@ -85,21 +86,37 @@ class Clock:
     def get_time(self):
         tuple_time = datetime.timetuple(datetime.today())
         print(tuple_time)
-        # self.hour = tuple_time[3]
-        self.hour = 9
-        print(tuple_time[4])
-        print(tuple_time[5])
+        self.hour = tuple_time[3]
+        self.minute = tuple_time[4]
+        self.second = tuple_time[5]
         self.draw_clock()
 
     def draw_clock(self):
+        self.field_for_clock.set_all_pixels_to_black()
         self.hour_str = ""
         if self.hour < 10:
             self.hour_str += "0"
         self.hour_str += str(self.hour)
-        print(self.hour_str)
-        self.number_array = [int(self.hour_str[0]), int(self.hour_str[1])]
-        self.field_for_clock.set_block(self.number_list[self.number_array[0]].block, 0, 1)
-        self.field_for_clock.set_block(self.number_list[self.number_array[1]].block, 5, 1)
+
+        self.minute_str = ""
+        if self.minute < 10:
+            self.minute_str += "0"
+        self.minute_str += str(self.minute)
+
+        self.second_str = ""
+        if self.second < 10:
+            self.second_str += "0"
+        self.second_str += str(self.second)
+
+        self.clock_array = [int(self.hour_str[0]), int(self.hour_str[1]), int(self.minute_str[0]),
+                            int(self.minute_str[1]), int(self.second_str[0]), int(self.second_str[1])]
+        self.field_for_clock.set_block(self.number_list[self.clock_array[0]].block, 0, 1)
+        self.field_for_clock.set_block(self.number_list[self.clock_array[1]].block, 5, 1)
+        self.field_for_clock.set_block(self.number_list[self.clock_array[2]].block, 0, 7)
+        self.field_for_clock.set_block(self.number_list[self.clock_array[3]].block, 5, 7)
+        self.field_for_clock.set_block(self.number_list[self.clock_array[4]].block, 0, 13)
+        self.field_for_clock.set_block(self.number_list[self.clock_array[5]].block, 5, 13)
+        time.sleep(0.1)
 
 
 field_leds = Field(10, 20)
@@ -107,15 +124,7 @@ rgb_field_painter = RGB_Field_Painter()
 
 clock = Clock(field_leds)
 
-# field_leds.set_block(number_list[0].block, 0, 1)
-# field_leds.set_block(number_list[1].block, 5, 1)
-# field_leds.set_block(zero.block, 5, 1)
-# field_leds.set_block(four.block, 0, 7)
-# field_leds.set_block(five.block, 5, 7)
-# field_leds.set_block(two.block, 0, 13)
-# field_leds.set_block(eight.block, 5, 13)
+while True:
+    clock.get_time()
+    rgb_field_painter.draw(field_leds)
 
-clock.get_time()
-rgb_field_painter.draw(field_leds)
-
-input()
