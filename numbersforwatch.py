@@ -89,10 +89,10 @@ class Clock:
         self.hour = tuple_time[3]
         self.minute = tuple_time[4]
         self.second = tuple_time[5]
-        self.draw_clock()
 
     def draw_clock(self):
         self.field_for_clock.set_all_pixels_to_black()
+        self.get_time()
         self.hour_str = ""
         if self.hour < 10:
             self.hour_str += "0"
@@ -118,11 +118,16 @@ class Clock:
         self.field_for_clock.set_block(self.number_list[self.clock_array[5]].block, 5, 13)
         time.sleep(0.1)
 
+    #def rainbow_block(self):
+        #self.get_time
+        #todo rainbow colors for watch
+
+
 
 field_leds = Field(10, 20)
 rgb_field_painter = RGB_Field_Painter()
 clock = Clock(field_leds)
 while True:
-    clock.get_time()
+    clock.draw_clock()
     rgb_field_painter.draw(field_leds)
 
