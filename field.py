@@ -87,3 +87,4 @@ class Field:
         self.field[0] = []
         for _ in range(0, self.width):
             self.field[0].append([0, 0, 0])
+
