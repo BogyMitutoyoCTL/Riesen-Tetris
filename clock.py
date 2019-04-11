@@ -15,6 +15,7 @@ class Clock(Feature):
         return tuple_time[3], tuple_time[4],  tuple_time[5]
 
     def draw_clock(self):
+        print("Draw")
         self.field_leds.set_all_pixels_to_black()
         hour, minute, second = self.get_time()
         hour_str = ("0"+str(hour))[-2:]
@@ -29,6 +30,8 @@ class Clock(Feature):
             digit = clock_array[i]
             self.field_leds.set_block(Number(digit).block, positions[i][0], positions[i][1])
 
+        self.rgb_field_painter(self.field_leds)
+
     def event(self, eventname: str):
         if eventname == "rainbow":
             pass
@@ -38,11 +41,8 @@ class Clock(Feature):
     def tick(self):
         self.draw_clock()
 
-
-if __name__ == "__main__":
-    field_leds = Field(10, 20)
-    rgb_field_painter = RGB_Field_Painter()
-    clock = Clock(field_leds, field_leds, rgb_field_painter, Led_Matrix_Painter())
-    while True:
-        clock.draw_clock()
-        rgb_field_painter.draw(field_leds)
+    def start(self):
+        self.field_leds.set_all_pixels_to_black()
+        self.field_matrix.set_all_pixels_to_black()
+        self.rgb_field_painter.draw(self.field_leds)
+        self.led_matrix_painter.draw(self.field_matrix)

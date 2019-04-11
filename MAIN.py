@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import threading
 from pygame.locals import *
 import time
@@ -8,9 +10,11 @@ from field import Field
 from painter import RGB_Field_Painter, Led_Matrix_Painter
 from tetris_main import Tetris_Main
 
+running = True
+
 
 def control():
-    while True:
+    while running:
         pygame.event.pump()
         keys = pygame.key.get_pressed()
         if keys[K_n]:  # neuer Block    # todo: später rauswerfen (Johannes)
@@ -49,16 +53,27 @@ led_matrix_painter = Led_Matrix_Painter()
 clock = Clock(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
 tetris = Tetris_Main(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
 
-input()
 tetris.start()
-input()
 
 thread_for_control = threading.Thread(target=control)  # ohne () nach target=tetris_main.control
 thread_for_control.daemon = True
 thread_for_control.start()
 
 while True:
-    tetris.tick()
-    time.sleep(tetris.delay)
+    while True:
+        tetris.tick()
+        if tetris.game_over:
+            break
+        #time.sleep(tetris.delay)
+    tetris.stop()
 
-input()
+    running = False
+
+    print("Stop Tetris")
+    time.sleep(1)
+
+    clock.start()
+    print("Start")
+    while True:
+        clock.tick()
+        time.sleep(0.2)
