@@ -45,7 +45,6 @@ class Tetris_Main:
 
         game_sound.init_mixer()
         game_sound.play_song(random_music.choice(_songs))
-        print("Hallo")
 
     def new_block(self):
         self.check_for_full_lines()
@@ -62,7 +61,6 @@ class Tetris_Main:
         self.position_block_today_y = -self.block_today.get_line_of_first_pixel() - 1   #evtl. mit -1 am Ende
 
     def check_for_full_lines(self):
-        print("Test for full lines")
         self.field_leds.delete_all_full_lines()
 
     def refresh_blocks(self):
@@ -100,7 +98,7 @@ class Tetris_Main:
                 self.block_today,
                 self.position_block_today_x,
                 self.position_block_today_y + 1):
-            print("Kollision erkannt -> neuer Block")
+            print(" -> neuer Block")
             self.refresh_painter()
             self.new_block()
         else:
@@ -115,7 +113,7 @@ class Tetris_Main:
                 self.block_today,
                 self.position_block_today_x - 1,
                 self.position_block_today_y):
-            print("Kollision erkannt -> keine Bewegung nach links")
+            print(" -> keine Bewegung nach links")
         else:
             self.position_block_today_x -= 1
             self.refresh_blocks()
@@ -128,7 +126,7 @@ class Tetris_Main:
                 self.block_today,
                 self.position_block_today_x + 1,
                 self.position_block_today_y):
-            print("Kollision erkannt -> keine Bewegung nach rechts")
+            print(" -> keine Bewegung nach rechts")
         else:
             self.position_block_today_x += 1
             self.refresh_blocks()
@@ -142,7 +140,7 @@ class Tetris_Main:
                 block_today_for_test,
                 self.position_block_today_x,
                 self.position_block_today_y):
-            print("Kollision erkannt -> keine Rotation nach links")
+            print(" -> keine Rotation nach links")
         else:
             self.rotation_today += 1
             if self.rotation_today >= 4:
@@ -158,7 +156,7 @@ class Tetris_Main:
                 block_today_for_test,
                 self.position_block_today_x,
                 self.position_block_today_y):
-            print("Kollision erkannt -> keine Rotation nach rechts")
+            print(" -> keine Rotation nach rechts")
         else:
             self.rotation_today -= 1
             if self.rotation_today < 0:
@@ -169,34 +167,34 @@ class Tetris_Main:
     def tick(self):
         self.move_block_today_one_step_down()
 
+        for event in pygame.event.get():    # plays new music if music is over
+            if event.type == pygame.QUIT:
+                print("New Music")
+                next_song = random.choice(_songs)
+                game_sound.play_song(next_song)
+
     def control(self):
         while True:
             pygame.event.pump()
             keys = pygame.key.get_pressed()
             lock.acquire()
             if keys[K_n]:  # neuer Block    # todo: später rauswerfen (Johannes)
-                print("Taste gedrückt")
                 self.new_block()
                 self.refresh_painter()
                 self.control_wait_for_release(K_n)
             elif keys[K_q]:  # rotate left
-                print("Taste gedrückt")
                 self.rotate_block_today_left()
                 self.control_wait_for_release(K_q)
             elif keys[K_e]:  # rotate right
-                print("Taste gedrückt")
                 self.rotate_block_today_right()
                 self.control_wait_for_release(K_e)
             elif keys[K_a]:  # move left
-                print("Taste gedrückt")
                 self.move_block_today_one_step_left()
                 self.control_wait_for_release(K_a)
             elif keys[K_d]:  # move right
-                print("Taste gedrückt")
                 self.move_block_today_one_step_right()
                 self.control_wait_for_release(K_d)
             elif keys[K_s]:  # move down
-                print("Taste gedrückt")
                 self.move_block_today_one_step_down()
                 self.control_wait_for_release(K_s)
             lock.release()
@@ -208,26 +206,11 @@ class Tetris_Main:
         while keys[key]:
             pygame.event.pump()
             keys = pygame.key.get_pressed()
-        print("Taste losgelassen")
         lock.acquire()
 
 
 tetris_main = Tetris_Main()
 tetris_main.set_all_fields_black()
-
-# tetris_main.field_leds.set_pixel(0, 19, [255, 255, 0])
-# tetris_main.field_leds.set_pixel(1, 19, [255, 255, 0])
-# tetris_main.field_leds.set_pixel(2, 19, [255, 255, 0])
-# tetris_main.field_leds.set_pixel(3, 19, [255, 255, 0])
-# tetris_main.field_leds.set_pixel(4, 19, [255, 255, 0])
-# tetris_main.field_leds.set_pixel(6, 19, [255, 255, 0])
-# tetris_main.field_leds.set_pixel(7, 19, [255, 255, 0])
-# tetris_main.field_leds.set_pixel(8, 19, [255, 255, 0])
-# tetris_main.field_leds.set_pixel(9, 19, [255, 255, 0])
-for i in range(0, 10):
-    tetris_main.field_leds.set_pixel(i, 19, [255, 255, 0])
-for i in range(0, 10):
-    tetris_main.field_leds.set_pixel(i, 18, [255, 255, 0])
 
 thread_for_control = threading.Thread(target=tetris_main.control)       # ohne () nach target=tetris_main.control
 thread_for_control.daemon = True

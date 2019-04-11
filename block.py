@@ -89,10 +89,8 @@ class Block:
         for y in range(self.height - 1, -1, -1):
             for x in range(0, self.width):
                 if self.pixels[y][x] > 0:
-                    print("pixel used: y=" + str(y) + ", x=" + str(x))
                     count += 1
             if count > 0:
-                print("first pixel line: " + str(y))
                 return y
         return 0
 
