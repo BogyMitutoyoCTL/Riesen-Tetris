@@ -38,7 +38,6 @@ class Field:
 
     def collision_count(self, block_to_draw: Block, x: int, y: int) -> int:
         collision_count = 0
-        column_begin, column_end = block_to_draw.give_column_begin_and_end()
 
         for y_count in range(block_to_draw.height):
             for x_count in range(block_to_draw.width):
@@ -46,17 +45,16 @@ class Field:
                     if y + y_count > self.height - 1:
                         print("Kollision Boden an Block.pixel: x=" + str(x_count) + ", y=" + str(y_count))
                         collision_count += 1
-                    elif not self.pixel_is_inside_field(0, y_count + y):
-                        print("Not in field: y="+str(y_count)+", x="+str(x_count))
-                    elif x + column_begin < 0:
+                    elif x + x_count < 0:
                         print("Kollision linker Rand an Block.pixel: x=" + str(x_count) + ", y=" + str(y_count))
                         collision_count += 1
-                    elif x + column_end > self.width - 1:
+                    elif x + x_count > self.width - 1:
                         print("Kollision rechter Rand an Block.pixel: x=" + str(x_count) + ", y=" + str(y_count))
                         collision_count += 1
                         # §CT
-                    elif self.field[y + y_count][x + x_count][0] + self.field[y + y_count][x + x_count][1] + \
-                            self.field[y + y_count][x + x_count][2] != 0:
+                    elif not self.pixel_is_inside_field(x + x_count, y_count + y):
+                        print("Not in field: y="+str(y_count)+", x="+str(x_count))
+                    elif self.field[y + y_count][x + x_count] != BLACK:
                         print("Kollision Block an Block.pixel: x=" + str(x_count) + ", y=" + str(y_count))
                         collision_count += 1
 

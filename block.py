@@ -98,18 +98,3 @@ class Block:
 
     def is_brick(self, column_number: int, line_number: int):
         return self.pixels[line_number][column_number] != 0
-
-    def give_column_begin_and_end(self):
-        column_min = sys.maxsize
-        column_max = 0
-        for x_count_pixel in range(self.width):
-            pixels_in_column = False
-            for y_count_pixel in range(self.height):
-                if self.is_brick(x_count_pixel, y_count_pixel):
-                    pixels_in_column = True
-            if pixels_in_column:
-                if column_min > x_count_pixel:
-                    column_min = x_count_pixel
-                if column_max < x_count_pixel:
-                    column_max = x_count_pixel
-        return column_min, column_max
