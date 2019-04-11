@@ -1,6 +1,8 @@
 from block import Block
 
 BLACK = [0, 0, 0]
+
+
 class Field:
 
     def __init__(self, width, height):
@@ -36,35 +38,30 @@ class Field:
                 if block_to_draw.is_brick(brick_x, brick_y):
                     self.set_pixel(brick_x + field_x, brick_y + field_y, color)
 
-    def collision_count(self, block_to_draw: Block, x: int, y: int) -> int:
-        collision_count = 0
-
+    def collision_count(self, block_to_draw: Block, x: int, y: int) -> bool:
         for y_count in range(block_to_draw.height):
             for x_count in range(block_to_draw.width):
                 if block_to_draw.is_brick(x_count, y_count):
                     if y + y_count > self.height - 1:
                         print("Kollision Boden an Block.pixel: x=" + str(x_count) + ", y=" + str(y_count))
-                        collision_count += 1
+                        return True
                     elif x + x_count < 0:
                         print("Kollision linker Rand an Block.pixel: x=" + str(x_count) + ", y=" + str(y_count))
-                        collision_count += 1
+                        return True
                     elif x + x_count > self.width - 1:
                         print("Kollision rechter Rand an Block.pixel: x=" + str(x_count) + ", y=" + str(y_count))
-                        collision_count += 1
-                        # §CT
+                        return True
                     elif not self.pixel_is_inside_field(x + x_count, y_count + y):
                         print("Not in field: y="+str(y_count)+", x="+str(x_count))
                     elif self.field[y + y_count][x + x_count] != BLACK:
                         print("Kollision Block an Block.pixel: x=" + str(x_count) + ", y=" + str(y_count))
-                        collision_count += 1
-
-        return collision_count
+                        return True
+        return False
 
     def delete_all_full_lines(self):
         for y in range(self.height):
             line_is_full = True
             for x in range(self.width):
-                # §CT
                 if self.field[y][x] == BLACK:
                     line_is_full = False
                     break
@@ -78,7 +75,7 @@ class Field:
 
         self.field[0] = []
         for _ in range(0, self.width):
-            self.field[0].append([0, 0, 0])
+            self.field[0].append(BLACK)
 
     def pixel_is_inside_field(self, x: int, y: int):
         return 0 <= y < self.height and 0 <= x < self.width
