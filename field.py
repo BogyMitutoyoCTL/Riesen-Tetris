@@ -87,6 +87,7 @@ class Field:
 
             if line_is_full:
                 self.delete_line(y)
+
     def get_full_lines(self):
         self.lines_to_delete = []
         for y in range(0, self.height):
@@ -96,14 +97,15 @@ class Field:
                     counter += 1
             if counter == self.width:
                 self.lines_to_delete.append(y)
-        self.delete_line(self.lines_to_delete)
+        self.delete_lines(self.lines_to_delete)
+
     def delete_line(self, line: int):
         for y in range(line, 0, -1):
             self.field[y] = self.field[y-1]
 
         self.field[0] = []
         for _ in range(0, self.width):
-            self.field[0].append([0, 0, 0])
+            self.field[0].append(BLACK)
 
     def delete_lines(self, lines: list):
         for i in range(0, len(lines)):
@@ -113,7 +115,8 @@ class Field:
 
             self.field[0] = []
             for _ in range(0, self.width):
-                self.field[0].append([0, 0, 0])
+                self.field[0].append(BLACK)
+
     def pixel_is_inside_field(self, x: int, y: int):
         return 0 <= y < self.height and 0 <= x < self.width
 
