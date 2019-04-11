@@ -56,13 +56,31 @@ class Led_Matrix_Painter:
         self.serial = spi(port=0, device=0, gpio=noop())
         self.device = max7219(self.serial, rotate=2, width=8, height=8, cascaded=4, block_orientation=-90)
 
-        self.virtual = viewport(self.device, width=500, height=8)
+        self.virtual = viewport(self.device, width=1000, height=8)
+
+        self.amount_of_steps_for_message = 0
+        self.position_of_Message_x = 0
 
     def show_Text(self, text: str):
         with canvas(self.virtual) as draw:
             legacy.text(draw, (0, 0), text, fill="white", font=proportional(LCD_FONT))
 
+    def show_Message(self, message: str, amount_of_stepps_for_message: int):
+        self.amount_of_steps_for_message = amount_of_stepps_for_message
+        self.position_of_Message_x = 0
+        self.virtual.set_position((0, 0))
+        with canvas(self.virtual) as draw:
+            draw.rectangle(self.device.bounding_box, outline="white", fill="black")
+            draw.text((0, 0), "      "+message, fill="white")
+
+    def move_Message(self):
+        self.position_of_Message_x -= 1
+        if self.position_of_Message_x < -self.amount_of_steps_for_message:
+            self.position_of_Message_x = 0
+        self.virtual.set_position((self.position_of_Message_x, 0))
+
     def draw(self, field_to_print: Field):
+        self.virtual.set_position((0, 0))
         with canvas(self.virtual) as draw:
             for i in range(len(field_to_print.field)):
                 for j in range(len(field_to_print.field[0])):
