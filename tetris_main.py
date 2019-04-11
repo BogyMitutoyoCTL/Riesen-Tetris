@@ -31,7 +31,6 @@ class Tetris_Main(Feature):
         self.rotation_future = int(random() * 4)
 
         self.refresh_blocks()
-        self.refresh_matrix_painter()
 
         # Positionen block_today
         self.position_block_today_x = 3
@@ -43,11 +42,6 @@ class Tetris_Main(Feature):
         screen = pygame.display.set_mode((200, 200))
 
         game_sound.init_mixer()
-        game_sound.play_song(random_music.choice(_songs))
-
-        thread_for_control = threading.Thread(target=self.control)  # ohne () nach target=tetris_main.control
-        thread_for_control.daemon = True
-        thread_for_control.start()
 
     def new_block(self):
         self.check_for_full_lines()
@@ -175,6 +169,7 @@ class Tetris_Main(Feature):
             self.refresh_led_painter()
 
     def tick(self):
+        lock.acquire()
         self.move_block_today_one_step_down()
 
         for event in pygame.event.get():  # plays new music if music is over
@@ -183,9 +178,10 @@ class Tetris_Main(Feature):
                 pygame.time.wait(250)
                 next_song = random_music.choice(_songs)
                 game_sound.play_song(next_song)
+        lock.release()
 
-        if tetris_main.delay > 0.15:
-            tetris_main.delay -= 0.001
+        if self.delay > 0.15:
+            self.delay -= 0.001
 
     def control(self):
         while True:
@@ -213,6 +209,7 @@ class Tetris_Main(Feature):
             lock.release()
 
     def event(self, eventname: str):
+        lock.acquire()
         if eventname == "new":  # neuer Block    # todo: später rauswerfen (Johannes)
             self.new_block()
         elif eventname == "rotate left":  # rotate left
@@ -225,6 +222,7 @@ class Tetris_Main(Feature):
             self.move_block_today_one_step_right()
         elif eventname == "move down":  # move down
             self.move_block_today_one_step_down()
+        lock.release()
 
     def control_wait_for_release(self, key):
         lock.release()
@@ -235,10 +233,36 @@ class Tetris_Main(Feature):
             keys = pygame.key.get_pressed()
         lock.acquire()
 
+    def start(self):
+        self.set_all_fields_black()
+
+        # Blockeigenschaften
+        self.random_number_today = int(random() * 7)
+        self.random_number_future = int(random() * 7)
+        self.rotation_today = int(random() * 4)
+        self.rotation_future = int(random() * 4)
+
+        self.refresh_blocks()
+
+        # Positionen block_today
+        self.position_block_today_x = 3
+        self.position_block_today_y = -self.block_today.get_line_of_first_pixel_from_bottom() - 2
+
+        self.delay = 0.5
+
+        self.refresh_led_painter()
+        self.refresh_matrix_painter()
+
+        game_sound.play_song(random_music.choice(_songs))
+
 
 if __name__ == "__main__":
     tetris_main = Tetris_Main()
-    tetris_main.set_all_fields_black()
+    tetris_main.start()
+
+    thread_for_control = threading.Thread(target=tetris_main.control)  # ohne () nach target=tetris_main.control
+    thread_for_control.daemon = True
+    thread_for_control.start()
 
     while True:
         tetris_main.tick()
