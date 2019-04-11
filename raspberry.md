@@ -55,7 +55,7 @@ StandardError=syslog
 SyslogIdentifier=tetris
 Restart=always
 RestartSec=15
-User=root
+User=root 
 Group=root
 
 [Install]
