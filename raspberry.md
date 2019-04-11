@@ -33,3 +33,36 @@ zu 7.) PyCharm kann die Passwörter auch in einer KeePass-Datei speichern. Diese
 zu 8.) hier könnt ihr lesen wie ihr wieder Platz auf der SD Karte schafft: https://raspberry.tips/faq/raspberry-pi-speicherplatz-voll-sd-karte-aufraeumen
 
 zu 9.) Um PyCharm mit "sudo" zu starten, müsst ihr die Schaltfläche ändern, mit der ihr PyCharm aufruft. Im Schaltflächen Editor gibt es 3 Zeilen, die ihr seht wenn Ihr die Schaltfläche bearbeitet. In der mittleren Zeile steht der Programmaufruf. Dort schreibt ihr einfach "sudo" davor. (ohne Anführungszeichen natürlich)
+
+
+pip3 install luma luma.core luma.led_matrix numpy pillow  pygame datetime flask
+
+erster Befehl: "chmod +x /home/pi/Riesen-Tetris/MAIN.py"
+zweiter Befehl: "sudo nano /lib/systemd/system/LED.service "
+in folgende Datei muss:
+"
+[Unit]
+Description=LED
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/home/pi/Riesen-Tetris/MAIN.py
+WorkingDirectory=/home/pi/Riesen-Tetris/
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=tetris
+Restart=always
+RestartSec=15
+User=root 
+Group=root
+
+[Install]
+WantedBy=multi-user.target
+Alias=LED.service
+"
+
+dritter Befehl: "sudo systemctl daemon-reload"
+vierter Befehl: "sudo systemctl enable LED.service"
+letzer Befehl: "sudo systemctl start LED.service" 
