@@ -1,7 +1,4 @@
 from block import Block
-from clock import Clock
-from field import Field
-from painter import RGB_Field_Painter
 
 number_pixels = [
 
@@ -75,13 +72,3 @@ class Number:
         self.pixel = number_pixels[number]
         self.color = number_colors[number]
         self.block = Block(self.pixel, self.color)
-
-
-if __name__ == "__main__":
-    field_leds = Field(10, 20)
-    rgb_field_painter = RGB_Field_Painter()
-    clock = Clock(field_leds)
-    while True:
-        clock.draw_clock()
-        rgb_field_painter.draw(field_leds)
-
