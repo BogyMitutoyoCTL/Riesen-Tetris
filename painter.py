@@ -74,21 +74,21 @@ class Led_Matrix_Painter:
 
 
 if __name__ == "__main__":
-    field_leds = Field(10, 20)
-    field_matrix = Field(32, 8)
+    playfield = Field(10, 20)
+    scoreboard = Field(32, 8)
 
-    rgb_field_painter = RGB_Field_Painter()
+    playfield_painter = RGB_Field_Painter()
     led_matrix_painter = Led_Matrix_Painter()
 
     while True:
-        field_leds.set_all_pixels_to_black()
-        field_matrix.set_all_pixels_to_black()
-        rnd = int(random() * 6)
-        block = Block(blocks[rnd], block_colors[rnd])
-        field_leds.set_block(block)
-        rgb_field_painter.draw(field_leds)
+        playfield.set_all_pixels_to_black()
+        scoreboard.set_all_pixels_to_black()
+        random_block_number = int(random() * 7)
+        block = Block(blocks[random_block_number], block_colors[random_block_number])
+        playfield.set_block(block, 3, 0)
+        playfield_painter.draw(playfield)
 
-        field_matrix.set_block(block.double_size(), 24, 1)
-        led_matrix_painter.draw(field_matrix)
+        scoreboard.set_block(block.double_size(), 24, 1)
+        led_matrix_painter.draw(scoreboard)
 
         input()
