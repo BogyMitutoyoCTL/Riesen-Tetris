@@ -1,3 +1,5 @@
+import sys
+
 import numpy
 from PIL import Image
 
