@@ -30,7 +30,7 @@ class Clock(Feature):
             digit = clock_array[i]
             self.field_leds.set_block(Number(digit).block, positions[i][0], positions[i][1])
 
-        self.rgb_field_painter(self.field_leds)
+        #self.rgb_field_painter.draw(self.field_leds)
 
     def event(self, eventname: str):
         if eventname == "rainbow":

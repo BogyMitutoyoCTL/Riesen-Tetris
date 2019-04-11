@@ -1,3 +1,8 @@
 pygame
 numpy
 Flask
+flask-socketio
+pillow
+luma.led_matrix
+luma
+luma.core
