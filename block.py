@@ -106,3 +106,6 @@ class Block:
 
     def is_brick(self, column_number: int, line_number: int):
         return self.pixels[line_number][column_number] != 0
+
+
+

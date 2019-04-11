@@ -123,11 +123,11 @@ class Clock:
         #todo rainbow colors for watch
 
 
-
-field_leds = Field(10, 20)
-rgb_field_painter = RGB_Field_Painter()
-clock = Clock(field_leds)
-while True:
-    clock.draw_clock()
-    rgb_field_painter.draw(field_leds)
+if __name__ == "__main__":
+    field_leds = Field(10, 20)
+    rgb_field_painter = RGB_Field_Painter()
+    clock = Clock(field_leds)
+    while True:
+        clock.draw_clock()
+        rgb_field_painter.draw(field_leds)
 
