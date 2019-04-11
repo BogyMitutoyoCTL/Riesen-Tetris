@@ -169,18 +169,19 @@ class Tetris_Main(Feature):
 
     def event(self, eventname: str):
         lock.acquire()
-        if eventname == "new":  # neuer Block    # todo: später rauswerfen (Johannes)
-            self.new_block()
-        elif eventname == "rotate left":  # rotate left
-            self.rotate_block_today_left()
-        elif eventname == "rotate right":  # rotate right
-            self.rotate_block_today_right()
-        elif eventname == "move left":  # move left
-            self.move_block_today_one_step_left()
-        elif eventname == "move right":  # move right
-            self.move_block_today_one_step_right()
-        elif eventname == "move down":  # move down
-            self.move_block_today_one_step_down()
+        if not self.game_over:
+            if eventname == "new":  # neuer Block    # todo: später rauswerfen (Johannes)
+                self.new_block()
+            elif eventname == "rotate left":  # rotate left
+                self.rotate_block_today_left()
+            elif eventname == "rotate right":  # rotate right
+                self.rotate_block_today_right()
+            elif eventname == "move left":  # move left
+                self.move_block_today_one_step_left()
+            elif eventname == "move right":  # move right
+                self.move_block_today_one_step_right()
+            elif eventname == "move down":  # move down
+                self.move_block_today_one_step_down()
         lock.release()
 
     def start(self):
