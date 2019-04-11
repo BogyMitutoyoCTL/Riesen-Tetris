@@ -1,18 +1,79 @@
 #!/usr/bin/python3
-from rainbow import *
+
+import threading
+from pygame.locals import *
 import time
+import pygame
 
+from clock import Clock
 from field import Field
-from painter import RGB_Field_Painter
+from painter import RGB_Field_Painter, Led_Matrix_Painter
+from tetris_main import Tetris_Main
 
-if __name__ == "__main__":
-    rgb_field_painter = RGB_Field_Painter()
-    field_leds = Field(10, 20)
-    for m in range(5, 50):
-        for a in range(1, 50):
-            for i in range(200):
-                field_leds.set_pixel(i%10, i//10, hsv2rgb(i / 200 * m / 50 + a / 50, 1, 1))
+running = True
 
-            rgb_field_painter.draw(field_leds)
 
-            time.sleep(0.05)
+def control():
+    while running:
+        pygame.event.pump()
+        keys = pygame.key.get_pressed()
+        if keys[K_n]:  # neuer Block    # todo: später rauswerfen (Johannes)
+            tetris.event("new")
+            control_wait_for_release(K_n)
+        elif keys[K_q]:  # rotate left
+            tetris.event("rotate left")
+            control_wait_for_release(K_q)
+        elif keys[K_e]:  # rotate right
+            tetris.event("rotate right")
+            control_wait_for_release(K_e)
+        elif keys[K_a]:  # move left
+            tetris.event("move left")
+            control_wait_for_release(K_a)
+        elif keys[K_d]:  # move right
+            tetris.event("move right")
+            control_wait_for_release(K_d)
+        elif keys[K_s]:  # move down
+            tetris.event("move down")
+            control_wait_for_release(K_s)
+
+
+def control_wait_for_release(key):
+    pygame.event.pump()
+    keys = pygame.key.get_pressed()
+    while keys[key]:
+        pygame.event.pump()
+        keys = pygame.key.get_pressed()
+
+
+field_leds = Field(10, 20)
+field_matrix = Field(32, 8)
+rgb_field_painter = RGB_Field_Painter()
+led_matrix_painter = Led_Matrix_Painter()
+
+clock = Clock(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
+tetris = Tetris_Main(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
+
+tetris.start()
+
+thread_for_control = threading.Thread(target=control)  # ohne () nach target=tetris_main.control
+thread_for_control.daemon = True
+thread_for_control.start()
+
+while True:
+    while True:
+        tetris.tick()
+        if tetris.game_over:
+            break
+        #time.sleep(tetris.delay)
+    tetris.stop()
+
+    running = False
+
+    print("Stop Tetris")
+    time.sleep(1)
+
+    clock.start()
+    print("Start")
+    while True:
+        clock.tick()
+        time.sleep(0.2)
