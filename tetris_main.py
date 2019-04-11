@@ -170,7 +170,8 @@ class Tetris_Main:
         for event in pygame.event.get():    # plays new music if music is over
             if event.type == pygame.QUIT:
                 print("New Music")
-                next_song = random.choice(_songs)
+                pygame.time.wait(500)
+                next_song = random_music.choice(_songs)
                 game_sound.play_song(next_song)
 
     def control(self):
