@@ -1,3 +1,4 @@
+import time
 from datetime import datetime
 from feature import Feature
 from field import Field
@@ -15,7 +16,6 @@ class Clock(Feature):
         return tuple_time[3], tuple_time[4],  tuple_time[5]
 
     def draw_clock(self):
-        print("Draw")
         self.field_leds.set_all_pixels_to_black()
         hour, minute, second = self.get_time()
         hour_str = ("0"+str(hour))[-2:]
@@ -30,19 +30,24 @@ class Clock(Feature):
             digit = clock_array[i]
             self.field_leds.set_block(Number(digit).block, positions[i][0], positions[i][1])
 
-        self.rgb_field_painter(self.field_leds)
+        self.rgb_field_painter.draw(self.field_leds)
 
     def event(self, eventname: str):
-        if eventname == "rainbow":
-            pass
-        if eventname == "white":
+        if eventname == "break":
             pass
 
     def tick(self):
         self.draw_clock()
+        time.sleep(0.2)
 
     def start(self):
         self.field_leds.set_all_pixels_to_black()
         self.field_matrix.set_all_pixels_to_black()
         self.rgb_field_painter.draw(self.field_leds)
         self.led_matrix_painter.draw(self.field_matrix)
+
+    def stop(self):
+        pass
+
+    def is_game_over(self):
+        return False

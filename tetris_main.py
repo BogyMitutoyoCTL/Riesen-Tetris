@@ -20,29 +20,12 @@ class Tetris_Main(Feature):
                  led_matrix_painter: Led_Matrix_Painter):
         super(Tetris_Main, self).__init__(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
 
-        # block erstellen
-        self.block_today = Block(blocks[0], block_colors[0])
-        self.block_future = Block(blocks[0], block_colors[0])
-
-        # Blockeigenschaften
-        self.random_number_today = int(random() * 7)
-        self.random_number_future = int(random() * 7)
-        self.rotation_today = int(random() * 4)
-        self.rotation_future = int(random() * 4)
-
-        self.refresh_blocks()
-
-        # Positionen block_today
-        self.position_block_today_x = 3
-        self.position_block_today_y = -self.block_today.get_line_of_first_pixel_from_bottom() - 2
-
-        self.delay = 0.5
+        self.prepare_for_start()
 
         pygame.init()
         screen = pygame.display.set_mode((200, 200))
 
         game_sound.init_mixer()
-        self.game_over = False
 
     def new_block(self):
         self.check_for_full_lines()
@@ -171,38 +154,47 @@ class Tetris_Main(Feature):
 
     def tick(self):
         lock.acquire()
-        if not self.game_over:
-            self.move_block_today_one_step_down()
+        self.move_block_today_one_step_down()
 
-            for event in pygame.event.get():  # plays new music if music is over
-                if event.type == pygame.QUIT:
-                    print("New Music")
-                    pygame.time.wait(250)
-                    next_song = random_music.choice(_songs)
-                    game_sound.play_song(next_song)
-            lock.release()
+        for event in pygame.event.get():  # plays new music if music is over
+            if event.type == pygame.QUIT:
+                print("New Music")
+                pygame.time.wait(250)
+                next_song = random_music.choice(_songs)
+                game_sound.play_song(next_song)
+        lock.release()
 
-            if self.delay > 0.15:
-                self.delay -= 0.001
+        if self.delay > 0.15:
+            self.delay -= 0.001
+        time.sleep(self.delay) # TODO: Delay einbauen
 
     def event(self, eventname: str):
         lock.acquire()
-        if not self.game_over:
-            if eventname == "new":  # neuer Block    # todo: später rauswerfen (Johannes)
-                self.new_block()
-            elif eventname == "rotate left":  # rotate left
-                self.rotate_block_today_left()
-            elif eventname == "rotate right":  # rotate right
-                self.rotate_block_today_right()
-            elif eventname == "move left":  # move left
-                self.move_block_today_one_step_left()
-            elif eventname == "move right":  # move right
-                self.move_block_today_one_step_right()
-            elif eventname == "move down":  # move down
-                self.move_block_today_one_step_down()
+        if eventname == "new":  # neuer Block    # todo: später rauswerfen (Johannes)
+            self.new_block()
+        elif eventname == "rotate left":  # rotate left
+            self.rotate_block_today_left()
+        elif eventname == "rotate right":  # rotate right
+            self.rotate_block_today_right()
+        elif eventname == "move left":  # move left
+            self.move_block_today_one_step_left()
+        elif eventname == "move right":  # move right
+            self.move_block_today_one_step_right()
+        elif eventname == "move down":  # move down
+            self.move_block_today_one_step_down()
         lock.release()
 
     def start(self):
+        self.prepare_for_start()
+
+        self.refresh_led_painter()
+        self.refresh_matrix_painter()
+
+        self.game_over = False
+
+        game_sound.play_song(random_music.choice(_songs))
+
+    def prepare_for_start(self):
         self.set_all_fields_black()
 
         # Blockeigenschaften
@@ -218,13 +210,6 @@ class Tetris_Main(Feature):
         self.position_block_today_y = -self.block_today.get_line_of_first_pixel_from_bottom() - 2
 
         self.delay = 0.5
-
-        self.refresh_led_painter()
-        self.refresh_matrix_painter()
-
-        game_sound.play_song(random_music.choice(_songs))
-
-        self.game_over = False
 
     def stop(self):
         self.game_over = True
