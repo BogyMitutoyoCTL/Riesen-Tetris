@@ -1,24 +1,13 @@
 import colorsys
-from painter import RGB_Field_Painter
-from field import Field
-import time
 
 
-def hsv2rgb(h, s, v):
+def hsv2rgb(h: float, s: float, v: float):
     return tuple(round(i*255)for i in colorsys.hsv_to_rgb(h, s, v))
 
 
-field_leds = Field(10, 20)
+def rainbowcolors(howmany: int):
+    colors = []
+    for i in range(howmany):
+        colors.append(hsv2rgb(i/howmany, 1, 1))
+    return colors
 
-rgb_field_painter = RGB_Field_Painter()
-
-for m in range(5, 50):
-    for a in range(1, 50):
-        for i in range(200):
-            x = i%10
-            y = i//10
-            field_leds.set_pixel(x, y, hsv2rgb(i/200*m/50+a/50, 1, 1))
-
-        rgb_field_painter.draw(field_leds)
-
-        time.sleep(0.05)

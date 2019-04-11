@@ -237,7 +237,7 @@ class Tetris_Main(Feature):
 
 
 if __name__ == "__main__":
-    tetris_main = Tetris_Main()
+    tetris_main = Tetris_Main(Field(10,20), Field(32,8), RGB_Field_Painter(), Led_Matrix_Painter())
     tetris_main.set_all_fields_black()
 
     while True:

@@ -1,10 +1,8 @@
 import time
 
-from numbersforwatch import number_pixels, Number
+from numbersforwatch import Number
 from field import Field
 from painter import Led_Matrix_Painter
-
-
 
 
 class Score:
@@ -31,9 +29,6 @@ if __name__ == "__main__":
     led_matrix_painter = Led_Matrix_Painter()
     scoreboard = Field(32, 8)
     while True:
-
-
-
             text = "0000" + str(score.point)
             text = text[-5:]
 
@@ -43,7 +38,6 @@ if __name__ == "__main__":
 
             led_matrix_painter.draw(scoreboard)
             time.sleep(0.1)
-
 
             score.score_for_line(4)
             scoreboard.set_all_pixels_to_black()

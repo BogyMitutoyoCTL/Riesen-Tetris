@@ -1,7 +1,7 @@
-import sys
-
 import numpy
 from PIL import Image
+
+from rainbow import rainbowcolors
 
 # TODO: hierauf hat jeder Zugriff
 blocks = [
@@ -42,8 +42,7 @@ blocks = [
      [0, 0, 0, 0]]]
 
 # TODO: hierauf hat jeder Zugriff
-block_colors = [[170, 0, 255], [255, 225, 0], [0, 255, 245], [20, 255, 0], [255, 0, 0], [255, 165, 0],
-                [0, 40, 255]]
+block_colors = rainbowcolors(7)
 
 
 class Block:
@@ -106,6 +105,3 @@ class Block:
 
     def is_brick(self, column_number: int, line_number: int):
         return self.pixels[line_number][column_number] != 0
-
-
-
