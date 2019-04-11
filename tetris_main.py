@@ -1,14 +1,17 @@
 import time
 import threading
 import pygame
+import game_sound
 from pygame.locals import *
 from random import random
+import random as random_music
 
 from field import Field
 from painter import RGB_Field_Painter, Led_Matrix_Painter, Console_Painter
 from block import Block, blocks, block_colors
 
 lock = threading.Lock()
+_songs = ['./sound-files/lied.mp3', './sound-files/lied2.mp3']
 
 
 class Tetris_Main:
@@ -40,6 +43,10 @@ class Tetris_Main:
         pygame.init()
         screen = pygame.display.set_mode((200, 200))
 
+        game_sound.init_mixer()
+        game_sound.play_song(random_music.choice(_songs))
+        print("Hallo")
+
     def new_block(self):
         self.check_for_full_lines()
 
@@ -52,7 +59,7 @@ class Tetris_Main:
         self.refresh_blocks()
 
         self.position_block_today_x = 3
-        self.position_block_today_y = -self.block_today.get_line_of_first_pixel() - 1
+        self.position_block_today_y = -self.block_today.get_line_of_first_pixel() - 1   #evtl. mit -1 am Ende
 
     def check_for_full_lines(self):
         print("Test for full lines")
@@ -96,12 +103,10 @@ class Tetris_Main:
             print("Kollision erkannt -> neuer Block")
             self.refresh_painter()
             self.new_block()
-            self.move_block_today_one_step_down()
-            self.refresh_painter()
         else:
             self.position_block_today_y += 1
             self.refresh_blocks()
-            self.refresh_painter()
+        self.refresh_painter()
 
     def move_block_today_one_step_left(self):
         self.delete_block_today()
@@ -163,14 +168,13 @@ class Tetris_Main:
 
     def tick(self):
         self.move_block_today_one_step_down()
-        self.refresh_painter()
 
     def control(self):
         while True:
             pygame.event.pump()
             keys = pygame.key.get_pressed()
             lock.acquire()
-            if keys[K_n]:  # neuer Block
+            if keys[K_n]:  # neuer Block    # todo: später rauswerfen (Johannes)
                 print("Taste gedrückt")
                 self.new_block()
                 self.refresh_painter()
@@ -193,7 +197,7 @@ class Tetris_Main:
                 self.control_wait_for_release(K_d)
             elif keys[K_s]:  # move down
                 print("Taste gedrückt")
-                self.tick()
+                self.move_block_today_one_step_down()
                 self.control_wait_for_release(K_s)
             lock.release()
 
@@ -225,7 +229,6 @@ thread_for_control = threading.Thread(target=tetris_main.control)       # ohne (
 thread_for_control.daemon = True
 thread_for_control.start()
 
-count = 0
 while True:
     lock.acquire()
     tetris_main.tick()
