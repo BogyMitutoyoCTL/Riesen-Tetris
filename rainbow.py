@@ -9,6 +9,7 @@ def hsv2rgb(h, s, v):
 
 
 field_leds = Field(10, 20)
+
 rgb_field_painter = RGB_Field_Painter()
 
 for m in range(5, 50):
@@ -19,4 +20,5 @@ for m in range(5, 50):
             field_leds.set_pixel(x, y, hsv2rgb(i/200*m/50+a/50, 1, 1))
 
         rgb_field_painter.draw(field_leds)
+
         time.sleep(0.05)
