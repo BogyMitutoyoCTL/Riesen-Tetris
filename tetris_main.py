@@ -49,6 +49,10 @@ class Tetris_Main:
         game_sound.init_mixer()
         game_sound.play_song(random_music.choice(_songs))
 
+        thread_for_control = threading.Thread(target=self.control)  # ohne () nach target=tetris_main.control
+        thread_for_control.daemon = True
+        thread_for_control.start()
+
     def new_block(self):
         self.check_for_full_lines()
 
@@ -175,6 +179,7 @@ class Tetris_Main:
             self.refresh_led_painter()
 
     def tick(self):
+        lock.acquire()
         self.move_block_today_one_step_down()
 
         for event in pygame.event.get():    # plays new music if music is over
@@ -183,6 +188,10 @@ class Tetris_Main:
                 pygame.time.wait(250)
                 next_song = random_music.choice(_songs)
                 game_sound.play_song(next_song)
+        lock.release()
+
+        if tetris_main.delay > 0.15:
+            tetris_main.delay -= 0.001
 
     def control(self):
         while True:
@@ -219,17 +228,10 @@ class Tetris_Main:
         lock.acquire()
 
 
-tetris_main = Tetris_Main()
-tetris_main.set_all_fields_black()
+if __name__ == "__main__":
+    tetris_main = Tetris_Main()
+    tetris_main.set_all_fields_black()
 
-thread_for_control = threading.Thread(target=tetris_main.control)       # ohne () nach target=tetris_main.control
-thread_for_control.daemon = True
-thread_for_control.start()
-
-while True:
-    lock.acquire()
-    tetris_main.tick()
-    if tetris_main.delay > 0.15:
-        tetris_main.delay -= 0.001
-    lock.release()
-    time.sleep(tetris_main.delay)
+    while True:
+        tetris_main.tick()
+        time.sleep(tetris_main.delay)
