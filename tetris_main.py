@@ -42,6 +42,7 @@ class Tetris_Main(Feature):
         screen = pygame.display.set_mode((200, 200))
 
         game_sound.init_mixer()
+        self.game_over = False
 
     def new_block(self):
         self.check_for_full_lines()
@@ -100,7 +101,7 @@ class Tetris_Main(Feature):
                 self.position_block_today_x,
                 self.position_block_today_y + 1) == 2:
             print(" -> Game over")
-            input()
+            self.game_over = True
         elif self.field_leds.give_type_of_collision(
                 self.block_today,
                 self.position_block_today_x,
@@ -170,68 +171,36 @@ class Tetris_Main(Feature):
 
     def tick(self):
         lock.acquire()
-        self.move_block_today_one_step_down()
+        if not self.game_over:
+            self.move_block_today_one_step_down()
 
-        for event in pygame.event.get():  # plays new music if music is over
-            if event.type == pygame.QUIT:
-                print("New Music")
-                pygame.time.wait(250)
-                next_song = random_music.choice(_songs)
-                game_sound.play_song(next_song)
-        lock.release()
-
-        if self.delay > 0.15:
-            self.delay -= 0.001
-
-    def control(self):
-        while True:
-            pygame.event.pump()
-            keys = pygame.key.get_pressed()
-            lock.acquire()
-            if keys[K_n]:  # neuer Block    # todo: später rauswerfen (Johannes)
-                self.new_block()
-                self.control_wait_for_release(K_n)
-            elif keys[K_q]:  # rotate left
-                self.rotate_block_today_left()
-                self.control_wait_for_release(K_q)
-            elif keys[K_e]:  # rotate right
-                self.rotate_block_today_right()
-                self.control_wait_for_release(K_e)
-            elif keys[K_a]:  # move left
-                self.move_block_today_one_step_left()
-                self.control_wait_for_release(K_a)
-            elif keys[K_d]:  # move right
-                self.move_block_today_one_step_right()
-                self.control_wait_for_release(K_d)
-            elif keys[K_s]:  # move down
-                self.move_block_today_one_step_down()
-                self.control_wait_for_release(K_s)
+            for event in pygame.event.get():  # plays new music if music is over
+                if event.type == pygame.QUIT:
+                    print("New Music")
+                    pygame.time.wait(250)
+                    next_song = random_music.choice(_songs)
+                    game_sound.play_song(next_song)
             lock.release()
+
+            if self.delay > 0.15:
+                self.delay -= 0.001
 
     def event(self, eventname: str):
         lock.acquire()
-        if eventname == "new":  # neuer Block    # todo: später rauswerfen (Johannes)
-            self.new_block()
-        elif eventname == "rotate left":  # rotate left
-            self.rotate_block_today_left()
-        elif eventname == "rotate right":  # rotate right
-            self.rotate_block_today_right()
-        elif eventname == "move left":  # move left
-            self.move_block_today_one_step_left()
-        elif eventname == "move right":  # move right
-            self.move_block_today_one_step_right()
-        elif eventname == "move down":  # move down
-            self.move_block_today_one_step_down()
+        if not self.game_over:
+            if eventname == "new":  # neuer Block    # todo: später rauswerfen (Johannes)
+                self.new_block()
+            elif eventname == "rotate left":  # rotate left
+                self.rotate_block_today_left()
+            elif eventname == "rotate right":  # rotate right
+                self.rotate_block_today_right()
+            elif eventname == "move left":  # move left
+                self.move_block_today_one_step_left()
+            elif eventname == "move right":  # move right
+                self.move_block_today_one_step_right()
+            elif eventname == "move down":  # move down
+                self.move_block_today_one_step_down()
         lock.release()
-
-    def control_wait_for_release(self, key):
-        lock.release()
-        pygame.event.pump()
-        keys = pygame.key.get_pressed()
-        while keys[key]:
-            pygame.event.pump()
-            keys = pygame.key.get_pressed()
-        lock.acquire()
 
     def start(self):
         self.set_all_fields_black()
@@ -255,15 +224,11 @@ class Tetris_Main(Feature):
 
         game_sound.play_song(random_music.choice(_songs))
 
+        self.game_over = False
 
-if __name__ == "__main__":
-    tetris_main = Tetris_Main(Field(10,20), Field(32,8), RGB_Field_Painter(), Led_Matrix_Painter())
-    tetris_main.start()
+    def stop(self):
+        self.game_over = True
+        game_sound.stop_song()
 
-    thread_for_control = threading.Thread(target=tetris_main.control)  # ohne () nach target=tetris_main.control
-    thread_for_control.daemon = True
-    thread_for_control.start()
-
-    while True:
-        tetris_main.tick()
-        time.sleep(tetris_main.delay)
+    def is_game_over(self) -> bool:
+        return self.game_over

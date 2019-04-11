@@ -12,6 +12,10 @@ def play_song(_song_file_name):
     pygame.mixer.music.play(0)      # -1 plays song for ever
 
 
+def stop_song():
+    pygame.mixer.music.stop()
+
+
 def play_sound(file='./sound-files/effects/bell.wav'):
     sound = pygame.mixer.Sound(file)
     sound.set_volume(1.0)
