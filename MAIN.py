@@ -1,13 +1,18 @@
-from clock import Clock
-from feature import Feature
+#!/usr/bin/python3
+from rainbow import *
+import time
+
 from field import Field
-from painter import RGB_Field_Painter, Led_Matrix_Painter
+from painter import RGB_Field_Painter
 
-field_leds = Field(10, 20)
-field_matrix = Field(32, 8)
-rgb_field_painter = RGB_Field_Painter()
-led_matrix_painter = Led_Matrix_Painter()
+if __name__ == "__main__":
+    rgb_field_painter = RGB_Field_Painter()
+    field_leds = Field(10, 20)
+    for m in range(5, 50):
+        for a in range(1, 50):
+            for i in range(200):
+                field_leds.set_pixel(i%10, i//10, hsv2rgb(i / 200 * m / 50 + a / 50, 1, 1))
 
-clock = Clock(field_leds, rgb_field_painter)
-tetris = Feature(field_leds, rgb_field_painter)
-snake = Feature(field_leds, rgb_field_painter)
+            rgb_field_painter.draw(field_leds)
+
+            time.sleep(0.05)
