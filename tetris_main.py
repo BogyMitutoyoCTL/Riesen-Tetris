@@ -257,7 +257,7 @@ class Tetris_Main(Feature):
 
 
 if __name__ == "__main__":
-    tetris_main = Tetris_Main()
+    tetris_main = Tetris_Main(Field(10,20), Field(32,8), RGB_Field_Painter(), Led_Matrix_Painter())
     tetris_main.start()
 
     thread_for_control = threading.Thread(target=tetris_main.control)  # ohne () nach target=tetris_main.control

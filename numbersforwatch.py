@@ -1,4 +1,5 @@
 from block import Block
+from rainbow import rainbowcolors
 
 number_pixels = [
 
@@ -63,8 +64,7 @@ number_pixels = [
      [10, 10, 10, 10]]
 ]
 
-number_colors = [[255, 255, 255], [0, 204, 204], [255, 0, 0], [51, 0, 0], [127, 0, 255], [255, 125, 255], [0, 102, 51],
-                 [255, 0, 255], [0, 0, 255], [153, 0, 76]]
+number_colors = rainbowcolors(10)
 
 
 class Number:

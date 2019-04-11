@@ -1,3 +1,10 @@
+import time
+
+from numbersforwatch import Number
+from field import Field
+from painter import Led_Matrix_Painter
+
+
 class Score:
     def __init__(self):
         self.point = 0
@@ -16,18 +23,23 @@ class Score:
         self.point += 1
 
 
-score = Score()
-assert (score.point == 0)
-score.score_for_block()
-assert (score.point == 1)
-score.score_for_line(0)
-assert (score.point == 1)
-score.score_for_line(1)
-assert (score.point == 11)
-score.score_for_line(2)
-assert (score.point == 51)
-score.score_for_line(3)
-assert (score.point == 141)
-score.score_for_line(4)
-assert (score.point == 341)
+if __name__ == "__main__":
+    score = Score()
+
+    led_matrix_painter = Led_Matrix_Painter()
+    scoreboard = Field(32, 8)
+    while True:
+            text = "0000" + str(score.point)
+            text = text[-5:]
+
+            for x in range(len(text)):
+                n = Number(int(text[x]))
+                scoreboard.set_block(n.block, x*5, 2)
+
+            led_matrix_painter.draw(scoreboard)
+            time.sleep(0.1)
+
+            score.score_for_line(4)
+            scoreboard.set_all_pixels_to_black()
+
 

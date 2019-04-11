@@ -1,6 +1,4 @@
 from datetime import datetime
-
-from block import Block
 from feature import Feature
 from field import Field
 from numbersforwatch import Number
@@ -40,15 +38,11 @@ class Clock(Feature):
     def tick(self):
         self.draw_clock()
 
-    # def rainbow_block(self):
-    # self.get_time
-    # todo rainbow colors for watch
-
 
 if __name__ == "__main__":
     field_leds = Field(10, 20)
     rgb_field_painter = RGB_Field_Painter()
-    clock = Clock(field_leds, field_leds, rgb_field_painter, rgb_field_painter)
+    clock = Clock(field_leds, field_leds, rgb_field_painter, Led_Matrix_Painter())
     while True:
         clock.draw_clock()
         rgb_field_painter.draw(field_leds)
