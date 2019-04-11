@@ -38,20 +38,7 @@ class Field:
 
     def collision_count(self, block_to_draw: Block, x: int, y: int) -> int:
         collision_count = 0
-        # TODO: Warum muss das rechts anfangen?
-        column_begin = block_to_draw.width-1
-        column_end = 0
-        # TODO: kann das der Block selbst wissen?
-        for x_count_pixel in range(block_to_draw.width):
-            column_count = 0
-            for y_count_pixel in range(block_to_draw.height):
-                if block_to_draw.is_brick(x_count_pixel, y_count_pixel):
-                    column_count += 1
-            if column_count > 0:
-                if column_begin > x_count_pixel:
-                    column_begin = x_count_pixel
-                if column_end < x_count_pixel:
-                    column_end = x_count_pixel
+        column_begin, column_end = block_to_draw.give_column_begin_and_end()
 
         for y_count in range(block_to_draw.height):
             for x_count in range(block_to_draw.width):
