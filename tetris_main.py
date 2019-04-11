@@ -224,4 +224,4 @@ while True:
     tetris_main.tick()
     tetris_main.delay -= 0.001
     lock.release()
-    time.sleep(tetris_main.delayaaa)
+    time.sleep(tetris_main.delay)
