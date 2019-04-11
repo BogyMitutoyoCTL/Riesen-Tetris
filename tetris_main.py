@@ -56,7 +56,7 @@ class Tetris_Main:
 
     def check_for_full_lines(self):
         print("Test for full lines")
-        self.field_leds.test_for_full_lines()
+        self.field_leds.delete_all_full_lines()
 
     def refresh_blocks(self):
         # Blöcke aussuchen
@@ -89,7 +89,7 @@ class Tetris_Main:
     def move_block_today_one_step_down(self):
         self.delete_block_today()
 
-        if self.field_leds.test_for_collision(
+        if self.field_leds.collision_count(
                 self.block_today,
                 self.position_block_today_x,
                 self.position_block_today_y + 1):
@@ -106,7 +106,7 @@ class Tetris_Main:
     def move_block_today_one_step_left(self):
         self.delete_block_today()
 
-        if self.field_leds.test_for_collision(
+        if self.field_leds.collision_count(
                 self.block_today,
                 self.position_block_today_x - 1,
                 self.position_block_today_y):
@@ -119,7 +119,7 @@ class Tetris_Main:
     def move_block_today_one_step_right(self):
         self.delete_block_today()
 
-        if self.field_leds.test_for_collision(
+        if self.field_leds.collision_count(
                 self.block_today,
                 self.position_block_today_x + 1,
                 self.position_block_today_y):
@@ -133,7 +133,7 @@ class Tetris_Main:
         self.delete_block_today()
         block_today_for_test = Block(self.block_today.get_rotated_left(), 0)
 
-        if self.field_leds.test_for_collision(
+        if self.field_leds.collision_count(
                 block_today_for_test,
                 self.position_block_today_x,
                 self.position_block_today_y):
@@ -149,7 +149,7 @@ class Tetris_Main:
         self.delete_block_today()
         block_today_for_test = Block(self.block_today.get_rotated_right(), 0)
 
-        if self.field_leds.test_for_collision(
+        if self.field_leds.collision_count(
                 block_today_for_test,
                 self.position_block_today_x,
                 self.position_block_today_y):
