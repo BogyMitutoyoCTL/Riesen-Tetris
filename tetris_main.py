@@ -222,6 +222,7 @@ thread_for_control.start()
 while True:
     lock.acquire()
     tetris_main.tick()
-    tetris_main.delay -= 0.001
+    if tetris_main.delay > 0.15:
+        tetris_main.delay -= 0.001
     lock.release()
     time.sleep(tetris_main.delay)
