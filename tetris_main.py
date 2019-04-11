@@ -1,18 +1,18 @@
-import time
-import threading
-import pygame
-import game_sound
-from pygame.locals import *
-from random import random
 import random as random_music
+import threading
+import time
+from random import random
 
+import pygame
+
+import game_sound
+from block import Block, blocks, block_colors
 from feature import Feature
 from field import Field
-from painter import RGB_Field_Painter, Led_Matrix_Painter, Console_Painter
-from block import Block, blocks, block_colors
+from painter import RGB_Field_Painter, Led_Matrix_Painter
 
 lock = threading.Lock()
-_songs = ['./sound-files/lied.mp3', './sound-files/lied2.mp3']
+tetris_songs = ['./sound-files/lied.mp3', './sound-files/lied2.mp3']
 
 
 class Tetris_Main(Feature):
@@ -45,7 +45,8 @@ class Tetris_Main(Feature):
         self.refresh_matrix_painter()
 
     def check_for_full_lines(self):
-        self.field_leds.delete_all_full_lines()
+        if self.field_leds.test_for_and_delete_all_full_lines():
+            game_sound.play_sound("breaking_glass")
 
     def refresh_blocks(self):
         # Blöcke aussuchen
@@ -154,19 +155,16 @@ class Tetris_Main(Feature):
 
     def tick(self):
         lock.acquire()
-        self.move_block_today_one_step_down()
+        if not self.game_over:
+            self.move_block_today_one_step_down()
+            game_sound.play_new_musik_if_music_is_over(tetris_songs)
+        else:
 
-        for event in pygame.event.get():  # plays new music if music is over
-            if event.type == pygame.QUIT:
-                print("New Music")
-                pygame.time.wait(250)
-                next_song = random_music.choice(_songs)
-                game_sound.play_song(next_song)
         lock.release()
 
         if self.delay > 0.15:
             self.delay -= 0.001
-        time.sleep(self.delay) # TODO: Delay einbauen
+        time.sleep(self.delay)  # TODO: Delay einbauen
 
     def event(self, eventname: str):
         lock.acquire()
@@ -192,7 +190,7 @@ class Tetris_Main(Feature):
 
         self.game_over = False
 
-        game_sound.play_song(random_music.choice(_songs))
+        game_sound.play_random_song(tetris_songs)
 
     def prepare_for_start(self):
         self.set_all_fields_black()
@@ -211,7 +209,7 @@ class Tetris_Main(Feature):
 
         self.delay = 0.5
 
-    def stop(self):
+    def stop(self) -> None:
         self.game_over = True
         game_sound.stop_song()
 

@@ -66,8 +66,7 @@ class Led_Matrix_Painter:
         with canvas(self.virtual) as draw:
             for i in range(len(field_to_print.field)):
                 for j in range(len(field_to_print.field[0])):
-                    if field_to_print.field[i][j][0] + field_to_print.field[i][j][1] + field_to_print.field[i][j][
-                        2] > 0:
+                    if field_to_print.field[i][j][0] + field_to_print.field[i][j][1] + field_to_print.field[i][j][2] > 0:
                         draw.point((j, i), fill="white")
                     else:
                         draw.point((j, i), fill="black")

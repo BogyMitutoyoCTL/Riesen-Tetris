@@ -64,7 +64,7 @@ class Field:
         else:
             return 2
 
-    def delete_all_full_lines(self):
+    def test_for_and_delete_all_full_lines(self) -> bool:
         lines_to_delete = []
         for y in range(self.height):
             line_is_full = True
@@ -75,7 +75,11 @@ class Field:
 
             if line_is_full:
                 lines_to_delete.append(y)
-        self.delete_lines(lines_to_delete)
+        if len(lines_to_delete) > 0:
+            self.delete_lines(lines_to_delete)
+            return True
+        else:
+            return False
 
     def delete_lines(self, lines: list):
         for i in range(len(lines)):
