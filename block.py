@@ -84,7 +84,17 @@ class Block:
         ret = m.tolist()
         return ret
 
-    def get_line_of_first_pixel(self):
+    def get_line_of_first_pixel_from_top(self):
+        count = 0
+        for y in range(self.height):
+            for x in range(0, self.width):
+                if self.pixels[y][x] > 0:
+                    count += 1
+            if count > 0:
+                return y
+        return 0
+
+    def get_line_of_first_pixel_from_bottom(self):
         count = 0
         for y in range(self.height - 1, -1, -1):
             for x in range(0, self.width):

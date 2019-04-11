@@ -35,10 +35,11 @@ class Tetris_Main:
         self.rotation_future = int(random() * 4)
 
         self.refresh_blocks()
+        self.refresh_matrix_painter()
 
         # Positionen block_today
         self.position_block_today_x = 3
-        self.position_block_today_y = -self.block_today.get_line_of_first_pixel() - 2
+        self.position_block_today_y = -self.block_today.get_line_of_first_pixel_from_bottom() - 2
 
         self.delay = 0.5
 
@@ -60,7 +61,10 @@ class Tetris_Main:
         self.refresh_blocks()
 
         self.position_block_today_x = 3
-        self.position_block_today_y = -self.block_today.get_line_of_first_pixel() - 1   #evtl. mit -1 am Ende
+        self.position_block_today_y = -self.block_today.get_line_of_first_pixel_from_bottom() - 1   #evtl. mit -1 am Ende
+
+        self.refresh_led_painter()
+        self.refresh_matrix_painter()
 
     def check_for_full_lines(self):
         self.field_leds.delete_all_full_lines()
@@ -76,11 +80,12 @@ class Tetris_Main:
         for i in range(self.rotation_future):
             self.block_future.rotateleft()
 
-    def refresh_painter(self):
+    def refresh_led_painter(self):
         # Blöcke auf das LED Feld malen
         self.field_leds.set_block(self.block_today, self.position_block_today_x, self.position_block_today_y)
         self.rgb_field_painter.draw(self.field_leds)
 
+    def refresh_matrix_painter(self):
         # Blöcke auf die Matrix schreiben
         self.field_matrix.set_all_pixels_to_black()
         self.field_matrix.set_block(self.block_future.double_size(), 24, 0)
@@ -96,75 +101,78 @@ class Tetris_Main:
     def move_block_today_one_step_down(self):
         self.delete_block_today()
 
-        if self.field_leds.collision_count(
+        if self.field_leds.give_type_of_collision(
                 self.block_today,
                 self.position_block_today_x,
-                self.position_block_today_y + 1):
+                self.position_block_today_y + 1) == 2:
+            print(" -> Game over")
+            input()
+        elif self.field_leds.give_type_of_collision(
+                self.block_today,
+                self.position_block_today_x,
+                self.position_block_today_y + 1) == 1:
             print(" -> neuer Block")
-            self.refresh_painter()
+            self.refresh_led_painter()
             self.new_block()
         else:
             self.position_block_today_y += 1
-            self.refresh_blocks()
-        self.refresh_painter()
+            self.refresh_led_painter()
 
     def move_block_today_one_step_left(self):
         self.delete_block_today()
 
-        if self.field_leds.collision_count(
+        if self.field_leds.give_type_of_collision(
                 self.block_today,
                 self.position_block_today_x - 1,
-                self.position_block_today_y):
+                self.position_block_today_y) != 0:
             print(" -> keine Bewegung nach links")
         else:
             self.position_block_today_x -= 1
-            self.refresh_blocks()
-            self.refresh_painter()
+            self.refresh_led_painter()
 
     def move_block_today_one_step_right(self):
         self.delete_block_today()
 
-        if self.field_leds.collision_count(
+        if self.field_leds.give_type_of_collision(
                 self.block_today,
                 self.position_block_today_x + 1,
-                self.position_block_today_y):
+                self.position_block_today_y) != 0:
             print(" -> keine Bewegung nach rechts")
         else:
             self.position_block_today_x += 1
-            self.refresh_blocks()
-            self.refresh_painter()
+            self.refresh_led_painter()
 
     def rotate_block_today_left(self):
         self.delete_block_today()
         block_today_for_test = Block(self.block_today.get_rotated_left(), 0)
 
-        if self.field_leds.collision_count(
+        if self.field_leds.give_type_of_collision(
                 block_today_for_test,
                 self.position_block_today_x,
-                self.position_block_today_y):
+                self.position_block_today_y) != 0:
             print(" -> keine Rotation nach links")
         else:
             self.rotation_today += 1
             if self.rotation_today >= 4:
                 self.rotation_today -= 4
             self.refresh_blocks()
-            self.refresh_painter()
+            self.refresh_led_painter()
 
     def rotate_block_today_right(self):
         self.delete_block_today()
         block_today_for_test = Block(self.block_today.get_rotated_right(), 0)
 
-        if self.field_leds.collision_count(
+        if self.field_leds.give_type_of_collision(
                 block_today_for_test,
                 self.position_block_today_x,
-                self.position_block_today_y):
+                self.position_block_today_y) != 0:
             print(" -> keine Rotation nach rechts")
         else:
             self.rotation_today -= 1
             if self.rotation_today < 0:
                 self.rotation_today += 4
             self.refresh_blocks()
-            self.refresh_painter()
+            self.refresh_led_painter()
 
     def tick(self):
         self.move_block_today_one_step_down()
@@ -183,7 +191,6 @@ class Tetris_Main:
             lock.acquire()
             if keys[K_n]:  # neuer Block    # todo: später rauswerfen (Johannes)
                 self.new_block()
-                self.refresh_painter()
                 self.control_wait_for_release(K_n)
             elif keys[K_q]:  # rotate left
                 self.rotate_block_today_left()

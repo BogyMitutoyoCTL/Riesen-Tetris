@@ -38,25 +38,31 @@ class Field:
                 if block_to_draw.is_brick(brick_x, brick_y):
                     self.set_pixel(brick_x + field_x, brick_y + field_y, color)
 
-    def collision_count(self, block_to_draw: Block, x: int, y: int) -> bool:
+    def give_type_of_collision(self, block_to_draw: Block, x: int, y: int) -> int:
         for y_count in range(block_to_draw.height):
             for x_count in range(block_to_draw.width):
                 if block_to_draw.is_brick(x_count, y_count):
                     if y + y_count > self.height - 1:
                         print("Kollision Boden", end="")
-                        return True
+                        return 1
                     elif x + x_count < 0:
                         print("Kollision linker Rand", end="")
-                        return True
+                        return 1
                     elif x + x_count > self.width - 1:
                         print("Kollision rechter Rand", end="")
-                        return True
+                        return 1
                     elif not self.pixel_is_inside_field(x + x_count, y_count + y):
                         pass
                     elif self.field[y + y_count][x + x_count] != BLACK:
                         print("Kollision Block", end="")
-                        return True
-        return False
+                        return self.is_hole_block_in_field(block_to_draw, y)
+        return 0
+
+    def is_hole_block_in_field(self, block_to_draw: Block, y: int) -> int:
+        if self.pixel_is_inside_field(0, y+block_to_draw.get_line_of_first_pixel_from_top()-1): # -1 weil der Block ja eins runtergesetzt wurde
+            return 1
+        else:
+            return 2
 
     def delete_all_full_lines(self):
         lines_to_delete = []
