@@ -6,6 +6,7 @@ from pygame.locals import *
 from random import random
 import random as random_music
 
+from feature import Feature
 from field import Field
 from painter import RGB_Field_Painter, Led_Matrix_Painter, Console_Painter
 from block import Block, blocks, block_colors
@@ -14,15 +15,10 @@ lock = threading.Lock()
 _songs = ['./sound-files/lied.mp3', './sound-files/lied2.mp3']
 
 
-class Tetris_Main:
-    def __init__(self):
-        # Felder erstellen
-        self.field_leds = Field(10, 20)
-        self.field_matrix = Field(32, 8)
-
-        # Painter erstellen
-        self.rgb_field_painter = RGB_Field_Painter()
-        self.led_matrix_painter = Led_Matrix_Painter()
+class Tetris_Main(Feature):
+    def __init__(self, field_leds: Field, field_matrix: Field, rgb_field_painter: RGB_Field_Painter,
+                 led_matrix_painter: Led_Matrix_Painter):
+        super(Tetris_Main, self).__init__(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
 
         # block erstellen
         self.block_today = Block(blocks[0], block_colors[0])
@@ -65,7 +61,7 @@ class Tetris_Main:
         self.refresh_blocks()
 
         self.position_block_today_x = 3
-        self.position_block_today_y = -self.block_today.get_line_of_first_pixel_from_bottom() - 1   #evtl. mit -1 am Ende
+        self.position_block_today_y = -self.block_today.get_line_of_first_pixel_from_bottom() - 1  # evtl. mit -1 am Ende
 
         self.refresh_led_painter()
         self.refresh_matrix_painter()
@@ -179,16 +175,14 @@ class Tetris_Main:
             self.refresh_led_painter()
 
     def tick(self):
-        lock.acquire()
         self.move_block_today_one_step_down()
 
-        for event in pygame.event.get():    # plays new music if music is over
+        for event in pygame.event.get():  # plays new music if music is over
             if event.type == pygame.QUIT:
                 print("New Music")
                 pygame.time.wait(250)
                 next_song = random_music.choice(_songs)
                 game_sound.play_song(next_song)
-        lock.release()
 
         if tetris_main.delay > 0.15:
             tetris_main.delay -= 0.001
@@ -217,6 +211,20 @@ class Tetris_Main:
                 self.move_block_today_one_step_down()
                 self.control_wait_for_release(K_s)
             lock.release()
+
+    def event(self, eventname: str):
+        if eventname == "new":  # neuer Block    # todo: später rauswerfen (Johannes)
+            self.new_block()
+        elif eventname == "rotate left":  # rotate left
+            self.rotate_block_today_left()
+        elif eventname == "rotate right":  # rotate right
+            self.rotate_block_today_right()
+        elif eventname == "move left":  # move left
+            self.move_block_today_one_step_left()
+        elif eventname == "move right":  # move right
+            self.move_block_today_one_step_right()
+        elif eventname == "move down":  # move down
+            self.move_block_today_one_step_down()
 
     def control_wait_for_release(self, key):
         lock.release()
