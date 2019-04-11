@@ -56,11 +56,11 @@ class Field:
         for y_count in range(block_to_draw.height):
             for x_count in range(block_to_draw.width):
                 if block_to_draw.is_brick(x_count, y_count):
-                    if not self.pixel_is_inside_field(0, y_count + y):
-                        print("Not in field: y="+str(y_count)+", x="+str(x_count))
-                    elif y + y_count > self.height - 1:
+                    if y + y_count > self.height - 1:
                         print("Kollision Boden an Block.pixel: x=" + str(x_count) + ", y=" + str(y_count))
                         collision_count += 1
+                    elif not self.pixel_is_inside_field(0, y_count + y):
+                        print("Not in field: y="+str(y_count)+", x="+str(x_count))
                     elif x + column_begin < 0:
                         print("Kollision linker Rand an Block.pixel: x=" + str(x_count) + ", y=" + str(y_count))
                         collision_count += 1
