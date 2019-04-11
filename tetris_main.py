@@ -29,8 +29,8 @@ class Tetris_Main:
         self.block_future = Block(blocks[0], block_colors[0])
 
         # Blockeigenschaften
-        self.random_number_today = int(random() * 6)
-        self.random_number_future = int(random() * 6)
+        self.random_number_today = int(random() * 7)
+        self.random_number_future = int(random() * 7)
         self.rotation_today = int(random() * 4)
         self.rotation_future = int(random() * 4)
 
@@ -39,6 +39,8 @@ class Tetris_Main:
         # Positionen block_today
         self.position_block_today_x = 3
         self.position_block_today_y = -self.block_today.get_line_of_first_pixel() - 2
+
+        self.delay = 0.5
 
         pygame.init()
         screen = pygame.display.set_mode((200, 200))
@@ -50,7 +52,7 @@ class Tetris_Main:
         self.check_for_full_lines()
 
         self.random_number_today = self.random_number_future
-        self.random_number_future = int(random() * 6)
+        self.random_number_future = int(random() * 7)
 
         self.rotation_today = self.rotation_future
         self.rotation_future = int(random() * 4)
@@ -170,7 +172,7 @@ class Tetris_Main:
         for event in pygame.event.get():    # plays new music if music is over
             if event.type == pygame.QUIT:
                 print("New Music")
-                pygame.time.wait(500)
+                pygame.time.wait(250)
                 next_song = random_music.choice(_songs)
                 game_sound.play_song(next_song)
 
@@ -220,5 +222,6 @@ thread_for_control.start()
 while True:
     lock.acquire()
     tetris_main.tick()
+    tetris_main.delay -= 0.001
     lock.release()
-    time.sleep(0.5)
+    time.sleep(tetris_main.delayaaa)
