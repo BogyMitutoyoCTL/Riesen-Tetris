@@ -1,6 +1,8 @@
 from block import Block
 
 BLACK = [0, 0, 0]
+
+
 class Field:
 
     def __init__(self, width, height):
@@ -8,7 +10,6 @@ class Field:
         self.height = height
         self.field = []
         self.generate_field()
-        self.lines_to_delete = []
 
     def set_all_pixels_to_black(self):
         for y in range(self.height):
@@ -17,7 +18,7 @@ class Field:
 
     def generate_field(self):
         for y in range(self.height):
-            self.field.append([])    # empty line
+            self.field.append([])  # empty line
             for x in range(self.width):
                 self.field[y].append(BLACK)
 
@@ -40,7 +41,7 @@ class Field:
     def collision_count(self, block_to_draw: Block, x: int, y: int) -> int:
         collision_count = 0
         # TODO: Warum muss das rechts anfangen?
-        column_begin = block_to_draw.width-1
+        column_begin = block_to_draw.width - 1
         column_end = 0
         # TODO: kann das der Block selbst wissen?
         for x_count_pixel in range(block_to_draw.width):
@@ -61,7 +62,7 @@ class Field:
                         print("Kollision Boden an Block.pixel: x=" + str(x_count) + ", y=" + str(y_count))
                         collision_count += 1
                     elif not self.pixel_is_inside_field(0, y_count + y):
-                        print("Not in field: y="+str(y_count)+", x="+str(x_count))
+                        print("Not in field: y=" + str(y_count) + ", x=" + str(x_count))
                     elif x + column_begin < 0:
                         print("Kollision linker Rand an Block.pixel: x=" + str(x_count) + ", y=" + str(y_count))
                         collision_count += 1
@@ -77,6 +78,7 @@ class Field:
         return collision_count
 
     def delete_all_full_lines(self):
+        lines_to_delete = []
         for y in range(self.height):
             line_is_full = True
             for x in range(self.width):
@@ -86,37 +88,19 @@ class Field:
                     break
 
             if line_is_full:
-                self.delete_line(y)
-
-    def get_full_lines(self):
-        self.lines_to_delete = []
-        for y in range(0, self.height):
-            counter = 0
-            for x in range(0, self.width):
-                if self.field[y][x][0] + self.field[y][x][1] + self.field[y][x][2] > 0:
-                    counter += 1
-            if counter == self.width:
-                self.lines_to_delete.append(y)
-        self.delete_lines(self.lines_to_delete)
-
-    def delete_line(self, line: int):
-        for y in range(line, 0, -1):
-            self.field[y] = self.field[y-1]
-
-        self.field[0] = []
-        for _ in range(0, self.width):
-            self.field[0].append(BLACK)
+                lines_to_delete.append(y)
+        self.delete_lines(lines_to_delete)
 
     def delete_lines(self, lines: list):
-        for i in range(0, len(lines)):
+        for i in range(len(lines)):
             line = lines[i]
             for y in range(line, 0, -1):
                 self.field[y] = self.field[y - 1]
 
+
             self.field[0] = []
-            for _ in range(0, self.width):
+            for _ in range(self.width):
                 self.field[0].append(BLACK)
 
     def pixel_is_inside_field(self, x: int, y: int):
         return 0 <= y < self.height and 0 <= x < self.width
-

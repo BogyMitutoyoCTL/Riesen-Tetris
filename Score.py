@@ -4,6 +4,7 @@ class Scorelist:
         self.point = point
     def score(self, point):
 
+
 #add dictionary
 #add function for score
 

@@ -224,6 +224,10 @@ tetris_main.set_all_fields_black()
 # tetris_main.field_leds.set_pixel(7, 19, [255, 255, 0])
 # tetris_main.field_leds.set_pixel(8, 19, [255, 255, 0])
 # tetris_main.field_leds.set_pixel(9, 19, [255, 255, 0])
+for i in range(0, 10):
+    tetris_main.field_leds.set_pixel(i, 19, [255, 255, 0])
+for i in range(0, 10):
+    tetris_main.field_leds.set_pixel(i, 18, [255, 255, 0])
 
 thread_for_control = threading.Thread(target=tetris_main.control)       # ohne () nach target=tetris_main.control
 thread_for_control.daemon = True
