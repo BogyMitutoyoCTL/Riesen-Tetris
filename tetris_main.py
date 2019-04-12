@@ -31,7 +31,7 @@ class Tetris_Main(Feature):
 
         game_sound.init_mixer()
 
-    def new_block(self):
+    def __new_block(self):
         self.check_for_full_lines()
 
         self.random_number_today = self.random_number_future
@@ -49,8 +49,13 @@ class Tetris_Main(Feature):
         self.refresh_matrix_painter()
 
     def check_for_full_lines(self):
-        if self.field_leds.test_for_and_delete_all_full_lines():
+
+        deletablelines = self.field_leds.get_all_full_lines()
+        if len(deletablelines) > 0:
             game_sound.play_sound("breaking_line")
+            time.sleep(0.2)
+            self.field_leds.delete_lines(deletablelines)
+            self.score.score_for_line(len(deletablelines))
 
     def refresh_blocks(self):
         # Blöcke aussuchen
@@ -69,8 +74,10 @@ class Tetris_Main(Feature):
         self.rgb_field_painter.draw(self.field_leds)
 
     def refresh_matrix_painter(self):
+
         # Blöcke auf die Matrix schreiben
         self.field_matrix.set_all_pixels_to_black()
+        self.score.draw_score_on_field()
         self.field_matrix.set_block(self.block_future.double_size(), 24, 0)
         self.led_matrix_painter.draw(self.field_matrix)
 
@@ -99,7 +106,9 @@ class Tetris_Main(Feature):
                 self.position_block_today_y + 1) == 1:
             print(" -> neuer Block")
             self.refresh_led_painter()
-            self.new_block()
+            self.__new_block()
+            self.score.score_for_block()
+            self.refresh_matrix_painter()
         else:
             self.position_block_today_y += 1
             self.refresh_led_painter()
@@ -179,7 +188,7 @@ class Tetris_Main(Feature):
         lock.acquire()
         if not self.game_over:
             if eventname == "new":  # neuer Block    # todo: später rauswerfen (Johannes)
-                self.new_block()
+                self.__new_block()
             elif eventname == "rotate left":  # rotate left
                 self.rotate_block_today_left()
             elif eventname == "rotate right":  # rotate right
@@ -219,8 +228,11 @@ class Tetris_Main(Feature):
 
         self.delay = 0.5
 
+        self.score = Score(self.field_matrix)
+
     def stop(self) -> None:
-         game_sound.stop_song()
+        self.game_over = True
+        game_sound.stop_song()
 
     def is_game_over(self) -> bool:
         return self.game_over

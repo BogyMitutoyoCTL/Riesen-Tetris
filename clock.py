@@ -38,13 +38,11 @@ class Clock(Feature):
 
     def draw_date(self):
         self.field_matrix.set_all_pixels_to_black()
-        year, month, day = self.get_date()
+        _, month, day = self.get_date()
         day_str = ("0"+str(day))[-2:]
         month_str = ("0" + str(month))[-2:]
-        year_str = ("000" + str(year))[-4:]
 
-        print(day_str+"."+month_str+"."+year_str)
-        self.led_matrix_painter.show_Text(""+day_str+"."+month_str+"."+year_str+"")
+        self.led_matrix_painter.show_Text(""+day_str+"."+month_str+".")
 
     def event(self, eventname: str):
         if eventname == "break":
