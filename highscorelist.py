@@ -43,7 +43,7 @@ class Highscorelist:
             temporary_list = pickle.load(f)
             self.highscores = temporary_list.highscores
 score = Score()
-y = str(score.point)
+y = str(score.points)
 
 if __name__ == "__main__":
     tetrishighscores = Highscorelist('tetrisscores')
