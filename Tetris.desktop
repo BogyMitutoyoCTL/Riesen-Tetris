@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Autostart-Script
+Comment=BOGY Tetris
+Type=Application
+Exec=/home/pi/Riesen-Tetris/MAIN.py
+Terminal=false
