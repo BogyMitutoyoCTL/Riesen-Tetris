@@ -25,7 +25,7 @@ class Rainbowclock(Clock):
         for x in range(10):
             for y in range(20):
                 back.set_pixel(x, y, self.r[y + self.currentrainbowstart])
-        self.draw_clock()
+        self.draw_clock([255, 255, 255])
         rainbowtime = multiply(back, self.field_leds)
         self.rgb_field_painter.draw(rainbowtime)
         sleep(0.05)

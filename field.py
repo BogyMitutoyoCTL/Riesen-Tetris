@@ -26,8 +26,10 @@ class Field:
         if self.pixel_is_inside_field(x, y):
             self.field[y][x] = color
 
-    def set_block(self, block_to_draw: Block, field_x: int, field_y: int):
-        self.draw_block(block_to_draw, block_to_draw.color, field_x, field_y)
+    def set_block(self, block_to_draw: Block, field_x: int, field_y: int, color: list = None):
+        if color == None:
+            color = block_to_draw.color
+        self.draw_block(block_to_draw, color, field_x, field_y)
 
     def remove_block(self, block_to_draw: Block, field_x: int, field_y: int):
         self.draw_block(block_to_draw, BLACK, field_x, field_y)

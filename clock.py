@@ -19,7 +19,7 @@ class Clock(Feature):
         tuple_date = datetime.timetuple(datetime.today())
         return tuple_date[0], tuple_date[1],  tuple_date[2]
 
-    def draw_clock(self):
+    def draw_clock(self, color: list=None):
         self.field_leds.set_all_pixels_to_black()
         hour, minute, second = self.get_time()
         hour_str = ("0"+str(hour))[-2:]
@@ -32,7 +32,7 @@ class Clock(Feature):
         positions = [[0, 1], [5, 1], [0, 7], [5, 7], [0, 13], [5, 13]]
         for i in range(6):
             digit = clock_array[i]
-            self.field_leds.set_block(Number(digit).block, positions[i][0], positions[i][1])
+            self.field_leds.set_block(Number(digit).block, positions[i][0], positions[i][1], color)
 
 
     def get_date_string(self):
