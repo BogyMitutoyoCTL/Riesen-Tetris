@@ -17,6 +17,5 @@ socket.on('playing-users', (data) => {
 
 socket.on('connected-users', (data) => {
   console.log("Connected Users: " + data);
-  document.getElementById("connected-users").innerHTML = data;
 });
 

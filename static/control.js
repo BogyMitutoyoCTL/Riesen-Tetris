@@ -7,7 +7,6 @@ socket.on('playing-users', (data) => {
     console.log("Too many players")
     window.location.replace("/");
   }
-  document.getElementById("playing-users").innerHTML = data;
 });
 
 function button_pressed(action) {
@@ -16,7 +15,10 @@ function button_pressed(action) {
   console.log(action);
 }
 
-function checkPlayingUsers() {
-  console.log("Check Playing users...");
-  data = document.getElementById("playing-users").innerHTML;
+function getUsername() {
+    console.log("Get Username...");
+    data = document.getElementById("username").value;
+    document.getElementById("username-display").innerHTML = data;
+    document.getElementById('container-username-id').style.display = 'none'
+    console.log(data);
 }
