@@ -35,7 +35,7 @@ zu 8.) hier könnt ihr lesen wie ihr wieder Platz auf der SD Karte schafft: http
 zu 9.) Um PyCharm mit "sudo" zu starten, müsst ihr die Schaltfläche ändern, mit der ihr PyCharm aufruft. Im Schaltflächen Editor gibt es 3 Zeilen, die ihr seht wenn Ihr die Schaltfläche bearbeitet. In der mittleren Zeile steht der Programmaufruf. Dort schreibt ihr einfach "sudo" davor. (ohne Anführungszeichen natürlich)
 
 
-pip3 install luma luma.core luma.led_matrix numpy pillow  pygame datetime flask
+sudo pip3 install -r requirements.txt
 
 erster Befehl: "chmod +x /home/pi/Riesen-Tetris/MAIN.py"
 zweiter Befehl: "sudo nano /lib/systemd/system/LED.service "
