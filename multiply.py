@@ -12,7 +12,7 @@ def multiply(background: Field, foreground: Field):
     white = Field(10,20)
     for x in range(10):
         for y in range(20):
-            white.set_pixel(x,y, [255,255,255])
+            white.set_pixel(x, y, [255, 255, 255])
 
     bg = numpy.array(background.field)
     fg = numpy.array(foreground.field)
@@ -42,4 +42,4 @@ if __name__ == "__main__":
         clock.draw_clock()
         rainbowtime = multiply(back, fore)
         rgb_field_painter.draw(rainbowtime)
-        sleep(0.03)
+        sleep(0.05)
