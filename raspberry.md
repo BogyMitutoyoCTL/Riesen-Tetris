@@ -37,7 +37,7 @@ zu 9.) Um PyCharm mit "sudo" zu starten, müsst ihr die Schaltfläche ändern, m
 
 pip3 install luma luma.core luma.led_matrix numpy pillow  pygame datetime flask
 
-erster Befehl: "~/Riesen-Tetris $ chmod +x MAIN.py"
+erster Befehl: "chmod +x /home/pi/Riesen-Tetris/MAIN.py"
 zweiter Befehl: "sudo nano /lib/systemd/system/LED.service "
 in folgende Datei muss:
 "
