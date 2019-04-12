@@ -1,7 +1,7 @@
-import random as random_music
 import threading
 import time
 from random import random
+from copy import deepcopy
 
 import pygame
 
@@ -51,9 +51,25 @@ class Tetris_Main(Feature):
         deletablelines = self.field_leds.get_all_full_lines()
         if len(deletablelines) > 0:
             game_sound.play_sound("breaking_line")
-            time.sleep(0.2)
+            self.blink_deleted_lines(deletablelines)
             self.field_leds.delete_lines(deletablelines)
             self.score.score_for_line(len(deletablelines))
+
+    def blink_deleted_lines(self, deletablelines: list):
+        colors_in_line = deepcopy(self.field_leds.field)
+        colors_for_blink = [1, 0, 1, 0]
+
+        for color in colors_for_blink:
+            for y in deletablelines:
+                for x in range(self.field_leds.width):
+                    if color == 1:
+                        self.field_leds.field[y][x] = [255, 255, 255]
+                    else:
+                        print("Farbe")
+                        self.field_leds.field[y][x] = colors_in_line[y][x]
+
+            self.rgb_field_painter.draw(self.field_leds)
+            time.sleep(0.03)
 
     def refresh_blocks(self):
         # Blöcke aussuchen
@@ -228,9 +244,18 @@ class Tetris_Main(Feature):
 
         self.score = Score(self.field_matrix)
 
+        # self.draw_lines_for_test()
+
     def stop(self) -> None:
         self.game_over = True
         game_sound.stop_song()
 
     def is_game_over(self) -> bool:
         return self.game_over
+
+    def draw_lines_for_test(self):
+        for x in range(self.field_leds.width):
+            self.field_leds.field[19][x] = [0, 255, 100]
+            self.field_leds.field[18][x] = [0, 255, 100]
+        self.field_leds.field[18][5] = [0, 0, 0]
+        self.field_leds.field[19][5] = [0, 0, 0]
