@@ -26,6 +26,8 @@ class Score:
     def get_score(self):
         return self.point
 
+
+
 if __name__ == "__main__":
     score = Score()
 
