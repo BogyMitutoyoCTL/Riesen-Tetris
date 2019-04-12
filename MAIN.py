@@ -24,7 +24,7 @@ def control():
         if keys[K_t]:  # tetris
             active.stop()
             active = tetris
-            active.start()
+            active.start(input("Tell me your name: "))
             control_wait_for_release(K_t)
         elif keys[K_r]:  # rainbow uhr
             active.stop()

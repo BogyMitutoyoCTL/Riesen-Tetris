@@ -115,7 +115,7 @@ class Tetris_Main(Feature):
             game_sound.stop_song()
             game_sound.play_sound("game_over")
             self.highscorelist.add_entry(
-                Highscoreentry(datetime.today(), input("Tell me your name: "), self.score.get_score_int()))
+                Highscoreentry(datetime.today(), self.playername, self.score.get_score_int()))
             self.highscorelist.save()
             self.led_matrix_painter.show_Message("Game over - Your Points: " + str(self.score.get_score_str()), 250)
         elif self.field_leds.give_type_of_collision(
@@ -219,7 +219,8 @@ class Tetris_Main(Feature):
                 self.move_block_today_one_step_down()
         lock.release()
 
-    def start(self):
+    def start(self, playername: str=None):
+        super(Tetris_Main, self).start(playername)
         self.prepare_for_start()
 
         self.refresh_led_painter()
