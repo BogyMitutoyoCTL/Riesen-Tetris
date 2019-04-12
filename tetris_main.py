@@ -16,6 +16,7 @@ lock = threading.Lock()
 tetris_songs = ['./sound-files/lied.mp3', './sound-files/lied2.mp3']
 
 
+
 class Tetris_Main(Feature):
     def __init__(self, field_leds: Field, field_matrix: Field, rgb_field_painter: RGB_Field_Painter,
                  led_matrix_painter: Led_Matrix_Painter):
@@ -94,7 +95,9 @@ class Tetris_Main(Feature):
                 self.position_block_today_y + 1) == 2:
             print(" -> Game over")
             self.game_over = True
-            self.led_matrix_painter.show_Message("Game over - Your Points: "+str(self.score.get_score()), 250)
+            game_sound.stop_song()
+            game_sound.play_sound("game_over")
+            self.led_matrix_painter.show_Message("Game over - Your Points: " + str(self.score.get_score_str()), 250)
         elif self.field_leds.give_type_of_collision(
                 self.block_today,
                 self.position_block_today_x,

@@ -4,6 +4,7 @@ import pickle
 from Score import *
 
 
+
 class Highscoreentry:
     date = 0
     name = ""
@@ -50,7 +51,7 @@ if __name__ == "__main__":
     print(score)
 
     today = date.today()
-    x = Highscoreentry(today, "Domenik", y)
+    x = Highscoreentry(today, name_input, y)                 #TODO: Name mit tatsächlichem Username austauschen!
     tetrishighscores.add_entry(x)
 
     tetrishighscores.save()

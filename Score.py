@@ -23,8 +23,11 @@ class Score:
     def score_for_block(self):
         self.points += 1
 
-    def get_score(self) -> str:
+    def get_score_str(self) -> str:
         return ("0000"+str(self.points))[-5:]
+
+    def get_score_int(self) -> int:
+        return self.points
 
     def draw_score_on_field(self):
         text = ("0000" + str(self.points))[-5:]
@@ -32,6 +35,8 @@ class Score:
         for x in range(len(text)):
             n = Number(int(text[x]))
             self.field_for_score.set_block(n.block, x*5, 2)
+
+
 
 
 if __name__ == "__main__":
