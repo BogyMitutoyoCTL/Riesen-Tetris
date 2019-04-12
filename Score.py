@@ -37,6 +37,8 @@ class Score:
             self.field_for_score.set_block(n.block, x*5, 2)
 
 
+
+
 if __name__ == "__main__":
     score = Score()
 

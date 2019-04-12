@@ -24,8 +24,8 @@ def play_sound(name: str="bell"):
         file = './sound-files/effects/glass_breaking.wav'
     elif name == "bell":
         file = './sound-files/effects/bell.wav'
-    elif name == "breaking_glass":
-        file = './sound-files/effects/glass_breaking.wav'
+    elif name == "game_over":
+        file = './sound-files/effects/game_over.wav'
     sound = pygame.mixer.Sound(file)
     sound.set_volume(1.0)
     pygame.mixer.Channel(1).play(sound)

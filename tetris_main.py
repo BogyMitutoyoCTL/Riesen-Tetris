@@ -94,7 +94,9 @@ class Tetris_Main(Feature):
                 self.position_block_today_y + 1) == 2:
             print(" -> Game over")
             self.game_over = True
-            self.led_matrix_painter.show_Message("Game over - Your Points: " + str(self.score.get_score_str()), 250)
+            game_sound.stop_song()
+            game_sound.play_sound("game_over")
+            self.led_matrix_painter.show_Message("Game over - Your Points: "+str(123456), 250)
         elif self.field_leds.give_type_of_collision(
                 self.block_today,
                 self.position_block_today_x,
