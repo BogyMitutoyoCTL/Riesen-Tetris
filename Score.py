@@ -5,6 +5,7 @@ from field import Field
 from painter import Led_Matrix_Painter
 
 
+
 class Score:
     def __init__(self):
         self.point = 0
@@ -16,12 +17,14 @@ class Score:
             self.point += 40
         elif deleted_lines == 3:
             self.point += 90
-        elif deleted_lines >= 4:
+        elif deleted_lines == 4:
             self.point += 200
 
     def score_for_block(self):
         self.point += 1
 
+    def get_score(self):
+        return self.point
 
 if __name__ == "__main__":
     score = Score()
