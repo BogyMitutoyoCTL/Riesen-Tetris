@@ -34,7 +34,7 @@ async def control(request):
 
 @aiohttp_jinja2.template('highscores.html')
 async def highscores(request):
-    return {{'point':20, 'name':"TW", 'date':'2019-02-11'}}
+    return json.dumps({{'point':20, 'name':"TW", 'date':'2019-02-11'}})
 
 
 async def favicon_handler(request):
