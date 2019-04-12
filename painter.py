@@ -70,12 +70,12 @@ class Led_Matrix_Painter:
         self.position_of_Message_x = 0
         self.virtual.set_position((0, 0))
         with canvas(self.virtual) as draw:
-            draw.rectangle(self.device.bounding_box, outline="white", fill="black")
-            draw.text((0, 0), "      "+message, fill="white")
+            # draw.rectangle(self.device.bounding_box, outline="white", fill="black")
+            draw.text((0, -2), "      "+message, fill="white")
 
     def move_Message(self):
-        self.position_of_Message_x -= 1
-        if self.position_of_Message_x < -self.amount_of_steps_for_message:
+        self.position_of_Message_x += 1
+        if self.position_of_Message_x > self.amount_of_steps_for_message:
             self.position_of_Message_x = 0
         self.virtual.set_position((self.position_of_Message_x, 0))
 

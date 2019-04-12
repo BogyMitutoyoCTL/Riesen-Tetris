@@ -46,7 +46,7 @@ class Tetris_Main(Feature):
 
     def check_for_full_lines(self):
         if self.field_leds.test_for_and_delete_all_full_lines():
-            game_sound.play_sound("breaking_glass")
+            game_sound.play_sound("breaking_line")
 
     def refresh_blocks(self):
         # Blöcke aussuchen
@@ -86,7 +86,7 @@ class Tetris_Main(Feature):
                 self.position_block_today_y + 1) == 2:
             print(" -> Game over")
             self.game_over = True
-            self.led_matrix_painter.show_Message("Game over - Your Points: "+str(123456), 50)
+            self.led_matrix_painter.show_Message("Game over - Your Points: "+str(123456), 250)
         elif self.field_leds.give_type_of_collision(
                 self.block_today,
                 self.position_block_today_x,
@@ -161,11 +161,13 @@ class Tetris_Main(Feature):
             game_sound.play_new_musik_if_music_is_over(tetris_songs)
         else:
             self.led_matrix_painter.move_Message()
+            time.sleep(0.02)
         lock.release()
 
-        if self.delay > 0.15:
-            self.delay -= 0.001
-        time.sleep(self.delay)  # TODO: Delay einbauen
+        if not self.game_over:
+            if self.delay > 0.15:
+                self.delay -= 0.001
+            time.sleep(self.delay)  # TODO: Delay einbauen
 
     def event(self, eventname: str):
         lock.acquire()
