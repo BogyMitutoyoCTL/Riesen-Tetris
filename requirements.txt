@@ -11,4 +11,4 @@ aiohttp
 jinja2
 aiohttp_jinja2
 python-socketio
-
+redis
