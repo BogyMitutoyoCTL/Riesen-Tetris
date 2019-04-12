@@ -8,7 +8,6 @@ import aiohttp_jinja2
 import socketio
 
 r = redis.StrictRedis(host='localhost', port=6379)
-p = r.pubsub()
 
 sio = socketio.AsyncServer(ping_timeout=1, ping_interval=0.2)
 

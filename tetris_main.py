@@ -1,5 +1,4 @@
 import threading
-import time
 from random import random
 from copy import deepcopy
 
@@ -8,9 +7,7 @@ import pygame
 import game_sound
 from block import Block, blocks, block_colors
 from feature import Feature
-from field import Field
-from painter import RGB_Field_Painter, Led_Matrix_Painter
-from Score import *
+from painter import RGB_Field_Painter
 from highscorelist import *
 
 lock = threading.Lock()
@@ -22,12 +19,8 @@ class Tetris_Main(Feature):
                  led_matrix_painter: Led_Matrix_Painter, highscorelist: Highscorelist):
         super(Tetris_Main, self).__init__(field_leds, field_matrix, rgb_field_painter, led_matrix_painter,
                                           highscorelist)
-
         self.prepare_for_start()
-
         pygame.init()
-        screen = pygame.display.set_mode((200, 200))
-
         game_sound.init_mixer()
 
     def __new_block(self):
@@ -66,7 +59,6 @@ class Tetris_Main(Feature):
                     if color == 1:
                         self.field_leds.field[y][x] = [255, 255, 255]
                     else:
-                        print("Farbe")
                         self.field_leds.field[y][x] = colors_in_line[y][x]
 
             self.rgb_field_painter.draw(self.field_leds)
