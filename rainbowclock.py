@@ -15,7 +15,6 @@ class Rainbowclock(Clock):
         self.r = rainbowcolors(self.COLORS + 20, (self.COLORS + 20) / self.COLORS)
         self.currentrainbowstart = 0
 
-
     def tick(self):
         self.led_matrix_painter.show_Text(self.get_date_string())
         back = Field(10, 20)

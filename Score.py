@@ -6,9 +6,8 @@ from painter import Led_Matrix_Painter
 
 
 class Score:
-    def __init__(self, field_for_score: Field):
+    def __init__(self):
         self.points = 0
-        self.field_for_score = field_for_score
 
     def score_for_line(self, deleted_lines):
         if deleted_lines == 1:
@@ -29,12 +28,12 @@ class Score:
     def get_score_int(self) -> int:
         return self.points
 
-    def draw_score_on_field(self):
+    def draw_score_on_field(self, field_for_score: Field):
         text = ("0000" + str(self.points))[-5:]
 
         for x in range(len(text)):
             n = Number(int(text[x]))
-            self.field_for_score.set_block(n.block, x*5, 2)
+            field_for_score.set_block(n.block, x*5, 2)
 
 
 

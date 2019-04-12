@@ -11,6 +11,7 @@ from field import Field
 from painter import RGB_Field_Painter, Led_Matrix_Painter
 from rainbowclock import Rainbowclock
 from tetris_main import Tetris_Main
+from highscorelist import *
 
 running = True
 
@@ -35,6 +36,10 @@ def control():
             active = clock
             active.start()
             control_wait_for_release(K_u)
+        elif keys[K_h]:  # Highscorelist
+            test = highscorelist_tetris.highscores
+            print(test)
+            control_wait_for_release(K_h)
         elif keys[K_n]:  # neuer Block    # todo: später rauswerfen (Johannes)
             active.event("new")
             control_wait_for_release(K_n)
@@ -68,9 +73,12 @@ field_matrix = Field(32, 8)
 rgb_field_painter = RGB_Field_Painter()
 led_matrix_painter = Led_Matrix_Painter()
 
+highscorelist_tetris = Highscorelist("Tetris")
+highscorelist_tetris.load()
+
 rainbowclock = Rainbowclock(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
 clock = Clock(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
-tetris = Tetris_Main(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
+tetris = Tetris_Main(field_leds, field_matrix, rgb_field_painter, led_matrix_painter, highscorelist_tetris)
 
 active = rainbowclock
 active.start()
