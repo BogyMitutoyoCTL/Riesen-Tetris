@@ -1,3 +1,14 @@
+### fontawesome-free-web
+# To download a copy of fontawesome, go here: https://fontawesome.com/download
+# and put the content to the folder /static/fontawesome-free-web
+/static/fontawesome-free-web
+
+/.idea/Riesen-Tetris.iml
+/.idea/encodings.xml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/vcs.xml
+
 
 # Created by https://www.gitignore.io/api/python,pycharm
 # Edit at https://www.gitignore.io/?templates=python,pycharm
@@ -210,3 +221,4 @@ dmypy.json
 .pyre/
 
 # End of https://www.gitignore.io/api/python,pycharm
+
