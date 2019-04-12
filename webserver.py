@@ -1,10 +1,14 @@
 import time
+import redis
 from aiohttp import web
 import json
 import os
 import jinja2
 import aiohttp_jinja2
 import socketio
+
+r = redis.StrictRedis(host='localhost', port=6379)
+p = r.pubsub()
 
 sio = socketio.AsyncServer(ping_timeout=1, ping_interval=0.2)
 
@@ -17,11 +21,6 @@ app['connect_counter'] = 0
 app['playing_counter'] = 0
 
 sio.attach(app)
-
-
-@sio.on('message', namespace='Test')
-async def connect_handler():
-    print('Message!')
 
 
 @aiohttp_jinja2.template('index.html')
@@ -45,6 +44,7 @@ async def favicon_handler(request):
 
 @sio.on('message', namespace='/control')
 async def print_message(sid, message):
+    r.publish('game_action', message)
     print("Socket ID: ", sid)
     print(message)
 
