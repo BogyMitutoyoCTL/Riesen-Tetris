@@ -9,6 +9,7 @@ import random
 from clock import Clock
 from field import Field
 from painter import RGB_Field_Painter, Led_Matrix_Painter
+from rainbowclock import Rainbowclock
 from tetris_main import Tetris_Main
 
 running = True
@@ -62,7 +63,7 @@ field_matrix = Field(32, 8)
 rgb_field_painter = RGB_Field_Painter()
 led_matrix_painter = Led_Matrix_Painter()
 
-clock = Clock(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
+clock = Rainbowclock(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
 tetris = Tetris_Main(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
 
 features = [tetris, clock]
