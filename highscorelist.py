@@ -1,6 +1,7 @@
 from datetime import datetime
 from datetime import date
 import pickle
+from Score import *
 
 
 class Highscoreentry:
@@ -41,18 +42,17 @@ class Highscorelist:
         with open(self.filename, 'rb') as f:
             temporary_list = pickle.load(f)
             self.highscores = temporary_list.highscores
-
+score = Score()
+y = str(score.point)
 
 if __name__ == "__main__":
-    snakehighscores = Highscorelist('snakescores')
-    snakehighscores.save()
     tetrishighscores = Highscorelist('tetrisscores')
+    print(score)
 
     today = date.today()
-    print(today)
-    for i in range(20):
-        x = Highscoreentry(today, "Florian", i)
-        tetrishighscores.add_entry(x)
+    x = Highscoreentry(today, "Domenik", y)
+    tetrishighscores.add_entry(x)
+
     tetrishighscores.save()
     print(tetrishighscores.highscores)
 

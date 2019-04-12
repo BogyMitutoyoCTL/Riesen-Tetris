@@ -10,9 +10,13 @@ from block import Block, blocks, block_colors
 from feature import Feature
 from field import Field
 from painter import RGB_Field_Painter, Led_Matrix_Painter
+from Score import *
 
 lock = threading.Lock()
 tetris_songs = ['./sound-files/lied.mp3', './sound-files/lied2.mp3']
+_songs = ['./sound-files/lied.mp3', './sound-files/lied2.mp3']
+score = Score()
+
 
 
 class Tetris_Main(Feature):
