@@ -20,5 +20,6 @@ function getUsername() {
     data = document.getElementById("username").value;
     document.getElementById("username-display").innerHTML = data;
     document.getElementById('container-username-id').style.display = 'none'
+    socket.emit("message", "tetris_start");
     console.log(data);
 }
