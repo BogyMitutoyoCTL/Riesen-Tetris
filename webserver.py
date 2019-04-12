@@ -42,6 +42,13 @@ async def favicon_handler(request):
     return web.FileResponse('./static/favicon.ico')
 
 
+@sio.on('username', namespace='/control')
+async def print_message(sid, message):
+    r.publish('username', message)
+    print("Socket ID: ", sid)
+    print("Username: " + message)
+
+
 @sio.on('message', namespace='/control')
 async def print_message(sid, message):
     r.publish('game_action', message)

@@ -12,6 +12,7 @@ socket.on('playing-users', (data) => {
 function button_exit_pressed() {
   socket.emit("message", "start_clock");
   console.log("exit button pressed, will start the clock");
+  window.location.replace("/");
 }
 
 function button_pressed(action) {
@@ -25,6 +26,7 @@ function getUsername() {
     data = document.getElementById("username").value;
     document.getElementById("username-display").innerHTML = data;
     document.getElementById('container-username-id').style.display = 'none'
+    socket.emit("username", data);
     socket.emit("message", "start_tetris");
     console.log(data);
 }
