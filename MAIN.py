@@ -70,12 +70,9 @@ features = [tetris, clock]
 active = features[0]
 active.start()
 
-thread_for_control = threading.Thread(target=control)  # ohne () nach target=tetris_main.control
+thread_for_control = threading.Thread(target=control)
 thread_for_control.daemon = True
 thread_for_control.start()
 
 while True:
-    #    if not active.is_game_over():
     active.tick()
-    #    else:
-    #        active.stop()
