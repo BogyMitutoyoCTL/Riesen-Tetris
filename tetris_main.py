@@ -14,8 +14,6 @@ from Score import *
 
 lock = threading.Lock()
 tetris_songs = ['./sound-files/lied.mp3', './sound-files/lied2.mp3']
-_songs = ['./sound-files/lied.mp3', './sound-files/lied2.mp3']
-score = S
 
 
 
@@ -99,7 +97,7 @@ class Tetris_Main(Feature):
             self.game_over = True
             game_sound.stop_song()
             game_sound.play_sound("game_over")
-            self.led_matrix_painter.show_Message("Game over - Your Points: "+str(123456), 250)
+            self.led_matrix_painter.show_Message("Game over - Your Points: " + str(self.score.get_score_str()), 250)
         elif self.field_leds.give_type_of_collision(
                 self.block_today,
                 self.position_block_today_x,
