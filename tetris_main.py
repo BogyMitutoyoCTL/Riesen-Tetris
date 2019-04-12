@@ -11,16 +11,17 @@ from feature import Feature
 from field import Field
 from painter import RGB_Field_Painter, Led_Matrix_Painter
 from Score import *
+from highscorelist import *
 
 lock = threading.Lock()
 tetris_songs = ['./sound-files/lied.mp3', './sound-files/lied2.mp3']
 
 
-
 class Tetris_Main(Feature):
     def __init__(self, field_leds: Field, field_matrix: Field, rgb_field_painter: RGB_Field_Painter,
-                 led_matrix_painter: Led_Matrix_Painter):
-        super(Tetris_Main, self).__init__(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
+                 led_matrix_painter: Led_Matrix_Painter, highscorelist: Highscorelist):
+        super(Tetris_Main, self).__init__(field_leds, field_matrix, rgb_field_painter, led_matrix_painter,
+                                          highscorelist)
 
         self.prepare_for_start()
 
@@ -91,7 +92,7 @@ class Tetris_Main(Feature):
 
         # Blöcke auf die Matrix schreiben
         self.field_matrix.set_all_pixels_to_black()
-        self.score.draw_score_on_field()
+        self.score.draw_score_on_field(self.field_matrix)
         self.field_matrix.set_block(self.block_future.double_size(), 24, 0)
         self.led_matrix_painter.draw(self.field_matrix)
 
@@ -113,6 +114,9 @@ class Tetris_Main(Feature):
             self.game_over = True
             game_sound.stop_song()
             game_sound.play_sound("game_over")
+            self.highscorelist.add_entry(
+                Highscoreentry(datetime.today(), input("Tell me your name: "), self.score.get_score_int()))
+            self.highscorelist.save()
             self.led_matrix_painter.show_Message("Game over - Your Points: " + str(self.score.get_score_str()), 250)
         elif self.field_leds.give_type_of_collision(
                 self.block_today,
@@ -242,7 +246,7 @@ class Tetris_Main(Feature):
 
         self.delay = 0.5
 
-        self.score = Score(self.field_matrix)
+        self.score = Score()
 
         # self.draw_lines_for_test()
 

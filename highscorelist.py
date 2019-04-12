@@ -4,7 +4,6 @@ import pickle
 from Score import *
 
 
-
 class Highscoreentry:
     date = 0
     name = ""
@@ -24,6 +23,12 @@ class Highscoreentry:
     def __lt__(self, other):
         return self.point < other.point
 
+    def __eq__(self, other):
+        return self.point == other.point
+
+    def __ge__(self, other):
+        return self.point >= other.point
+
 
 class Highscorelist:
     def __init__(self, filename):
@@ -40,18 +45,26 @@ class Highscorelist:
             pickle.dump(self, f)
 
     def load(self):
-        with open(self.filename, 'rb') as f:
-            temporary_list = pickle.load(f)
-            self.highscores = temporary_list.highscores
-score = Score()
-y = str(score.points)
+        try:
+            with open(self.filename, 'rb') as f:
+                temporary_list = pickle.load(f)
+                self.highscores = temporary_list.highscores
+        except FileNotFoundError:
+            pass
+
+a = Highscoreentry(datetime.today(), "a", 2)
+b = Highscoreentry(datetime.today(), "a", 2)
+print(a>=b)
 
 if __name__ == "__main__":
+    score = Score()
+    y = str(score.points)
+
     tetrishighscores = Highscorelist('tetrisscores')
     print(score)
 
     today = date.today()
-    x = Highscoreentry(today, name_input, y)                 #TODO: Name mit tatsächlichem Username austauschen!
+    x = Highscoreentry(datetime.today, input("Give me your name: "), y)                 #TODO: Name mit tatsächlichem Username austauschen!
     tetrishighscores.add_entry(x)
 
     tetrishighscores.save()
