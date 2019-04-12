@@ -1,3 +1,27 @@
+namespace = '/control';
+
+var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace);
+
+$(document).ready(function() {
+
+            socket.on('connect', function() {
+                socket.emit('myevent', {data: 'I\'m connected!'});
+            });
+
+            socket.on('myresponse', function(msg) {
+                console.log(msg);
+
+            });
+            });
+function handleClick(event) {
+    socket.emit('username', "Ich bin der User")
+             }
+
+
+
+
+
+/*
 const right = document.querySelector('#right');
 const left = document.querySelector('#left');
 const turnL = document.querySelector('#turnL');
@@ -11,7 +35,7 @@ right.onclick = function(event) {
 left.onclick = function(event) {
     WebSocket.send(JSON.stringify({action= 'left'}));
 }
-turnL.onclick = alert('Halt STOP!');
+turnL.onclick = function(event);
     WebSocket.send(JSON.stringify({action= 'turnL'}));
 
 turnR.onclick = function(event) {
@@ -20,6 +44,7 @@ turnR.onclick = function(event) {
 down.onclick = function(event) {
     WebSocket.send(JSON.stringify({action= 'down'}));
 }
+*/
 
 
 

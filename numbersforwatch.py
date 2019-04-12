@@ -70,5 +70,5 @@ number_colors = rainbowcolors(10)
 class Number:
     def __init__(self, number: int):
         self.pixel = number_pixels[number]
-        self.color = number_colors[number]
+        self.color = [255,255,255] # number_colors[number]
         self.block = Block(self.pixel, self.color)
