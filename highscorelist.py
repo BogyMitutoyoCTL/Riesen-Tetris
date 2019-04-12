@@ -52,10 +52,6 @@ class Highscorelist:
         except FileNotFoundError:
             pass
 
-a = Highscoreentry(datetime.today(), "a", 2)
-b = Highscoreentry(datetime.today(), "a", 2)
-print(a>=b)
-
 if __name__ == "__main__":
     score = Score()
     y = str(score.points)

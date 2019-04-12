@@ -66,7 +66,6 @@ class Tetris_Main(Feature):
                     if color == 1:
                         self.field_leds.field[y][x] = [255, 255, 255]
                     else:
-                        print("Farbe")
                         self.field_leds.field[y][x] = colors_in_line[y][x]
 
             self.rgb_field_painter.draw(self.field_leds)
@@ -198,9 +197,8 @@ class Tetris_Main(Feature):
         lock.release()
 
         if not self.game_over:
-            if self.delay > 0.15:
-                self.delay -= 0.001
-            time.sleep(self.delay)  # TODO: Delay einbauen
+            self.get_delay()
+            time.sleep(self.delay)  # TODO: Delay anpassen
 
     def event(self, eventname: str):
         lock.acquire()
@@ -218,6 +216,30 @@ class Tetris_Main(Feature):
             elif eventname == "move down":  # move down
                 self.move_block_today_one_step_down()
         lock.release()
+
+    def get_delay(self):
+        if self.score.get_score_int() < 50:
+            self.delay = 0.4
+        elif self.score.get_score_int() < 100:
+            self.delay = 0.35
+        elif self.score.get_score_int() < 500:
+            self.delay = 0.3
+        elif self.score.get_score_int() < 1000:
+            self.delay = 0.25
+        elif self.score.get_score_int() < 2000:
+            self.delay = 0.2
+        elif self.score.get_score_int() < 5000:
+            self.delay = 0.15
+        elif self.score.get_score_int() < 10000:
+            self.delay = 0.12
+        elif self.score.get_score_int() < 20000:
+            self.delay = 0.09
+        elif self.score.get_score_int() < 50000:
+            self.delay = 0.07
+        elif self.score.get_score_int() < 100000:
+            self.delay = 0.06
+        else:
+            self.delay = 0.05
 
     def start(self, playername: str=None):
         super(Tetris_Main, self).start(playername)
