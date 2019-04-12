@@ -1,0 +1,109 @@
+body {
+	font: 15px/1.5 Arial, Helvetica, sans-serif;
+	padding: 0;
+	margin: 0;
+	background-color: #f4f4f4;
+}
+
+h2 {
+	font-size: 1em;
+	font-weight: bold;
+}
+
+h3 {
+	font-size: 0.7em;
+}
+
+.container-0 {
+	display: flex;
+	justify-content: space-between;
+}
+
+.container-0 div {
+	border: 0px #ccc solid;
+	padding: 10px;
+}
+
+.container-1 {
+	display: flex;
+	justify-content: space-between;
+}
+
+.container-1 div {
+	border: 0px #ccc solid;
+	padding: 10px;
+}
+
+.container-2 {
+	display: flex;
+	justify-content: space-between;
+}
+
+.container-2 div {
+	border: 0px #ccc solid;
+	padding: 10px;
+}
+
+.box-left {
+	flex: 1;
+	order: 1;
+	text-align: left;
+}
+
+.fas {
+	color: gray;
+}
+
+.fas:active {
+	transform: translateY(4px);
+	color: black;
+}
+
+.box-text {
+	flex: 1;
+	order: 2;
+	text-align: center;
+}
+
+.box-exit {
+	flex: 1;
+	order: 3;
+	text-align: left;
+}
+
+.box-pause {
+	flex: 1;
+	order: 1;
+	text-align: right;
+}
+
+
+.box-soft-down {
+	flex: 1;
+	order: 2;
+	text-align: center;
+}
+
+.box-right {
+	flex: 1;
+	order: 3;
+	text-align: right;
+}
+
+.box-turn-left {
+	flex: 1;
+	order: 1;
+	text-align: left;
+}
+
+.box-turn-right {
+	flex: 1;
+	order: 4;
+	text-align: right;
+}
+
+.box-hard-down {
+	flex: 1;
+	order: 2;
+	text-align: center;
+}

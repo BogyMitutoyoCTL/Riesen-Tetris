@@ -1,0 +1,44 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{ static('fontawesome-free-web/css/all.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ static('style.css') }}">
+    <title>{{ app['name'] }} - Highscores</title>
+</head>
+
+<body>
+
+<div class="container-0">
+    <div class="box-app-name">
+        <span id="app-name">{{ app['name'] }}</span>
+    </div>
+    <div class="box-highscores">
+        <ol>
+            <li>Hans Dampf - 10000</li>
+            <li>Robert Redford - 9000</li>
+            <li>Boris Becker - 8000</li>
+            <li>Karlheinz Wild - 7000</li>
+            <li>Ruth Moschner - 6000</li>
+        </ol>
+    </div>
+    <div class="box-connected-users">
+        Connected Users: <span id="connected-users">0</span>
+    </div>
+    <div class="box-playing-users">
+        Playing Users: <span id="playing-users">0</span>
+    </div>
+    <div class="box-exit">
+        <i class="fas fa-times-circle fa-6x" onclick="location.href='/';"></i>
+    </div>
+</div>
+<script src='{{ static(' socket.io.js
+') }}' charset='utf-8'></script>
+  <script src='{{ static('overview.js') }}' charset='utf-8'></script>
+</body>
+
+</html>

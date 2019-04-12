@@ -1,0 +1,65 @@
+<!-- control.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="{{ static('fontawesome-free-web/css/all.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ static('style.css') }}">
+  <title>{{ app['name'] }}</title>
+</head>
+
+<body>
+
+  <div class="container-0">
+    <div class="box-text">
+      <h2>{{ app['name'] }}</h2>
+      <h3>Playing Users: <span id="playing-users"></span></h3>
+    </div>
+    <div class="box-exit">
+      <a href="/"><i class="fas fa-times-circle fa-6x">
+        </i></a>
+    </div>
+    <div class="box-pause">
+      <i class="fas fa-pause fa-6x" onclick="button_pressed('action_pause')">
+      </i>
+    </div>
+  </div>
+
+  <div class="container-1">
+    <div class="box-left">
+      <i class="fas fa-arrow-alt-circle-left fa-7x" onclick="button_pressed('action_move_left')">
+      </i>
+    </div>
+    <div class="box-soft-down">
+      <i class="fas fa-angle-down fa-7x" onclick="button_pressed('action_soft_down')">
+      </i>
+    </div>
+    <div class="box-right">
+      <i class="fas fa-arrow-alt-circle-right fa-7x" onclick="button_pressed('action_move_right')">
+      </i>
+    </div>
+  </div>
+
+  <div class="container-2">
+    <div class="box-turn-left">
+      <i class="fas fa-undo-alt fa-7x" onclick="button_pressed('action_turn_left')">
+      </i>
+    </div>
+    <div class="box-turn-right">
+      <i class="fas fa-redo-alt fa-7x" onclick="button_pressed('action_turn_right')">
+      </i>
+    </div>
+    <div class="box-hard-down">
+      <i class="fas fa-angle-double-down fa-7x" onclick="button_pressed('action_hard_down')">
+      </i>
+    </div>
+  </div>
+
+  <script src='{{ static('socket.io.js') }}' charset='utf-8'></script>
+  <script src='{{ static('control.js') }}' charset='utf-8'></script>
+</body>
+
+</html>
