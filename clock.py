@@ -34,15 +34,15 @@ class Clock(Feature):
             digit = clock_array[i]
             self.field_leds.set_block(Number(digit).block, positions[i][0], positions[i][1])
 
-        self.rgb_field_painter.draw(self.field_leds)
 
-    def draw_date(self):
+    def get_date_string(self):
         self.field_matrix.set_all_pixels_to_black()
         _, month, day = self.get_date()
         day_str = ("0"+str(day))[-2:]
         month_str = ("0" + str(month))[-2:]
+        datetext = "" + day_str + "." + month_str + "."
+        return datetext
 
-        self.led_matrix_painter.show_Text(""+day_str+"."+month_str+".")
 
     def event(self, eventname: str):
         if eventname == "break":
@@ -50,7 +50,9 @@ class Clock(Feature):
 
     def tick(self):
         self.draw_clock()
-        self.draw_date()
+        self.rgb_field_painter.draw(self.field_leds)
+        self.led_matrix_painter.show_Text(self.get_date_string())
+
         time.sleep(0.2)
 
     def start(self):
