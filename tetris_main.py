@@ -94,7 +94,7 @@ class Tetris_Main(Feature):
                 self.position_block_today_y + 1) == 2:
             print(" -> Game over")
             self.game_over = True
-            self.led_matrix_painter.show_Message("Game over - Your Points: "+str(self.score.get_score()), 250)
+            self.led_matrix_painter.show_Message("Game over - Your Points: " + str(self.score.get_score_str()), 250)
         elif self.field_leds.give_type_of_collision(
                 self.block_today,
                 self.position_block_today_x,
@@ -175,9 +175,9 @@ class Tetris_Main(Feature):
         lock.release()
 
         if not self.game_over:
-            if self.delay > 0.15:
-                self.delay -= 0.001
-            time.sleep(self.delay)  # TODO: Delay einbauen
+            self.get_delay()
+            print(self.delay)
+            time.sleep(self.delay)  # TODO: Delay anpassen
 
     def event(self, eventname: str):
         lock.acquire()
@@ -195,6 +195,30 @@ class Tetris_Main(Feature):
             elif eventname == "move down":  # move down
                 self.move_block_today_one_step_down()
         lock.release()
+
+    def get_delay(self):
+        if self.score.get_score_int() < 50:
+            self.delay = 0.4
+        elif self.score.get_score_int() < 100:
+            self.delay = 0.3
+        elif self.score.get_score_int() < 500:
+            self.delay = 0.25
+        elif self.score.get_score_int() < 1000:
+            self.delay = 0.2
+        elif self.score.get_score_int() < 2000:
+            self.delay = 0.15
+        elif self.score.get_score_int() < 5000:
+            self.delay = 0.12
+        elif self.score.get_score_int() < 10000:
+            self.delay = 0.1
+        elif self.score.get_score_int() < 20000:
+            self.delay = 0.09
+        elif self.score.get_score_int() < 50000:
+            self.delay = 0.07
+        elif self.score.get_score_int() < 100000:
+            self.delay = 0.06
+        else:
+            self.delay = 0.05
 
     def start(self):
         self.prepare_for_start()
@@ -220,8 +244,6 @@ class Tetris_Main(Feature):
         # Positionen block_today
         self.position_block_today_x = 3
         self.position_block_today_y = -self.block_today.get_line_of_first_pixel_from_bottom() - 2
-
-        self.delay = 0.5
 
         self.score = Score(self.field_matrix)
 
