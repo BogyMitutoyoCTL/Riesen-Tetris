@@ -6,7 +6,7 @@ import time
 import pygame
 import random
 
-from clock import Clock
+from rainbowclock import Clock
 from field import Field
 from painter import RGB_Field_Painter, Led_Matrix_Painter
 from rainbowclock import Rainbowclock
@@ -25,6 +25,11 @@ def control():
             active = tetris
             active.start()
             control_wait_for_release(K_t)
+        elif keys[K_r]:  # rainbow uhr
+            active.stop()
+            active = rainbowclock
+            active.start()
+            control_wait_for_release(K_r)
         elif keys[K_u]:  # uhr
             active.stop()
             active = clock
@@ -63,12 +68,11 @@ field_matrix = Field(32, 8)
 rgb_field_painter = RGB_Field_Painter()
 led_matrix_painter = Led_Matrix_Painter()
 
-clock = Rainbowclock(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
+rainbowclock = Rainbowclock(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
+clock = Clock(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
 tetris = Tetris_Main(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
 
-features = [tetris, clock]
-
-active = features[0]
+active = rainbowclock
 active.start()
 
 thread_for_control = threading.Thread(target=control)
