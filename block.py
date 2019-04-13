@@ -86,8 +86,8 @@ class Block:
     def get_line_of_first_pixel_from_top(self):
         count = 0
         for y in range(self.height):
-            for x in range(0, self.width):
-                if self.pixels[y][x] > 0:
+            for x in range(self.width):
+                if self.is_brick(x, y):
                     count += 1
             if count > 0:
                 return y
@@ -96,11 +96,31 @@ class Block:
     def get_line_of_first_pixel_from_bottom(self):
         count = 0
         for y in range(self.height - 1, -1, -1):
-            for x in range(0, self.width):
-                if self.pixels[y][x] > 0:
+            for x in range(self.width):
+                if self.is_brick(x, y):
                     count += 1
             if count > 0:
                 return y
+        return 0
+
+    def get_line_of_first_pixel_from_left(self):
+        count = 0
+        for x in range(self.width):
+            for y in range(self.height):
+                if self.is_brick(x, y):
+                    count += 1
+            if count > 0:
+                return x
+        return 0
+
+    def get_line_of_first_pixel_from_right(self):
+        count = 0
+        for x in range(self.width - 1, -1, -1):
+            for y in range(self.height):
+                if self.is_brick(x, y):
+                    count += 1
+            if count > 0:
+                return x
         return 0
 
     def is_brick(self, column_number: int, line_number: int):
