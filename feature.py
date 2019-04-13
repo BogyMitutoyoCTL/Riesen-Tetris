@@ -28,5 +28,5 @@ class Feature:
     def stop(self):
         raise NotImplementedError
 
-    def is_game_over(self):
-        raise NotImplementedError
+    def is_game_over(self) -> bool:
+        return self.game_over

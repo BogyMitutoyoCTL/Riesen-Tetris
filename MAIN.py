@@ -7,6 +7,7 @@ from pygame.locals import *
 from rainbowclock import Clock
 from painter import RGB_Field_Painter
 from rainbowclock import Rainbowclock
+from snake_main import Snake_Main
 from tetris_main import Tetris_Main
 from highscorelist import *
 
@@ -22,49 +23,42 @@ def control():
             active.stop()
             active = tetris
             active.start(username)
-            control_wait_for_release(K_t)
         elif cmd == "start_clock_rainbow":  # rainbow uhr
             active.stop()
             active = rainbowclock
             active.start()
-            control_wait_for_release(K_r)
         elif cmd == "start_clock":  # uhr
             active.stop()
             active = clock
             active.start()
-            control_wait_for_release(K_u)
+        elif cmd == "start_snake":  # snake
+            active.stop()
+            active = snake
+            active.start()
         elif cmd == "start_highscore":  # Highscorelist
             test = highscorelist_tetris.highscores
             print(test)
-            control_wait_for_release(K_h)
         elif cmd == "action_new_block":  # neuer Block    # todo: später rauswerfen (Johannes)
             active.event("new")
-            control_wait_for_release(K_n)
         elif cmd == "action_turn_left":  # rotate left
             active.event("rotate left")
-            control_wait_for_release(K_q)
         elif cmd == "action_turn_right":  # rotate right
             active.event("rotate right")
-            control_wait_for_release(K_e)
         elif cmd == "action_move_left":  # move left
             active.event("move left")
-            control_wait_for_release(K_a)
         elif cmd == "action_move_right":  # move right
             active.event("move right")
-            control_wait_for_release(K_d)
-        elif cmd == "action_soft_down":  # move down
+        elif cmd == "action_soft_down":  # move soft down
             active.event("move down")
-            control_wait_for_release(K_s)
-        elif cmd == "action_hard_down":  # move down
+        elif cmd == "action_hard_down":  # move hard down
             active.event("move down")
-            control_wait_for_release(K_s)
+        elif cmd == "action_move_down":  # move down
+            active.event("move down")
+        elif cmd == "action_move_up":  # move up
+            active.event("move up")
         elif cmd == "action_pause":
-
             pass
 
-
-def control_wait_for_release(key):
-    pass
 
 def get_redis_message() -> str:
     global p
@@ -80,6 +74,7 @@ def get_redis_message() -> str:
             print("Redis command received:", command)
             return command
     return ""
+
 
 username = ""
 r = redis.StrictRedis(host='localhost', port=6379)
@@ -98,6 +93,7 @@ highscorelist_tetris.load()
 rainbowclock = Rainbowclock(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
 clock = Clock(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
 tetris = Tetris_Main(field_leds, field_matrix, rgb_field_painter, led_matrix_painter, highscorelist_tetris)
+snake = Snake_Main(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
 
 active = rainbowclock
 active.start()
