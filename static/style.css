@@ -53,6 +53,16 @@ z-index: 1;
 	padding: 10px;
 }
 
+.container-3 {
+	display: flex;
+	justify-content: space-between;
+}
+
+.container-3 div {
+	border: 0px #ccc solid;
+	padding: 10px;
+}
+
 .box-left {
 	flex: 1;
 	order: 1;
@@ -112,6 +122,18 @@ z-index: 1;
 }
 
 .box-hard-down {
+	flex: 1;
+	order: 2;
+	text-align: center;
+}
+
+.box-up {
+	flex: 1;
+	order: 1;
+	text-align: center;
+}
+
+.box-down {
 	flex: 1;
 	order: 2;
 	text-align: center;

@@ -9,13 +9,17 @@ socket.on('playing-users', (data) => {
     console.log("Disable Button Tetris...")
     document.getElementById('btn-id-snake').disabled = true;
     console.log("Disable Button Snake...")
+    document.getElementById('btn-id-chose-startscreen').disabled = true;
+    console.log("Disable Button Startscreen...")
   }
   else
   {
     document.getElementById('btn-id-tetris').disabled = false;
     console.log("Enable Button Tetris...")
-    document.getElementById('btn-id-Snake').disabled = false;
+    document.getElementById('btn-id-snake').disabled = false;
     console.log("Enable Button Snake...")
+    document.getElementById('btn-id-chose-startscreen').disabled = false;
+    console.log("Enable Button Startscreen...")
   }
 });
 

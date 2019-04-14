@@ -9,24 +9,23 @@ from painter import RGB_Field_Painter
 from rainbowclock import Rainbowclock
 from snake_main import Snake_Main
 from tetris_main import Tetris_Main
+from startscreen import Startscreen
 from highscorelist import *
 
 running = True
+startscreen_default = "start_startscreen_snow"
 
 
 def control():
     global active
     global username
+    global startscreen_default
     while running:
         cmd = get_redis_message()
-        if cmd == "start_tetris" or cmd == "tetris_start":  # tetris
+        if cmd == "start_tetris":  # tetris
             active.stop()
             active = tetris
             active.start(username)
-        elif cmd == "start_clock_rainbow":  # rainbow uhr
-            active.stop()
-            active = rainbowclock
-            active.start()
         elif cmd == "start_clock":  # uhr
             active.stop()
             active = clock
@@ -35,6 +34,20 @@ def control():
             active.stop()
             active = snake
             active.start()
+        elif cmd == "start_startscreen":  # start default one
+            chose_startscreen()
+        elif cmd == "start_startscreen_snow":  # startscreen snow
+            startscreen_default = cmd
+            chose_startscreen()
+        elif cmd == "start_startscreen_falling_blocks":  # startscreen falling_blocks
+            startscreen_default = cmd
+            chose_startscreen()
+        elif cmd == "start_startscreen_rainbow_clock":  # rainbow uhr
+            startscreen_default = cmd
+            chose_startscreen()
+        elif cmd == "start_startscreen_clock":  # uhr
+            startscreen_default = cmd
+            chose_startscreen()
         elif cmd == "start_highscore":  # Highscorelist
             test = highscorelist_tetris.highscores
             print(test)
@@ -58,6 +71,26 @@ def control():
             active.event("move up")
         elif cmd == "action_pause":
             pass
+
+def chose_startscreen():
+    global active
+    global startscreen_default
+    if startscreen_default == "start_startscreen_snow":
+        active.stop()
+        active = startscreen
+        active.start(mode="snow")
+    elif startscreen_default == "start_startscreen_falling_blocks":
+        active.stop()
+        active = startscreen
+        active.start(mode="falling_blocks")
+    elif startscreen_default == "start_startscreen_rainbow_clock":
+        active.stop()
+        active = rainbowclock
+        active.start()
+    elif startscreen_default == "start_startscreen_clock":
+        active.stop()
+        active = clock
+        active.start()
 
 
 def get_redis_message() -> str:
@@ -94,6 +127,7 @@ rainbowclock = Rainbowclock(field_leds, field_matrix, rgb_field_painter, led_mat
 clock = Clock(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
 tetris = Tetris_Main(field_leds, field_matrix, rgb_field_painter, led_matrix_painter, highscorelist_tetris)
 snake = Snake_Main(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
+startscreen = Startscreen(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
 
 active = rainbowclock
 active.start()

@@ -17,15 +17,19 @@
     <div class="box-app-name">
         <span id="app-name">{{ app['name'] }}</span>
     </div>
-    <div class="box-highscores">
-        <ol>
-            {% for entry in app['highscore'] %}
-            <li>{{entry.point}} - {{entry.name}} on {{entry.date}}</li>
-            {% endfor %}
-        </ol>
-    </div>
     <div class="box-exit">
         <i class="fas fa-times-circle fa-6x" onclick="location.href='/';"></i>
+    </div>
+</div>
+
+<div class="container-1">
+    <div class="box-highscores">
+        <ol>
+            {% for entry in app['highscores'] %}
+            <li>{{app['highscores'][entry].point}} - {{app['highscores'][entry].name}} on {{app['highscores'][entry].date}}</li>
+            {{entry}}
+            {% endfor %}
+        </ol>
     </div>
 </div>
 </body>

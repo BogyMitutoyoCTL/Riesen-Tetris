@@ -10,8 +10,8 @@ socket.on('playing-users', (data) => {
 });
 
 function button_exit_pressed() {
-  socket.emit("message", "start_clock");
-  console.log("exit button pressed, will start the clock");
+  socket.emit("message", "start_startscreen");
+  console.log("exit button pressed, will start the startscreen");
   window.location.replace("/");
 }
 

@@ -1,0 +1,39 @@
+<!-- chose_startscreen.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{ static('fontawesome-free-web/css/all.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ static('style.css') }}">
+    <title>{{ app['name'] }}</title>
+</head>
+
+<body>
+<div class="container-0">
+    <div class="box-text">
+        <h2>{{ app['name'] }}</h2>
+        <h3>Playing User: <span id="username-display"></span></h3>
+    </div>
+    <div class="box-exit">
+        <i class="fas fa-times-circle fa-6x" onclick="button_exit_pressed()"></i>
+    </div>
+</div>
+
+<div class="container-1">
+    <p>Chose startscreen</p>
+    <div class="box-game-modes">
+        <button type="button" id="btn-id-chose-startscreen-snow" class="btn" onclick="button_pressed('start_startscreen_snow')">Snow</button>
+        <button type="button" id="btn-id-chose-startscreen-falling_blocks" class="btn" onclick="button_pressed('start_startscreen_falling_blocks')">Falling blocks</button>
+        <button type="button" id="btn-id-chose-startscreen-rainbow_clock" class="btn" onclick="button_pressed('start_startscreen_rainbow_clock')">Rainbow clock</button>
+        <button type="button" id="btn-id-chose-startscreen-clock" class="btn" onclick="button_pressed('start_startscreen_clock')">Clock</button>
+    </div>
+</div>
+
+<script src='{{ static('socket.io.js') }}' charset='utf-8'></script>
+  <script src='{{ static('chose_startscreen.js') }}' charset='utf-8'></script>
+</body>
+
+</html>

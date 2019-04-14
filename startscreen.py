@@ -77,10 +77,11 @@ class Startscreen(Feature):
     def tick(self):
         if self.mode == "snow":
             self.colored_snow([255, 255, 255])
+            time.sleep(0.2)
         elif self.mode == "falling_blocks":
             self.falling_blocks()
+            time.sleep(0.02)
         self.rgb_field_painter.draw(self.field_leds)
-        time.sleep(0.1)
 
     def copy_block_top_to_block_bottom(self):
         self.block_bottom = deepcopy(self.block_top)
@@ -95,6 +96,9 @@ class Startscreen(Feature):
             self.new_block()
             self.copy_block_top_to_block_bottom()
 
+    def stop(self):
+        pass
+
 
 if __name__ == "__main__":
     field_leds = Field(10, 20)
@@ -103,7 +107,7 @@ if __name__ == "__main__":
     led_matrix_painter = Led_Matrix_Painter()
 
     startscreen = Startscreen(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
-    startscreen.start(mode="falling_blocks")
+    startscreen.start(mode="snow")
 
     while True:
         startscreen.tick()
