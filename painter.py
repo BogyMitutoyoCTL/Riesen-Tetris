@@ -55,6 +55,7 @@ class Led_Matrix_Painter:
     def __init__(self):
         self.serial = spi(port=0, device=0, gpio=noop())
         self.device = max7219(self.serial, rotate=2, width=8, height=8, cascaded=4, block_orientation=-90)
+        self.device.contrast(20)
 
         self.virtual = viewport(self.device, width=1000, height=8)
 

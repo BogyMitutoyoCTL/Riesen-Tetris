@@ -39,7 +39,7 @@ if __name__ == "__main__":
         for x in range(10):
             for y in range(20):
                 back.set_pixel(x, y, r[y+currentrainbowstart])
-        clock.draw_clock()
+        clock.draw_clock([255, 255, 255])
         rainbowtime = multiply(back, fore)
         rgb_field_painter.draw(rainbowtime)
         sleep(0.05)

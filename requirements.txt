@@ -4,7 +4,6 @@ pillow
 luma.led_matrix
 luma
 luma.core
-redis
 aioredis
 setuptools
 aiohttp

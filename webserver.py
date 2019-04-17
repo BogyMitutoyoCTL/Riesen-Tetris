@@ -34,6 +34,11 @@ async def control(request):
 
 @aiohttp_jinja2.template('highscores.html')
 async def highscores(request):
+    return json.dumps({{'point': 20, 'name': "TW", 'date': '2019-02-11'}})
+
+
+@aiohttp_jinja2.template('control_snake.html')
+async def control_snake(request):
     return {}
 
 
@@ -49,6 +54,20 @@ async def print_message(sid, message):
 
 
 @sio.on('message', namespace='/control')
+async def print_message(sid, message):
+    r.publish('game_action', message)
+    print("Socket ID: ", sid)
+    print(message)
+
+
+@sio.on('username', namespace='/control_snake')
+async def print_message(sid, message):
+    r.publish('username', message)
+    print("Socket ID: ", sid)
+    print("Username: " + message)
+
+
+@sio.on('message', namespace='/control_snake')
 async def print_message(sid, message):
     r.publish('game_action', message)
     print("Socket ID: ", sid)
@@ -97,9 +116,32 @@ async def print_disconnect_message_control(sid):
     print("Playing Users: ", app['playing_counter'])
 
 
+@sio.on('connect', namespace='/control_snake')
+async def print_connect_message_control(sid, message):
+    app['connect_counter'] += 1
+    await sio.emit('connected-users', app['connect_counter'], namespace='/overview')
+    app['playing_counter'] += 1
+    await sio.emit('playing-users', app['playing_counter'], namespace='/control_snake')
+    await sio.emit('playing-users', app['playing_counter'], namespace='/overview')
+    print("Connect Socket ID: ", sid)
+    print("Playing Users: ", app['playing_counter'])
+
+
+@sio.on('disconnect', namespace='/control_snake')
+async def print_disconnect_message_control(sid):
+    app['connect_counter'] -= 1
+    await sio.emit('connected-users', app['connect_counter'], namespace='/overview')
+    app['playing_counter'] -= 1
+    await sio.emit('playing-users', app['playing_counter'], namespace='/control_snake')
+    await sio.emit('playing-users', app['playing_counter'], namespace='/overview')
+    print("Disconnect Socket ID: ", sid)
+    print("Playing Users: ", app['playing_counter'])
+
+
 app.router.add_get('/', index, name='index')
 app.router.add_get('/control.html', control, name='control')
 app.router.add_get('/highscores.html', highscores, name='highscores')
+app.router.add_get('/control_snake.html', control_snake, name='control_snake')
 app.router.add_get('/favicon.ico', favicon_handler, name='favicon')
 app.router.add_static('/static', 'static', name='static')
 

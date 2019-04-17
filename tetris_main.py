@@ -260,8 +260,6 @@ class Tetris_Main(Feature):
         self.position_block_today_x = 3
         self.position_block_today_y = -self.block_today.get_line_of_first_pixel_from_bottom() - 2
 
-        self.delay = 0.5
-
         self.score = Score()
 
         # self.draw_lines_for_test()
@@ -270,8 +268,8 @@ class Tetris_Main(Feature):
         self.game_over = True
         game_sound.stop_song()
 
-    def is_game_over(self) -> bool:
-        return self.game_over
+    def is_game_over(self):
+        return super(Tetris_Main, self).is_game_over()
 
     def draw_lines_for_test(self):
         for x in range(self.field_leds.width):

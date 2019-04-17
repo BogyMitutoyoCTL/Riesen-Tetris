@@ -7,11 +7,15 @@ socket.on('playing-users', (data) => {
   {
     document.getElementById('btn-id-tetris').disabled = true;
     console.log("Disable Button Tetris...")
+    document.getElementById('btn-id-snake').disabled = true;
+    console.log("Disable Button Snake...")
   }
   else
   {
     document.getElementById('btn-id-tetris').disabled = false;
     console.log("Enable Button Tetris...")
+    document.getElementById('btn-id-Snake').disabled = false;
+    console.log("Enable Button Snake...")
   }
 });
 

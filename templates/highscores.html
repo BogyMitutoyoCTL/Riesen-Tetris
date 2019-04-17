@@ -19,11 +19,9 @@
     </div>
     <div class="box-highscores">
         <ol>
-            <li>Hans Dampf - 10000</li>
-            <li>Robert Redford - 9000</li>
-            <li>Boris Becker - 8000</li>
-            <li>Karlheinz Wild - 7000</li>
-            <li>Ruth Moschner - 6000</li>
+            {% for entry in app['highscore'] %}
+            <li>{{entry.point}} - {{entry.name}} on {{entry.date}}</li>
+            {% endfor %}
         </ol>
     </div>
     <div class="box-exit">
