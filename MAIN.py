@@ -11,7 +11,7 @@ from rainbowclock import Rainbowclock
 from snake_main import Snake_Main
 from tetris_main import Tetris_Main
 from highscorelist import *
-
+from time import sleep
 running = True
 
 def stophandler(signal, stackframe):
@@ -25,6 +25,7 @@ def control():
     global active
     global username
     while running:
+        sleep(0.1)
         cmd = get_redis_message()
         if cmd == "start_tetris" or cmd == "tetris_start":  # tetris
             active.stop()
