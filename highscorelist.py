@@ -52,15 +52,16 @@ class Highscorelist:
         except FileNotFoundError:
             pass
 
+
 if __name__ == "__main__":
     score = Score()
-    y = str(score.points)
+    y = score.points
 
     tetrishighscores = Highscorelist('tetrisscores')
     print(score)
 
     today = date.today()
-    x = Highscoreentry(datetime.today, input("Give me your name: "), y)                 #TODO: Name mit tatsächlichem Username austauschen!
+    x = Highscoreentry(datetime.today, input("Give me your name: "), y)
     tetrishighscores.add_entry(x)
 
     tetrishighscores.save()
