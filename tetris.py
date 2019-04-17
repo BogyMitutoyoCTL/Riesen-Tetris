@@ -81,10 +81,10 @@ class Tetris(Feature):
     def move_block_today_one_step_down(self):
         self.delete_current_block()
 
-        if self.field_leds.give_type_of_collision(
-                self.current_block,
-                self.position_block_today_x,
-                self.position_block_today_y + 1) == 2:
+        collision = self.field_leds.give_type_of_collision(self.current_block, self.position_block_today_x,
+                                                           self.position_block_today_y + 1)
+
+        if collision == Field.GameOverCollision:
             print(" -> Game over")
             self.game_over = True
             game_sound.stop_song()
@@ -93,10 +93,7 @@ class Tetris(Feature):
                 Highscoreentry(datetime.today(), self.playername, self.score.get_score_int()))
             self.highscorelist.save()
             self.led_matrix_painter.show_Message("Game over - Your Points: " + self.score.get_score_str(), 250)
-        elif self.field_leds.give_type_of_collision(
-                self.current_block,
-                self.position_block_today_x,
-                self.position_block_today_y + 1) == 1:
+        elif collision == Field.Collision:
             game_sound.play_sound("tick")
             print(" -> neuer Block")
             self.refresh_led_painter()
@@ -113,7 +110,7 @@ class Tetris(Feature):
         if self.field_leds.give_type_of_collision(
                 self.current_block,
                 self.position_block_today_x - 1,
-                self.position_block_today_y) != 0:
+                self.position_block_today_y) != Field.NoCollision:
             print(" -> keine Bewegung nach links")
         else:
             self.position_block_today_x -= 1
@@ -125,7 +122,7 @@ class Tetris(Feature):
         if self.field_leds.give_type_of_collision(
                 self.current_block,
                 self.position_block_today_x + 1,
-                self.position_block_today_y) != 0:
+                self.position_block_today_y) != Field.NoCollision:
             print(" -> keine Bewegung nach rechts")
         else:
             self.position_block_today_x += 1
@@ -139,7 +136,7 @@ class Tetris(Feature):
         if self.field_leds.give_type_of_collision(
                 block_today_for_test,
                 self.position_block_today_x,
-                self.position_block_today_y) != 0:
+                self.position_block_today_y) != Field.NoCollision:
             print(" -> keine Rotation nach links")
         else:
             self.current_block.rotateleft()
@@ -153,7 +150,7 @@ class Tetris(Feature):
         if self.field_leds.give_type_of_collision(
                 block_today_for_test,
                 self.position_block_today_x,
-                self.position_block_today_y) != 0:
+                self.position_block_today_y) != Field.NoCollision:
             print(" -> keine Rotation nach rechts")
         else:
             self.current_block.rotateright()
