@@ -27,7 +27,7 @@ class Field:
             self.field[y][x] = color
 
     def set_block(self, block_to_draw: Block, field_x: int, field_y: int, color: list = None):
-        if color == None:
+        if color is None:
             color = block_to_draw.color
         self.draw_block(block_to_draw, color, field_x, field_y)
 
