@@ -16,8 +16,8 @@ class Tetris(Feature):
                  led_matrix_painter: Led_Matrix_Painter, highscorelist: Highscorelist):
         super(Tetris, self).__init__(field_leds, field_matrix, rgb_field_painter, led_matrix_painter,
                                      highscorelist)
-        self.next_block = None
-        self.current_block = None
+        self.next_block = TetrisBlock.get_random_block()
+        self.current_block = TetrisBlock.get_random_block()
         self.score = Score()
         self.prepare_for_start()
         pygame.init()
@@ -97,6 +97,7 @@ class Tetris(Feature):
                 self.current_block,
                 self.position_block_today_x,
                 self.position_block_today_y + 1) == 1:
+            game_sound.play_sound("tick")
             print(" -> neuer Block")
             self.refresh_led_painter()
             self.__new_block()
@@ -132,7 +133,8 @@ class Tetris(Feature):
 
     def rotate_block_today_left(self):
         self.delete_current_block()
-        block_today_for_test = self.current_block.clone().rotateleft()
+        block_today_for_test = self.current_block.clone()
+        block_today_for_test.rotateleft()
 
         if self.field_leds.give_type_of_collision(
                 block_today_for_test,
@@ -145,7 +147,8 @@ class Tetris(Feature):
 
     def rotate_block_today_right(self):
         self.delete_current_block()
-        block_today_for_test = self.current_block.clone().rotateright()
+        block_today_for_test = self.current_block.clone()
+        block_today_for_test.rotateright()
 
         if self.field_leds.give_type_of_collision(
                 block_today_for_test,
@@ -222,8 +225,8 @@ class Tetris(Feature):
         self.set_all_fields_black()
 
         # Blockeigenschaften
-        self.next_block = TetrisBlock.get_random_block()
-        self.__new_block()
+        #self.next_block = TetrisBlock.get_random_block()
+        #self.__new_block()
 
         # Positionen block_today
         self.position_block_today_x = 3
