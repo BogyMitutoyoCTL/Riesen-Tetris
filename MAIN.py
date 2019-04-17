@@ -74,11 +74,13 @@ led_matrix_painter = Led_Matrix_Painter()
 
 highscorelist_tetris = Highscorelist("Tetris")
 highscorelist_tetris.load()
+highscorelist_snake = Highscorelist("Snake")
+highscorelist_snake.load()
 
 rainbowclock = Rainbowclock(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
 clock = Clock(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
 tetris = Tetris(field_leds, field_matrix, rgb_field_painter, led_matrix_painter, highscorelist_tetris)
-snake = Snake_Main(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
+snake = Snake_Main(field_leds, field_matrix, rgb_field_painter, led_matrix_painter, highscorelist_snake)
 
 features = {"start_tetris": tetris,
             "tetris_start": tetris,

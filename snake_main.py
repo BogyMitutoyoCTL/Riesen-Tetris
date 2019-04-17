@@ -1,11 +1,12 @@
 import time
+from datetime import datetime
 from random import random
 
 import game_sound
 from Score import Score
 from feature import Feature
 from field import Field
-from highscorelist import Highscorelist
+from highscorelist import Highscorelist, Highscoreentry
 from painter import RGB_Field_Painter, Led_Matrix_Painter
 
 BLACK = [0, 0, 0]
@@ -15,6 +16,10 @@ class Snake_Main(Feature):
     def __init__(self, field_leds: Field, field_matrix: Field, rgb_field_painter: RGB_Field_Painter,
                  led_matrix_painter: Led_Matrix_Painter, highscorelist: Highscorelist = Highscorelist("Not_used")):
         super(Snake_Main, self).__init__(field_leds, field_matrix, rgb_field_painter, led_matrix_painter, highscorelist)
+        self.direction = 0
+        self.is_there_a_direction_change_in_this_tick = False
+        self.food_is_on_field = False
+        self.field_for_snake = []
 
     def event(self, eventname: str):
         if not self.is_there_a_direction_change_in_this_tick:
@@ -47,28 +52,28 @@ class Snake_Main(Feature):
 
     def move_snake_if_possible(self):
         if self.direction == 0:
-            if self.test_for_case_of_block_in_field(self.heat_x, self.heat_y - 1) <= 0:
-                self.heat_y -= 1
-            elif self.test_for_case_of_block_in_field(self.heat_x, self.heat_y - 1) == 1:
+            if self.test_for_case_of_block_in_field(self.head_x, self.head_y - 1) <= 0:
+                self.head_y -= 1
+            elif self.test_for_case_of_block_in_field(self.head_x, self.head_y - 1) == 1:
                 self.game_over = True
         elif self.direction == 1:
-            if self.test_for_case_of_block_in_field(self.heat_x - 1, self.heat_y) <= 0:
-                self.heat_x -= 1
-            elif self.test_for_case_of_block_in_field(self.heat_x - 1, self.heat_y) == 1:
+            if self.test_for_case_of_block_in_field(self.head_x - 1, self.head_y) <= 0:
+                self.head_x -= 1
+            elif self.test_for_case_of_block_in_field(self.head_x - 1, self.head_y) == 1:
                 self.game_over = True
         elif self.direction == 2:
-            if self.test_for_case_of_block_in_field(self.heat_x, self.heat_y + 1) <= 0:
-                self.heat_y += 1
-            elif self.test_for_case_of_block_in_field(self.heat_x, self.heat_y + 1) == 1:
+            if self.test_for_case_of_block_in_field(self.head_x, self.head_y + 1) <= 0:
+                self.head_y += 1
+            elif self.test_for_case_of_block_in_field(self.head_x, self.head_y + 1) == 1:
                 self.game_over = True
         elif self.direction == 3:
-            if self.test_for_case_of_block_in_field(self.heat_x + 1, self.heat_y) <= 0:
-                self.heat_x += 1
-            elif self.test_for_case_of_block_in_field(self.heat_x + 1, self.heat_y) == 1:
+            if self.test_for_case_of_block_in_field(self.head_x + 1, self.head_y) <= 0:
+                self.head_x += 1
+            elif self.test_for_case_of_block_in_field(self.head_x + 1, self.head_y) == 1:
                 self.game_over = True
 
         if not self.game_over:
-            if self.test_for_case_of_block_in_field(self.heat_x, self.heat_y) == -1:  # if heat eat food
+            if self.test_for_case_of_block_in_field(self.head_x, self.head_y) == -1:  # if head eats food
                 self.food_is_on_field = False
                 self.lenght_of_snake += 1
                 self.score.score_for_block()
@@ -76,13 +81,13 @@ class Snake_Main(Feature):
                 self.score.draw_score_on_field(self.field_matrix)
                 self.led_matrix_painter.draw(self.field_matrix)
             self.turn_every_pixel_in_snakes_field_ones_up()
-            self.field_for_snake[self.heat_y][self.heat_x] = 1
+            self.field_for_snake[self.head_y][self.head_x] = 1
         else:
             game_sound.stop_song()
             game_sound.play_sound("game_over")
-            # self.highscorelist.add_entry(Highscoreentry(datetime.today(), self.playername, self.score.get_score_int()))
-            # self.highscorelist.save()
-            self.led_matrix_painter.show_Message("Game over - Your Points: " + str(self.score.get_score_str()), 250)
+            self.highscorelist.add_entry(Highscoreentry(datetime.today(), self.playername, self.score.get_score_int()))
+            self.highscorelist.save()
+            self.led_matrix_painter.show_Message("Game over - Your Points: " + self.score.get_score_str(), 250)
 
     def turn_every_pixel_in_snakes_field_ones_up(self):
         for y in range(len(self.field_for_snake)):
@@ -157,8 +162,8 @@ class Snake_Main(Feature):
             for _ in range(self.field_leds.width):
                 self.field_for_snake[i].append(0)
 
-        self.heat_x = 5
-        self.heat_y = 20
+        self.head_x = 5
+        self.head_y = 20
 
         self.direction = 0
         self.lenght_of_snake = 3
