@@ -36,24 +36,22 @@ class Score:
             field_for_score.set_block(n.block, x*5, 2)
 
 
-
-
 if __name__ == "__main__":
     score = Score()
 
     led_matrix_painter = Led_Matrix_Painter()
     scoreboard = Field(32, 8)
     while True:
-            text = ("0000" + str(score.points))[-5:]
+        text = ("0000" + str(score.points))[-5:]
 
-            for x in range(len(text)):
-                n = Number(int(text[x]))
-                scoreboard.set_block(n.block, x*5, 2)
+        for x in range(len(text)):
+            n = Number(int(text[x]))
+            scoreboard.set_block(n.block, x*5, 2)
 
-            led_matrix_painter.draw(scoreboard)
-            time.sleep(0.1)
+        led_matrix_painter.draw(scoreboard)
+        time.sleep(0.1)
 
-            score.score_for_line(4)
-            scoreboard.set_all_pixels_to_black()
+        score.score_for_line(4)
+        scoreboard.set_all_pixels_to_black()
 
 

@@ -18,7 +18,7 @@ def stop_song():
     pygame.mixer.music.stop()
 
 
-def play_sound(name: str="bell"):
+def play_sound(name: str = "bell"):
     file = ""
     if name == "breaking_line":
         file = './sound-files/effects/glass_breaking.wav'

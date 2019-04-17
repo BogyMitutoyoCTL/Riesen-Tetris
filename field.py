@@ -61,7 +61,7 @@ class Field:
         return 0
 
     def is_hole_block_in_field(self, block_to_draw: Block, y: int) -> int:
-        if self.pixel_is_inside_field(0, y+block_to_draw.get_line_of_first_pixel_from_top()-1): # -1 weil der Block ja eins runtergesetzt wurde
+        if self.pixel_is_inside_field(0, y+block_to_draw.get_line_of_first_pixel_from_top()-1):  # -1 weil der Block ja eins runtergesetzt wurde
             return 1
         else:
             return 2
