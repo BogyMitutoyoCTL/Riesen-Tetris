@@ -1,82 +1,59 @@
 #!/usr/bin/python3
 
+import signal
 import threading
-import signal, sys
+from time import sleep
 
 import redis
-from pygame.locals import *
-from rainbowclock import Clock
+
+from highscorelist import *
 from painter import RGB_Field_Painter
+from rainbowclock import Clock
 from rainbowclock import Rainbowclock
 from snake_main import Snake_Main
 from tetris_main import Tetris_Main
-from highscorelist import *
-from time import sleep
+
 running = True
 
+
 def stophandler(signal, stackframe):
+    global running
     print("Stop Tetris due to kill signal")
-    sys.exit(0)
+    running = False
+
 
 signal.signal(signal.SIGTERM, stophandler)
 
 
-def control():
+def control(features: dict, events: dict, subscriptions):
     global active
     global username
+    global running
+
     while running:
         sleep(0.1)
-        cmd = get_redis_message()
-        if cmd == "start_tetris" or cmd == "tetris_start":  # tetris
+        cmd = get_redis_message(subscriptions)
+        if cmd in features:
             active.stop()
-            active = tetris
+            active = features[cmd]
             active.start(username)
-        elif cmd == "start_clock_rainbow":  # rainbow uhr
-            active.stop()
-            active = rainbowclock
-            active.start()
-        elif cmd == "start_clock":  # uhr
-            active.stop()
-            active = clock
-            active.start()
-        elif cmd == "start_snake":  # snake
-            active.stop()
-            active = snake
-            active.start()
-        elif cmd == "start_highscore":  # Highscorelist
+        elif cmd == "start_highscore":
+            # TODO: implement highscore list display
             test = highscorelist_tetris.highscores
             print(test)
-        elif cmd == "action_new_block":  # neuer Block    # todo: später rauswerfen (Johannes)
-            active.event("new")
-        elif cmd == "action_turn_left":  # rotate left
-            active.event("rotate left")
-        elif cmd == "action_turn_right":  # rotate right
-            active.event("rotate right")
-        elif cmd == "action_move_left":  # move left
-            active.event("move left")
-        elif cmd == "action_move_right":  # move right
-            active.event("move right")
-        elif cmd == "action_soft_down":  # move soft down
-            active.event("move down")
-        elif cmd == "action_hard_down":  # move hard down
-            active.event("move down")
-        elif cmd == "action_move_down":  # move down
-            active.event("move down")
-        elif cmd == "action_move_up":  # move up
-            active.event("move up")
-        elif cmd == "action_pause":
-            pass
+        elif cmd in events:
+            active.event(events[cmd])
 
 
-def get_redis_message() -> str:
-    global p
+def get_redis_message(subscriptions) -> str:
     global username
-    message = p.get_message()
+    message = subscriptions.get_message()
     if message:
         command = message['data']
         if isinstance(command, (bytes, bytearray)):
             command = str(command, "utf-8")
             if str(message['channel'], "utf-8") == "username":
+                # TODO: global variable hack
                 username = command
                 return ""
             print("Redis command received:", command)
@@ -85,10 +62,10 @@ def get_redis_message() -> str:
 
 
 username = ""
-r = redis.StrictRedis(host='localhost', port=6379)
-p = r.pubsub()
-p.subscribe('game_action')
-p.subscribe("username")
+redis_client = redis.StrictRedis(host='localhost', port=6379)
+subscriptions = redis_client.pubsub()
+subscriptions.subscribe('game_action')
+subscriptions.subscribe("username")
 
 field_leds = Field(10, 20)
 field_matrix = Field(32, 8)
@@ -103,12 +80,29 @@ clock = Clock(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
 tetris = Tetris_Main(field_leds, field_matrix, rgb_field_painter, led_matrix_painter, highscorelist_tetris)
 snake = Snake_Main(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
 
+features = {"start_tetris": tetris,
+            "tetris_start": tetris,
+            "start_clock_rainbow": rainbowclock,
+            "start_clock": clock,
+            "start_snake": snake}
+
+events = {"action_new_block": "new",
+          "action_turn_left": "rotate left",
+          "action_turn_right": "rotate right",
+          "action_move_left": "move left",
+          "action_move_right": "move right",
+          "action_soft_down": "move down",
+          "action_hard_down": "move down",
+          "action_move_down": "move down",
+          "action_move_up": "move up",
+          "action_pause": "pause"}
+
 active = rainbowclock
 active.start()
 
-thread_for_control = threading.Thread(target=control)
+thread_for_control = threading.Thread(target=control, args=(features, events, subscriptions))
 thread_for_control.daemon = True
 thread_for_control.start()
 
-while True:
+while running:
     active.tick()
