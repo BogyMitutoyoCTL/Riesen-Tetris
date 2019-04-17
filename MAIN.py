@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import threading
+import signal, sys
 
 import redis
 from pygame.locals import *
@@ -12,6 +13,12 @@ from tetris_main import Tetris_Main
 from highscorelist import *
 
 running = True
+
+def stophandler(signal, stackframe):
+    print("Stop Tetris due to kill signal")
+    sys.exit(0)
+
+signal.signal(signal.SIGTERM, stophandler)
 
 
 def control():
