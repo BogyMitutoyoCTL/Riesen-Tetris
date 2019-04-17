@@ -24,7 +24,6 @@ z-index: 1;
 }
 
 .container-0 {
-	display: flex;
 	justify-content: space-between;
 }
 
@@ -115,4 +114,16 @@ z-index: 1;
 	flex: 1;
 	order: 2;
 	text-align: center;
+}
+
+.btn {
+    font-size: 2em;
+    display:block;
+    width: 100%;
+    margin: 5%;
+}
+
+.box-game-modes, .box-app-name {
+    display: block;
+    clear: both
 }

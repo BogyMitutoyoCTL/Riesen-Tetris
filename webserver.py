@@ -25,6 +25,15 @@ sio.attach(app)
 async def index(request):
     return {}
 
+@aiohttp_jinja2.template('index.html')
+async def clock(request):
+    r.publish('game_action', "start_clock")
+    return {}
+
+@aiohttp_jinja2.template('index.html')
+async def rainbowclock(request):
+    r.publish('game_action', "start_clock_rainbow")
+    return {}
 
 @aiohttp_jinja2.template('control.html')
 async def control(request):
@@ -33,7 +42,8 @@ async def control(request):
 
 @aiohttp_jinja2.template('highscores.html')
 async def highscores(request):
-    return json.dumps({{'point': 20, 'name': "TW", 'date': '2019-02-11'}})
+    app['highscore'] = [{'point': 20, 'name': "TW", 'date': '2019-02-11'}]
+    return {}
 
 
 @aiohttp_jinja2.template('control_snake.html')
@@ -67,6 +77,20 @@ async def print_message(sid, message):
 
 
 @sio.on('message', namespace='/control_snake')
+async def print_message(sid, message):
+    r.publish('game_action', message)
+    print("Socket ID: ", sid)
+    print(message)
+
+
+@sio.on('message', namespace='/clock')
+async def print_message(sid, message):
+    r.publish('game_action', message)
+    print("Socket ID: ", sid)
+    print(message)
+
+
+@sio.on('message', namespace='/rainbowclock')
 async def print_message(sid, message):
     r.publish('game_action', message)
     print("Socket ID: ", sid)
@@ -141,6 +165,8 @@ app.router.add_get('/', index, name='index')
 app.router.add_get('/control.html', control, name='control')
 app.router.add_get('/highscores.html', highscores, name='highscores')
 app.router.add_get('/control_snake.html', control_snake, name='control_snake')
+app.router.add_get('/clock.html', clock, name='clock')
+app.router.add_get('/rainbowclock.html', rainbowclock, name='rainbowclock')
 app.router.add_get('/favicon.ico', favicon_handler, name='favicon')
 app.router.add_static('/static', 'static', name='static')
 
