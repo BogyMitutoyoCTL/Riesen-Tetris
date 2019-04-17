@@ -16,12 +16,12 @@ class Tetris(Feature):
                  led_matrix_painter: Led_Matrix_Painter, highscorelist: Highscorelist):
         super(Tetris, self).__init__(field_leds, field_matrix, rgb_field_painter, led_matrix_painter,
                                      highscorelist)
-        self.prepare_for_start()
-        pygame.init()
-        game_sound.init_mixer()
         self.next_block = None
         self.current_block = None
         self.score = Score()
+        self.prepare_for_start()
+        pygame.init()
+        game_sound.init_mixer()
 
     def __new_block(self):
         self.check_for_full_lines()
