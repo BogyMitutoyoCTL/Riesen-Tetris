@@ -187,28 +187,12 @@ class Tetris(Feature):
         lock.release()
 
     def get_delay(self):
-        if self.score.get_score_int() < 50:
-            return 0.4
-        elif self.score.get_score_int() < 100:
-            return 0.35
-        elif self.score.get_score_int() < 500:
-            return 0.3
-        elif self.score.get_score_int() < 1000:
-            return 0.25
-        elif self.score.get_score_int() < 2000:
-            return 0.2
-        elif self.score.get_score_int() < 5000:
-            return 0.15
-        elif self.score.get_score_int() < 10000:
-            return 0.12
-        elif self.score.get_score_int() < 20000:
-            return 0.09
-        elif self.score.get_score_int() < 50000:
-            return 0.07
-        elif self.score.get_score_int() < 100000:
-            return 0.06
-        else:
-            return 0.05
+        speedmap = [(50, 0.4), (100, 0.35), (500, 0.3), (1000, 0.25), (2000, 0.2), (5000, 0.15), (10000, 0.12), (20000, 0.09),
+                     (50000, 0.07), (100000, 0.06)]
+        for score, delay in speedmap:
+            if self.score.points < score:
+                return delay
+        return 0.05
 
     def start(self, playername: str = None):
         super(Tetris, self).start(playername)
@@ -220,10 +204,6 @@ class Tetris(Feature):
 
     def prepare_for_start(self):
         self.set_all_fields_black()
-
-        # Blockeigenschaften
-        #self.next_block = TetrisBlock.get_random_block()
-        #self.__new_block()
 
         # Positionen block_today
         self.position_block_today_x = 3
