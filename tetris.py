@@ -1,11 +1,8 @@
 import threading
-from random import random
 from copy import deepcopy
-
 import pygame
-
 import game_sound
-from block import Block, blocks, block_colors
+from block import TetrisBlock
 from feature import Feature
 from painter import RGB_Field_Painter
 from highscorelist import *
@@ -14,28 +11,26 @@ lock = threading.Lock()
 tetris_songs = ['./sound-files/lied.mp3', './sound-files/lied2.mp3']
 
 
-class Tetris_Main(Feature):
+class Tetris(Feature):
     def __init__(self, field_leds: Field, field_matrix: Field, rgb_field_painter: RGB_Field_Painter,
                  led_matrix_painter: Led_Matrix_Painter, highscorelist: Highscorelist):
-        super(Tetris_Main, self).__init__(field_leds, field_matrix, rgb_field_painter, led_matrix_painter,
-                                          highscorelist)
+        super(Tetris, self).__init__(field_leds, field_matrix, rgb_field_painter, led_matrix_painter,
+                                     highscorelist)
         self.prepare_for_start()
         pygame.init()
         game_sound.init_mixer()
+        self.next_block = None
+        self.current_block = None
+        self.score = Score()
 
     def __new_block(self):
         self.check_for_full_lines()
 
-        self.random_number_today = self.random_number_future
-        self.random_number_future = int(random() * 7)
-
-        self.rotation_today = self.rotation_future
-        self.rotation_future = int(random() * 4)
-
-        self.refresh_blocks()
+        self.current_block = self.next_block
+        self.next_block = TetrisBlock.get_random_block()
 
         self.position_block_today_x = 3
-        self.position_block_today_y = -self.block_today.get_line_of_first_pixel_from_bottom() - 1  # evtl. mit -1 am Ende
+        self.position_block_today_y = -self.current_block.get_line_of_first_pixel_from_bottom() - 1  # evtl. mit -1 am Ende
 
         self.refresh_led_painter()
         self.refresh_matrix_painter()
@@ -64,42 +59,30 @@ class Tetris_Main(Feature):
             self.rgb_field_painter.draw(self.field_leds)
             time.sleep(0.03)
 
-    def refresh_blocks(self):
-        # Blöcke aussuchen
-        self.block_today = Block(blocks[self.random_number_today], block_colors[self.random_number_today])
-        self.block_future = Block(blocks[self.random_number_future], block_colors[self.random_number_future])
-
-        # Blöcke drehen
-        for i in range(0, self.rotation_today):
-            self.block_today.rotateleft()
-        for i in range(self.rotation_future):
-            self.block_future.rotateleft()
-
     def refresh_led_painter(self):
         # Blöcke auf das LED Feld malen
-        self.field_leds.set_block(self.block_today, self.position_block_today_x, self.position_block_today_y)
+        self.field_leds.set_block(self.current_block, self.position_block_today_x, self.position_block_today_y)
         self.rgb_field_painter.draw(self.field_leds)
 
     def refresh_matrix_painter(self):
-
         # Blöcke auf die Matrix schreiben
         self.field_matrix.set_all_pixels_to_black()
         self.score.draw_score_on_field(self.field_matrix)
-        self.field_matrix.set_block(self.block_future.double_size(), 24, 0)
+        self.field_matrix.set_block(self.next_block.double_size(), 24, 0)
         self.led_matrix_painter.draw(self.field_matrix)
 
-    def delete_block_today(self):
-        self.field_leds.remove_block(self.block_today, self.position_block_today_x, self.position_block_today_y)
+    def delete_current_block(self):
+        self.field_leds.remove_block(self.current_block, self.position_block_today_x, self.position_block_today_y)
 
     def set_all_fields_black(self):
         self.field_leds.set_all_pixels_to_black()
         self.field_matrix.set_all_pixels_to_black()
 
     def move_block_today_one_step_down(self):
-        self.delete_block_today()
+        self.delete_current_block()
 
         if self.field_leds.give_type_of_collision(
-                self.block_today,
+                self.current_block,
                 self.position_block_today_x,
                 self.position_block_today_y + 1) == 2:
             print(" -> Game over")
@@ -111,7 +94,7 @@ class Tetris_Main(Feature):
             self.highscorelist.save()
             self.led_matrix_painter.show_Message("Game over - Your Points: " + str(self.score.get_score_str()), 250)
         elif self.field_leds.give_type_of_collision(
-                self.block_today,
+                self.current_block,
                 self.position_block_today_x,
                 self.position_block_today_y + 1) == 1:
             print(" -> neuer Block")
@@ -124,10 +107,10 @@ class Tetris_Main(Feature):
             self.refresh_led_painter()
 
     def move_block_today_one_step_left(self):
-        self.delete_block_today()
+        self.delete_current_block()
 
         if self.field_leds.give_type_of_collision(
-                self.block_today,
+                self.current_block,
                 self.position_block_today_x - 1,
                 self.position_block_today_y) != 0:
             print(" -> keine Bewegung nach links")
@@ -136,10 +119,10 @@ class Tetris_Main(Feature):
             self.refresh_led_painter()
 
     def move_block_today_one_step_right(self):
-        self.delete_block_today()
+        self.delete_current_block()
 
         if self.field_leds.give_type_of_collision(
-                self.block_today,
+                self.current_block,
                 self.position_block_today_x + 1,
                 self.position_block_today_y) != 0:
             print(" -> keine Bewegung nach rechts")
@@ -148,8 +131,8 @@ class Tetris_Main(Feature):
             self.refresh_led_painter()
 
     def rotate_block_today_left(self):
-        self.delete_block_today()
-        block_today_for_test = Block(self.block_today.get_rotated_left(), 0)
+        self.delete_current_block()
+        block_today_for_test = self.current_block.clone().rotateleft()
 
         if self.field_leds.give_type_of_collision(
                 block_today_for_test,
@@ -157,15 +140,12 @@ class Tetris_Main(Feature):
                 self.position_block_today_y) != 0:
             print(" -> keine Rotation nach links")
         else:
-            self.rotation_today += 1
-            if self.rotation_today >= 4:
-                self.rotation_today -= 4
-            self.refresh_blocks()
+            self.current_block.rotateleft()
             self.refresh_led_painter()
 
     def rotate_block_today_right(self):
-        self.delete_block_today()
-        block_today_for_test = Block(self.block_today.get_rotated_right(), 0)
+        self.delete_current_block()
+        block_today_for_test = self.current_block.clone().rotateright()
 
         if self.field_leds.give_type_of_collision(
                 block_today_for_test,
@@ -173,10 +153,7 @@ class Tetris_Main(Feature):
                 self.position_block_today_y) != 0:
             print(" -> keine Rotation nach rechts")
         else:
-            self.rotation_today -= 1
-            if self.rotation_today < 0:
-                self.rotation_today += 4
-            self.refresh_blocks()
+            self.current_block.rotateright()
             self.refresh_led_painter()
 
     def tick(self):
@@ -190,77 +167,67 @@ class Tetris_Main(Feature):
         lock.release()
 
         if not self.game_over:
-            self.get_delay()
-            time.sleep(self.delay)  # TODO: Delay anpassen
+            time.sleep(self.get_delay())
 
     def event(self, eventname: str):
         lock.acquire()
         if not self.game_over:
             if eventname == "new":  # neuer Block    # todo: später rauswerfen (Johannes)
                 self.__new_block()
-            elif eventname == "rotate left":  # rotate left
+            elif eventname == "rotate left":
                 self.rotate_block_today_left()
-            elif eventname == "rotate right":  # rotate right
+            elif eventname == "rotate right":
                 self.rotate_block_today_right()
-            elif eventname == "move left":  # move left
+            elif eventname == "move left":
                 self.move_block_today_one_step_left()
-            elif eventname == "move right":  # move right
+            elif eventname == "move right":
                 self.move_block_today_one_step_right()
-            elif eventname == "move down":  # move down
+            elif eventname == "move down":
                 self.move_block_today_one_step_down()
         lock.release()
 
     def get_delay(self):
         if self.score.get_score_int() < 50:
-            self.delay = 0.4
+            return 0.4
         elif self.score.get_score_int() < 100:
-            self.delay = 0.35
+            return 0.35
         elif self.score.get_score_int() < 500:
-            self.delay = 0.3
+            return 0.3
         elif self.score.get_score_int() < 1000:
-            self.delay = 0.25
+            return 0.25
         elif self.score.get_score_int() < 2000:
-            self.delay = 0.2
+            return 0.2
         elif self.score.get_score_int() < 5000:
-            self.delay = 0.15
+            return 0.15
         elif self.score.get_score_int() < 10000:
-            self.delay = 0.12
+            return 0.12
         elif self.score.get_score_int() < 20000:
-            self.delay = 0.09
+            return 0.09
         elif self.score.get_score_int() < 50000:
-            self.delay = 0.07
+            return 0.07
         elif self.score.get_score_int() < 100000:
-            self.delay = 0.06
+            return 0.06
         else:
-            self.delay = 0.05
+            return 0.05
 
-    def start(self, playername: str=None):
-        super(Tetris_Main, self).start(playername)
+    def start(self, playername: str = None):
+        super(Tetris, self).start(playername)
         self.prepare_for_start()
-
         self.refresh_led_painter()
         self.refresh_matrix_painter()
-
         self.game_over = False
-
         game_sound.play_random_song(tetris_songs)
 
     def prepare_for_start(self):
         self.set_all_fields_black()
 
         # Blockeigenschaften
-        self.random_number_today = int(random() * 7)
-        self.random_number_future = int(random() * 7)
-        self.rotation_today = int(random() * 4)
-        self.rotation_future = int(random() * 4)
-
-        self.refresh_blocks()
+        self.next_block = TetrisBlock.get_random_block()
+        self.__new_block()
 
         # Positionen block_today
         self.position_block_today_x = 3
-        self.position_block_today_y = -self.block_today.get_line_of_first_pixel_from_bottom() - 2
-
-        self.score = Score()
+        self.position_block_today_y = -self.current_block.get_line_of_first_pixel_from_bottom() - 2
 
         # self.draw_lines_for_test()
 
@@ -269,7 +236,7 @@ class Tetris_Main(Feature):
         game_sound.stop_song()
 
     def is_game_over(self):
-        return super(Tetris_Main, self).is_game_over()
+        return super(Tetris, self).is_game_over()
 
     def draw_lines_for_test(self):
         for x in range(self.field_leds.width):

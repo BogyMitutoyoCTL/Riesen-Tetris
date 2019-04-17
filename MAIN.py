@@ -11,7 +11,7 @@ from painter import RGB_Field_Painter
 from rainbowclock import Clock
 from rainbowclock import Rainbowclock
 from snake_main import Snake_Main
-from tetris_main import Tetris_Main
+from tetris import Tetris
 
 running = True
 
@@ -77,7 +77,7 @@ highscorelist_tetris.load()
 
 rainbowclock = Rainbowclock(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
 clock = Clock(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
-tetris = Tetris_Main(field_leds, field_matrix, rgb_field_painter, led_matrix_painter, highscorelist_tetris)
+tetris = Tetris(field_leds, field_matrix, rgb_field_painter, led_matrix_painter, highscorelist_tetris)
 snake = Snake_Main(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
 
 features = {"start_tetris": tetris,
