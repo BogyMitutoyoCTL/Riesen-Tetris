@@ -26,10 +26,6 @@ def play_sound(name: str = "bell"):
         raise FileNotFoundError
 
 
-def init_pygame():
-    pygame.init()
-
-
 def init_mixer():
     pygame.mixer.init()
     pygame.mixer.music.set_endevent(pygame.QUIT)
@@ -47,10 +43,7 @@ def play_random_song(songs_to_play: list):
     play_song(random.choice(songs_to_play))
 
 
-# todo: Wire up sounds with events
-
-
 if __name__ == '__main__':
-    init_pygame()
+    pygame.init()
     init_mixer()
     play_random_song(_songs)
