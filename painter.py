@@ -1,5 +1,3 @@
-from random import random
-
 from luma.core.render import canvas
 from luma.led_matrix.device import ws2812
 from luma.led_matrix.device import max7219
@@ -8,7 +6,7 @@ from luma.core.interface.serial import spi, noop
 from luma.core.virtual import viewport
 from luma.core.legacy.font import proportional, LCD_FONT
 
-from block import Block, blocks, block_colors
+from block import TetrisBlock
 from field import Field
 
 
@@ -101,8 +99,7 @@ if __name__ == "__main__":
     while True:
         playfield.set_all_pixels_to_black()
         scoreboard.set_all_pixels_to_black()
-        random_block_number = int(random() * 7)
-        block = Block(blocks[random_block_number], block_colors[random_block_number])
+        block = TetrisBlock.get_random_block()
         playfield.set_block(block, 3, 0)
         playfield_painter.draw(playfield)
 
