@@ -26,7 +26,7 @@ class Block:
     def double_size(self):
         img = Image.fromarray(numpy.array(self.pixels))
         img = img.resize((self.width * 2, self.height * 2), Image.NEAREST)
-        ret = numpy.array(img)
+        ret = numpy.array(img).tolist()
         return Block(ret, copy.deepcopy(self.color))
 
     def clone(self):
