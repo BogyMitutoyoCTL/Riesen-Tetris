@@ -1,10 +1,9 @@
 import time
 from random import random
 
-from block import Block, blocks, block_colors
+from block import TetrisBlock
 from feature import Feature
 from field import Field
-from highscorelist import Highscorelist
 from painter import Led_Matrix_Painter, RGB_Field_Painter
 
 
@@ -30,10 +29,10 @@ class Startscreen(Feature):
 
                 self.field_leds.field[y][x] = [int(random() * 255), int(random() * 255), int(random() * 255)]
 
-    def colored_snow(self, color: list=None):
-        self.field_leds.delete_lines([self.field_leds.height-1])
+    def colored_snow(self, color: list = None):
+        self.field_leds.delete_lines([self.field_leds.height - 1])
         for i in range(int(random() * 3)):
-            if color == None:
+            if color is None:
                 self.field_leds.field[0][int(random() * self.field_leds.width)] = [int(random() * 255),
                                                                                    int(random() * 255),
                                                                                    int(random() * 255)]
@@ -41,23 +40,16 @@ class Startscreen(Feature):
                 self.field_leds.field[0][int(random() * self.field_leds.width)] = color
 
     def new_block(self):
-        zufall = int(random() * 7)
+        self.current_block = TetrisBlock.get_random_block()
 
-        self.block_today = Block(blocks[zufall], block_colors[zufall]).double_size()
-        self.rotation_today = int(random()*4)
-
-        # Block drehen
-        for i in range(0, self.rotation_today):
-            self.block_today.rotateleft()
-
-        self.position_block_today_x = 1
-        self.position_block_today_y = -8
+        self.block_position_x = 1
+        self.block_position_y = -8
 
     def falling_blocks(self):
         self.field_leds.set_all_pixels_to_black()
-        self.field_leds.set_block(self.block_today, self.position_block_today_x, self.position_block_today_y)
-        self.position_block_today_y += 1
-        if self.position_block_today_y >= self.field_leds.height:
+        self.field_leds.set_block(self.current_block, self.block_position_x, self.block_position_y)
+        self.block_position_y += 1
+        if self.block_position_y >= self.field_leds.height:
             self.new_block()
 
     def tick(self):
