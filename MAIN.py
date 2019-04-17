@@ -98,7 +98,7 @@ events = {"action_new_block": "new",
           "action_pause": "pause"}
 
 active = rainbowclock
-active.start()
+active.start("")
 
 thread_for_control = threading.Thread(target=control, args=(features, events, subscriptions))
 thread_for_control.daemon = True

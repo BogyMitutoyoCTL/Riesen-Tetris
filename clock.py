@@ -13,16 +13,16 @@ class Clock(Feature):
 
     def get_time(self):
         tuple_time = datetime.timetuple(datetime.today())
-        return tuple_time[3], tuple_time[4],  tuple_time[5]
+        return tuple_time[3], tuple_time[4], tuple_time[5]
 
     def get_date(self):
         tuple_date = datetime.timetuple(datetime.today())
-        return tuple_date[0], tuple_date[1],  tuple_date[2]
+        return tuple_date[0], tuple_date[1], tuple_date[2]
 
-    def draw_clock(self, color: list=None):
+    def draw_clock(self, color: list = None):
         self.field_leds.set_all_pixels_to_black()
         hour, minute, second = self.get_time()
-        hour_str = ("0"+str(hour))[-2:]
+        hour_str = ("0" + str(hour))[-2:]
         minute_str = ("0" + str(minute))[-2:]
         second_str = ("0" + str(second))[-2:]
 
@@ -34,15 +34,13 @@ class Clock(Feature):
             digit = clock_array[i]
             self.field_leds.set_block(Number(digit).block, positions[i][0], positions[i][1], color)
 
-
     def get_date_string(self):
         self.field_matrix.set_all_pixels_to_black()
         _, month, day = self.get_date()
-        day_str = ("0"+str(day))[-2:]
+        day_str = ("0" + str(day))[-2:]
         month_str = ("0" + str(month))[-2:]
         datetext = "" + day_str + "." + month_str + "."
         return datetext
-
 
     def event(self, eventname: str):
         if eventname == "break":
@@ -55,7 +53,7 @@ class Clock(Feature):
 
         time.sleep(0.2)
 
-    def start(self):
+    def start(self, playername):
         self.field_leds.set_all_pixels_to_black()
         self.field_matrix.set_all_pixels_to_black()
         self.rgb_field_painter.draw(self.field_leds)

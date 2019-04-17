@@ -21,7 +21,7 @@ class Feature:
     def tick(self):
         raise NotImplementedError
 
-    def start(self, playername: str=None):
+    def start(self, playername: str = None):
         self.playername = playername
         # raise NotImplementedError
 

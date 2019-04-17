@@ -1,4 +1,3 @@
-import time
 import redis
 from aiohttp import web
 import json
