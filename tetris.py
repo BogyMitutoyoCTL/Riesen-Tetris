@@ -92,7 +92,7 @@ class Tetris(Feature):
             self.highscorelist.add_entry(
                 Highscoreentry(datetime.today(), self.playername, self.score.get_score_int()))
             self.highscorelist.save()
-            self.led_matrix_painter.show_Message("Game over - Your Points: " + str(self.score.get_score_str()), 250)
+            self.led_matrix_painter.show_Message("Game over - Your Points: " + self.score.get_score_str(), 250)
         elif self.field_leds.give_type_of_collision(
                 self.current_block,
                 self.position_block_today_x,
