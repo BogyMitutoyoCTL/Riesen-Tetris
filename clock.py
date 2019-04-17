@@ -11,6 +11,10 @@ class Clock(Feature):
                  led_matrix_painter: Led_Matrix_Painter):
         super(Clock, self).__init__(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
 
+    @staticmethod
+    def __leading_zeros(number: int) -> str:
+        return ("0"+str(number))[-2:]
+
     def get_time(self):
         tuple_time = datetime.timetuple(datetime.today())
         return tuple_time[3], tuple_time[4], tuple_time[5]
@@ -22,9 +26,9 @@ class Clock(Feature):
     def draw_clock(self, color: list = None):
         self.field_leds.set_all_pixels_to_black()
         hour, minute, second = self.get_time()
-        hour_str = ("0" + str(hour))[-2:]
-        minute_str = ("0" + str(minute))[-2:]
-        second_str = ("0" + str(second))[-2:]
+        hour_str = self.__leading_zeros(hour)
+        minute_str = self.__leading_zeros(minute)
+        second_str = self.__leading_zeros(second)
 
         clock_array = [int(hour_str[0]), int(hour_str[1]),
                        int(minute_str[0]), int(minute_str[1]),
@@ -37,14 +41,13 @@ class Clock(Feature):
     def get_date_string(self):
         self.field_matrix.set_all_pixels_to_black()
         _, month, day = self.get_date()
-        day_str = ("0" + str(day))[-2:]
-        month_str = ("0" + str(month))[-2:]
-        datetext = "" + day_str + "." + month_str + "."
+        day_str = self.__leading_zeros(day)
+        month_str = self.__leading_zeros(month)
+        datetext = day_str + "." + month_str + "."
         return datetext
 
     def event(self, eventname: str):
-        if eventname == "break":
-            pass
+        pass
 
     def tick(self):
         self.draw_clock()
