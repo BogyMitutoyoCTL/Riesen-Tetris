@@ -4,7 +4,7 @@ from random import random
 
 import game_sound
 from Score import Score
-from feature import Feature
+from features.feature import Feature
 from field import Field
 from highscorelist import Highscorelist, Highscoreentry
 from painter import RGB_Field_Painter, Led_Matrix_Painter

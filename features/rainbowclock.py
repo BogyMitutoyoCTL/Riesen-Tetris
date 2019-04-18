@@ -1,6 +1,6 @@
 from time import sleep
 
-from clock import Clock
+from features.clock import Clock
 from field import Field
 from multiply import multiply
 from painter import Led_Matrix_Painter, RGB_Field_Painter

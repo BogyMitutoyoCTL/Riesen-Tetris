@@ -1,6 +1,6 @@
 from time import sleep
 
-from clock import Clock
+from features.clock import Clock
 from field import Field
 import numpy
 

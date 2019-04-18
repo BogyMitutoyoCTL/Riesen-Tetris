@@ -6,12 +6,14 @@ from time import sleep
 
 import redis
 
+from features.snow import Snow
 from highscorelist import *
 from painter import RGB_Field_Painter
-from rainbowclock import Clock
-from rainbowclock import Rainbowclock
-from snake_main import Snake_Main
-from tetris import Tetris
+from features.rainbowclock import Clock
+from features.rainbowclock import Rainbowclock
+from features.snake_main import Snake_Main
+from features.startscreen import Startscreen
+from features.tetris import Tetris
 
 running = True
 
@@ -50,6 +52,7 @@ def get_redis_message(subscriptions) -> str:
     message = subscriptions.get_message()
     if message:
         command = message['data']
+        print(command)
         if isinstance(command, (bytes, bytearray)):
             command = str(command, "utf-8")
             if str(message['channel'], "utf-8") == "username":
@@ -81,12 +84,16 @@ rainbowclock = Rainbowclock(field_leds, field_matrix, rgb_field_painter, led_mat
 clock = Clock(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
 tetris = Tetris(field_leds, field_matrix, rgb_field_painter, led_matrix_painter, highscorelist_tetris)
 snake = Snake_Main(field_leds, field_matrix, rgb_field_painter, led_matrix_painter, highscorelist_snake)
+startscreen = Startscreen(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
+snow = Snow(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
 
 features = {"start_tetris": tetris,
             "tetris_start": tetris,
             "start_clock_rainbow": rainbowclock,
             "start_clock": clock,
-            "start_snake": snake}
+            "start_snake": snake,
+            "start_screen": startscreen,
+            "start_snow": snow}
 
 events = {"action_new_block": "new",
           "action_turn_left": "rotate left",
@@ -99,7 +106,7 @@ events = {"action_new_block": "new",
           "action_move_up": "move up",
           "action_pause": "pause"}
 
-active = rainbowclock
+active = snow
 active.start("")
 
 thread_for_control = threading.Thread(target=control, args=(features, events, subscriptions))

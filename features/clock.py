@@ -1,6 +1,6 @@
 import time
 from datetime import datetime
-from feature import Feature
+from features.feature import Feature
 from field import Field
 from numbersforwatch import Number
 from painter import RGB_Field_Painter, Led_Matrix_Painter

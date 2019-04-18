@@ -3,7 +3,7 @@ from copy import deepcopy
 import pygame
 import game_sound
 from block import TetrisBlock
-from feature import Feature
+from features.feature import Feature
 from painter import RGB_Field_Painter
 from highscorelist import *
 
