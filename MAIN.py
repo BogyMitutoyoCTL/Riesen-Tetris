@@ -7,6 +7,7 @@ from time import sleep
 import redis
 
 from features.binaryclock import BinaryClock
+from features.mona import Mona
 from features.snow import Snow
 from field import Field
 from highscorelist import *
@@ -89,6 +90,7 @@ snake = Snake_Main(field_leds, field_matrix, rgb_field_painter, led_matrix_paint
 startscreen = Startscreen(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
 snow = Snow(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
 binary = BinaryClock(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
+mona = Mona(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
 
 features = {"start_tetris": tetris,
             "tetris_start": tetris,
@@ -110,7 +112,7 @@ events = {"action_new_block": "new",
           "action_move_up": "move up",
           "action_pause": "pause"}
 
-active = rainbowclock
+active = mona
 active.start("")
 
 thread_for_control = threading.Thread(target=control, args=(features, events, subscriptions))
