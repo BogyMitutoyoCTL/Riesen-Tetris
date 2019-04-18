@@ -9,7 +9,6 @@ class BinaryClock(Clock):
                  led_matrix_painter: Led_Matrix_Painter):
         super(BinaryClock, self).__init__(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
 
-
     def draw_block(self, x, y, color):
         self.field_leds.field[y][x] = color
         self.field_leds.field[y-1][x] = color
