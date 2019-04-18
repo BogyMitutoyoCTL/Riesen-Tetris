@@ -25,9 +25,8 @@
 <div class="container-1">
     <div class="box-highscores">
         <ol>
-            {% for entry in app['highscores'] %}
-            <li>{{app['highscores'][entry].point}} - {{app['highscores'][entry].name}} on {{app['highscores'][entry].date}}</li>
-            {{entry}}
+            {% for entry in app['highscore'] %}
+            <li>{{entry.point}} by {{entry.name}} on {{entry.date}}</li>
             {% endfor %}
         </ol>
     </div>

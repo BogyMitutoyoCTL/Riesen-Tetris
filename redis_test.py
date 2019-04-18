@@ -1,11 +1,11 @@
 import redis
 
 r = redis.StrictRedis(host='localhost', port=6379)
-p = r.pubsub()
-p.subscribe('game_action')
+subscriptions = r.pubsub()
+subscriptions.subscribe('game_action')
 
 while True:
-    message = p.get_message()
+    message = subscriptions.get_message()
     if message:
         command = message['data']
         if isinstance(command, (bytes, bytearray)):

@@ -1,6 +1,6 @@
 from time import sleep
 
-from clock import Clock
+from features.clock import Clock
 from field import Field
 import numpy
 
@@ -9,7 +9,7 @@ from rainbow import rainbowcolors
 
 
 def multiply(background: Field, foreground: Field):
-    white = Field(10,20)
+    white = Field(10, 20)
     for x in range(10):
         for y in range(20):
             white.set_pixel(x, y, [255, 255, 255])
@@ -34,7 +34,7 @@ if __name__ == "__main__":
     r = rainbowcolors(COLORS)
     currentrainbowstart = 0
     while True:
-        currentrainbowstart +=1
+        currentrainbowstart += 1
         currentrainbowstart %= COLORS-20
         for x in range(10):
             for y in range(20):

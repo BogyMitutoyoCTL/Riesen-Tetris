@@ -21,7 +21,7 @@ class Highscoreentry:
         return self.point > other.point
 
     def __lt__(self, other):
-        return int(self.point) < int(other.point)
+        return self.point < other.point
 
     def __eq__(self, other):
         return self.point == other.point
@@ -52,25 +52,22 @@ class Highscorelist:
         except FileNotFoundError:
             pass
 
+
 if __name__ == "__main__":
     score = Score()
-    y = str(score.points)
+    y = score.points
 
     tetrishighscores = Highscorelist('tetrisscores')
     tetrishighscores.load()
     print(score)
 
-    print(datetime.date(datetime.today()))
-
     today = date.today()
-    x = Highscoreentry(datetime.today(), "2neu", 2)                 #TODO: Name mit tatsächlichem Username austauschen!
+    x = Highscoreentry(datetime.today, input("Give me your name: "), y)
     tetrishighscores.add_entry(x)
-
-    # print(x.date)
 
     tetrishighscores.save()
     print(tetrishighscores.highscores)
 
-    x = Highscorelist('Tetris')
+    x = Highscorelist('tetrisscores')
     x.load()
     print(x.highscores)

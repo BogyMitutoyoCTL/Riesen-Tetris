@@ -4,6 +4,9 @@ BLACK = [0, 0, 0]
 
 
 class Field:
+    NoCollision = 0
+    Collision = 1
+    GameOverCollision = 2
 
     def __init__(self, width, height):
         self.width = width
@@ -27,14 +30,14 @@ class Field:
             self.field[y][x] = color
 
     def set_block(self, block_to_draw: Block, field_x: int, field_y: int, color: list = None):
-        if color == None:
+        if color is None:
             color = block_to_draw.color
-        self.draw_block(block_to_draw, color, field_x, field_y)
+        self.__draw_block(block_to_draw, color, field_x, field_y)
 
     def remove_block(self, block_to_draw: Block, field_x: int, field_y: int):
-        self.draw_block(block_to_draw, BLACK, field_x, field_y)
+        self.__draw_block(block_to_draw, BLACK, field_x, field_y)
 
-    def draw_block(self, block_to_draw: Block, color: list, field_x: int, field_y: int):
+    def __draw_block(self, block_to_draw: Block, color: list, field_x: int, field_y: int):
         for brick_y in range(block_to_draw.height):
             for brick_x in range(block_to_draw.width):
                 if block_to_draw.is_brick(brick_x, brick_y):
@@ -46,25 +49,22 @@ class Field:
                 if block_to_draw.is_brick(x_count, y_count):
                     if y + y_count > self.height - 1:
                         print("Kollision Boden", end="")
-                        return 1
+                        return Field.Collision
                     elif x + x_count < 0:
                         print("Kollision linker Rand", end="")
-                        return 1
+                        return Field.Collision
                     elif x + x_count > self.width - 1:
                         print("Kollision rechter Rand", end="")
-                        return 1
+                        return Field.Collision
                     elif not self.pixel_is_inside_field(x + x_count, y_count + y):
                         pass
                     elif self.field[y + y_count][x + x_count] != BLACK:
                         print("Kollision Block", end="")
-                        return self.is_hole_block_in_field(block_to_draw, y)
-        return 0
+                        return Field.Collision if self.is_whole_block_in_field(block_to_draw, y) else Field.GameOverCollision
+        return Field.NoCollision
 
-    def is_hole_block_in_field(self, block_to_draw: Block, y: int) -> int:
-        if self.pixel_is_inside_field(0, y+block_to_draw.get_line_of_first_pixel_from_top()-1): # -1 weil der Block ja eins runtergesetzt wurde
-            return 1
-        else:
-            return 2
+    def is_whole_block_in_field(self, block_to_draw: Block, y: int) -> bool:
+        return self.pixel_is_inside_field(0, y+block_to_draw.get_line_of_first_pixel_from_top()-1)  # -1 weil der Block ja eins runtergesetzt wurde
 
     def get_all_full_lines(self) -> list:
         lines_to_delete = []

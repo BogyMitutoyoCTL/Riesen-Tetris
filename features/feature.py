@@ -1,5 +1,4 @@
-from field import Field
-from painter import RGB_Field_Painter, Led_Matrix_Painter
+from painter import RGB_Field_Painter
 from highscorelist import *
 
 
@@ -12,7 +11,7 @@ class Feature:
         self.rgb_field_painter = rgb_field_painter
         self.led_matrix_painter = led_matrix_painter
         self.highscorelist = highscorelist
-
+        self.playername = ""
         self.game_over = True
 
     def event(self, eventname: str):
@@ -21,9 +20,8 @@ class Feature:
     def tick(self):
         raise NotImplementedError
 
-    def start(self, playername: str=None):
+    def start(self, playername: str = None):
         self.playername = playername
-        # raise NotImplementedError
 
     def stop(self):
         raise NotImplementedError

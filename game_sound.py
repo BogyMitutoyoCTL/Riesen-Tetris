@@ -1,6 +1,3 @@
-# Credits:
-# glass_breaking.wav is from http://soundbible.com/1761-Glass-Breaking.html by Mike Koenig CC-BY-SA 3.0
-
 import random
 import pygame
 
@@ -18,22 +15,15 @@ def stop_song():
     pygame.mixer.music.stop()
 
 
-def play_sound(name: str="bell"):
-    file = ""
-    if name == "breaking_line":
-        file = './sound-files/effects/glass_breaking.wav'
-    elif name == "bell":
-        file = './sound-files/effects/bell.wav'
-    elif name == "game_over":
-        file = './sound-files/effects/game_over.wav'
-    sound = pygame.mixer.Sound(file)
-    sound.set_volume(1.0)
-    pygame.mixer.Channel(1).play(sound)
-    print('Sound playing:' + file)
-
-
-def init_pygame():
-    pygame.init()
+def play_sound(name: str = "bell"):
+    file = "./sound-files/effects/" + name + ".wav"
+    try:
+        sound = pygame.mixer.Sound(file)
+        sound.set_volume(1.0)
+        pygame.mixer.Channel(1).play(sound)
+        print('Sound playing:' + file)
+    except:
+        raise FileNotFoundError
 
 
 def init_mixer():
@@ -53,10 +43,7 @@ def play_random_song(songs_to_play: list):
     play_song(random.choice(songs_to_play))
 
 
-# todo: Wire up sounds with events
-
-
 if __name__ == '__main__':
-    init_pygame()
+    pygame.init()
     init_mixer()
     play_random_song(_songs)

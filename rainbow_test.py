@@ -10,7 +10,7 @@ if __name__ == "__main__":
     for m in range(5, 50):
         for a in range(1, 50):
             for i in range(200):
-                field_leds.set_pixel(i%10, i//10, hsv2rgb(i / 200 *m / 10 + a/ 50, 1, 1))
+                field_leds.set_pixel(i % 10, i // 10, hsv2rgb(i / 200 * m / 10 + a / 50, 1, 1))
 
             rgb_field_painter.draw(field_leds)
 

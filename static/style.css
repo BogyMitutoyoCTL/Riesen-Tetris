@@ -24,7 +24,6 @@ z-index: 1;
 }
 
 .container-0 {
-	display: flex;
 	justify-content: space-between;
 }
 
@@ -49,16 +48,6 @@ z-index: 1;
 }
 
 .container-2 div {
-	border: 0px #ccc solid;
-	padding: 10px;
-}
-
-.container-3 {
-	display: flex;
-	justify-content: space-between;
-}
-
-.container-3 div {
 	border: 0px #ccc solid;
 	padding: 10px;
 }
@@ -127,14 +116,14 @@ z-index: 1;
 	text-align: center;
 }
 
-.box-up {
-	flex: 1;
-	order: 1;
-	text-align: center;
+.btn {
+    font-size: 2em;
+    display:block;
+    width: 100%;
+    margin: 5%;
 }
 
-.box-down {
-	flex: 1;
-	order: 2;
-	text-align: center;
+.box-game-modes, .box-app-name {
+    display: block;
+    clear: both
 }
