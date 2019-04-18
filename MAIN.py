@@ -6,6 +6,7 @@ from time import sleep
 
 import redis
 
+from features.binaryclock import BinaryClock
 from features.snow import Snow
 from field import Field
 from highscorelist import *
@@ -87,6 +88,7 @@ tetris = Tetris(field_leds, field_matrix, rgb_field_painter, led_matrix_painter,
 snake = Snake_Main(field_leds, field_matrix, rgb_field_painter, led_matrix_painter, highscorelist_snake)
 startscreen = Startscreen(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
 snow = Snow(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
+binary = BinaryClock(field_leds, field_matrix, rgb_field_painter, led_matrix_painter)
 
 features = {"start_tetris": tetris,
             "tetris_start": tetris,
@@ -94,7 +96,8 @@ features = {"start_tetris": tetris,
             "start_clock": clock,
             "start_snake": snake,
             "start_screen": startscreen,
-            "start_snow": snow}
+            "start_snow": snow,
+            "start_binary": binary}
 
 events = {"action_new_block": "new",
           "action_turn_left": "rotate left",
@@ -107,7 +110,7 @@ events = {"action_new_block": "new",
           "action_move_up": "move up",
           "action_pause": "pause"}
 
-active = snow
+active = rainbowclock
 active.start("")
 
 thread_for_control = threading.Thread(target=control, args=(features, events, subscriptions))

@@ -34,6 +34,11 @@ async def clock(request):
     return {}
 
 @aiohttp_jinja2.template('index.html')
+async def binaryclock(request):
+    r.publish('game_action', "start_binary")
+    return {}
+
+@aiohttp_jinja2.template('index.html')
 async def rainbowclock(request):
     r.publish('game_action', "start_clock_rainbow")
     return {}
@@ -188,6 +193,7 @@ app.router.add_get('/highscores.html', highscores, name='highscores')
 app.router.add_get('/snakescores.html', snakescores, name='snakescores')
 app.router.add_get('/control_snake.html', control_snake, name='control_snake')
 app.router.add_get('/clock.html', clock, name='clock')
+app.router.add_get('/binaryclock.html', binaryclock, name='binaryclock')
 app.router.add_get('/startscreen.html', startscreen, name='startscreen')
 app.router.add_get('/rainbowclock.html', rainbowclock, name='rainbowclock')
 app.router.add_get('/snow.html', snow, name='snow')
