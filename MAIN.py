@@ -7,8 +7,9 @@ from time import sleep
 import redis
 
 from features.snow import Snow
+from field import Field
 from highscorelist import *
-from painter import RGB_Field_Painter
+from painter import RGB_Field_Painter, Led_Matrix_Painter
 from features.rainbowclock import Clock
 from features.rainbowclock import Rainbowclock
 from features.snake_main import Snake_Main

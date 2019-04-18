@@ -1,33 +1,27 @@
-from datetime import datetime
-from datetime import date
 import pickle
-from Score import *
+from datetime import datetime
 
 
 class Highscoreentry:
-    date = 0
-    name = ""
-    point = 0
-
     def __init__(self, date: datetime.date, name: str, point: int):
         self.date = date  # type: datetime.date
         self.name = name
-        self.point = point
+        self.points = point
 
     def __repr__(self):
-        return str(self.point) + " " + self.name + " " + self.date.strftime("%d.%m.%y")
+        return str(self.points) + " " + self.name + " " + self.date.strftime("%d.%m.%y")
 
     def __gt__(self, other):
-        return self.point > other.point
+        return self.points > other.points
 
     def __lt__(self, other):
-        return self.point < other.point
+        return self.points < other.points
 
     def __eq__(self, other):
-        return self.point == other.point
+        return self.points == other.points
 
     def __ge__(self, other):
-        return self.point >= other.point
+        return self.points >= other.points
 
 
 class Highscorelist:
@@ -51,22 +45,3 @@ class Highscorelist:
                 self.highscores = temporary_list.highscores
         except FileNotFoundError:
             pass
-
-
-if __name__ == "__main__":
-    score = Score()
-    y = score.points
-
-    tetrishighscores = Highscorelist('tetrisscores')
-    print(score)
-
-    today = date.today()
-    x = Highscoreentry(datetime.today, input("Give me your name: "), y)
-    tetrishighscores.add_entry(x)
-
-    tetrishighscores.save()
-    print(tetrishighscores.highscores)
-
-    x = Highscorelist('tetrisscores')
-    x.load()
-    print(x.highscores)

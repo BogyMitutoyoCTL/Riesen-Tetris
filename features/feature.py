@@ -1,4 +1,5 @@
-from painter import RGB_Field_Painter
+from field import Field
+from painter import RGB_Field_Painter, Led_Matrix_Painter
 from highscorelist import *
 
 
