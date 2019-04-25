@@ -193,7 +193,7 @@ python_import PIL
 python_import pygame
 python_import aiohttp
 python_import random
-python_import pickly
+python_import pickle
 python_import datetime
 python_import threading
 python_import signal
