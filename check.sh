@@ -5,22 +5,22 @@ connect_usbsound=no
 
 # Make Java compatible with PyCharm
 if [ "`java -version 2>&1 | grep version | grep 1.8.0_65 | wc -l`" -eq "1" ]; then
-    echo -e "\e[91mJava is problematic Oracle version 1.8.0.65."
-    echo -e "\e[96mSwitching to OpenJDK Ice-T version"
+    echo -e "\e[91mJava is problematic Oracle version 1.8.0.65.\e[39m"
+    echo -e "\e[96mSwitching to OpenJDK Ice-T version.\e[39m"
     apt-get purge -y oracle*
     apt-get update
     apt-get upgrade
     apt-get remove -y oracle*
     apt-get install -y openjdk-8-jre
     if [ "`java -version 2>&1 | grep version | grep 1.8.0_65 | wc -l`" -eq "0" ]; then
-        echo -e "\e[92mJava update seems good."
+        echo -e "\e[92mJava update seems good.\e[39m"
     else
-        echo -e "\e[91mJava is still 1.8.0_65."
-        echo -e "\e[96mDo you have an active Internet connection?"
+        echo -e "\e[91mJava is still 1.8.0_65.\e[39m"
+        echo -e "\e[96mDo you have an active Internet connection?\e[39m"
         exit 3
     fi
 else
-    echo -e "\e[92mJava is not the broken version 1.8.0.65.";
+    echo -e "\e[92mJava is not the broken version 1.8.0.65.\e[39m";
 fi
 
 # Back up config files
@@ -29,88 +29,88 @@ cp /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.conf$(date +%Y%m%d)
 
 # SPI checks
 if [ "`raspi-config nonint get_spi`" -eq "1" ]; then
-    echo -e "\e[92mSPI seems enabled (reported by raspi-config)";
+    echo -e "\e[92mSPI seems enabled (reported by raspi-config).\e[39m";
 else
-    echo -e "\e[91mSPI seems disabled (reported by raspi-config). Enabling now.";
+    echo -e "\e[91mSPI seems disabled (reported by raspi-config). Enabling now.\e[39m";
     raspi-config nonint do_spi 0
     reboot_required=yes
 fi
 
 if [ "`cat /boot/config.txt |grep ^dtparam=spi=on$| wc -l`" -eq "1" ]; then
-	echo -e "\e[92mSPI seems enabled (/boot/config.txt)";
+	echo -e "\e[92mSPI seems enabled (/boot/config.txt)\e[39m";
 else
-	echo -e "\e[91mSPI seems disabled in /boot/config.txt. Enabling it";
+	echo -e "\e[91mSPI seems disabled in /boot/config.txt. Enabling it\e[39m";
 	sed -i -e "s/dtparam=spi=off/dtparam=spi=on/g" /boot/config.txt
     reboot_required=yes
 fi
 
 if [ "`lsmod | grep spi_bcm2835 | wc -l`" -eq "1" ]; then
-	echo -e "\e[92mSPI is already active";
+	echo -e "\e[92mSPI is already active\e[39m";
 else
-	echo -e "\e[91mSPI does not seem active yet. If you just enabled it, a reboot is required";
+	echo -e "\e[91mSPI does not seem active yet. If you just enabled it, a reboot is required.\e[39m";
 	reboot_required=yes
 fi
 
 if [[ -e /dev/spidev0.0 ]]; then
-	echo -e "\e[92mSPI kernel device found";
+	echo -e "\e[92mSPI kernel device found.\e[39m";
 else
-	echo -e "\e[91mNo SPI kernel device found";
+	echo -e "\e[91mNo SPI kernel device found.\e[39m";
 	reboot_required=yes
 fi
 
 # Audio checks
 if [ "`cat /boot/config.txt | grep ^dtparam=audio=off$ | wc -l`" -eq "1" ]; then
-	echo -e "\e[92mInternal sound card is deactivated.";
+	echo -e "\e[92mInternal sound card is deactivated.\e[39m";
 else
-	echo -e "\e[91mInternal sound card still active.";
-	echo -e "\e[96mDisabling it in /boot/config.txt.";
+	echo -e "\e[91mInternal sound card still active.\e[39m";
+	echo -e "\e[96mDisabling it in /boot/config.txt.\e[39m";
 	sed -i -e "s/dtparam=audio=off/dtparam=audio=off/g" /boot/config.txt
     reboot_required=yes
 fi
 
 if [ "`cat /proc/asound/modules | wc -l`" -gt "1" ]; then
-	echo -e "\e[91mToo many sound cards found. Disable internal sound card in /boot/config.txt. If you just disabled it, please reboot."
+	echo -e "\e[91mToo many sound cards found. Disable internal sound card in /boot/config.txt. If you just disabled it, please reboot.\e[39m"
 	reboot_required=yes
 fi
 
 if [ "`cat /proc/asound/modules | grep usb | wc -l`" -eq "1" ]; then
-    echo -e "\e[92mUSB soundcard found.";
+    echo -e "\e[92mUSB soundcard found.\e[39m";
 else
-	echo -e "\e[91mUSB soundcard not found in /proc/asound/modules. Please connect the USB sound card.";
+	echo -e "\e[91mUSB soundcard not found in /proc/asound/modules. Please connect the USB sound card.\e[39m";
 	connect_usbsound=yes
 fi
 
 if [ "`cat /proc/asound/cards | grep USB | wc -l`" -gt "1" ]; then
-	echo -e "\e[92mUSB soundcard found.";
+	echo -e "\e[92mUSB soundcard found.\e[39m";
 else
-	echo -e "\e[91mUSB soundcard not found";
+	echo -e "\e[91mUSB soundcard not found.\e[39m";
 	connect_usbsound=yes
 fi
 
 
 if [ "`cat /usr/share/alsa/alsa.conf | grep 'defaults.ctl.card 1' | wc -l`" -eq "1" ]; then
-	echo -e "\e[92mDefault CTL sound card is 1";
+	echo -e "\e[92mDefault CTL sound card is 1.\e[39m";
 else
-	echo -e "\e[91mDefault CTL sound card is still 0 in /usr/share/alsa/alsa/alsa.conf.";
-	echo -e "\e[96mSetting CTL sound card to 1";
+	echo -e "\e[91mDefault CTL sound card is still 0 in /usr/share/alsa/alsa/alsa.conf.\e[39m";
+	echo -e "\e[96mSetting CTL sound card to 1"\e[39m;
 	sed -i -e "s/defaults.ctl.card 0/defaults.ctl.card 1/g" /usr/share/alsa/alsa.conf
 fi
 
 if [ "`cat /usr/share/alsa/alsa.conf | grep 'defaults.pcm.card 1' | wc -l`" -eq "1" ]; then
-    echo -e "\e[92mDefault PCM sound card is 1";
+    echo -e "\e[92mDefault PCM sound card is 1.\e[39m";
 else
-    echo -e "\e[91mDefault PCM sound card is still 0 in /usr/share/alsa/alsa.conf";
-    echo -e "\e[96mSetting PCM sound card to 1";
+    echo -e "\e[91mDefault PCM sound card is still 0 in /usr/share/alsa/alsa.conf\e[39m";
+    echo -e "\e[96mSetting PCM sound card to 1\e[39m";
     sed -i -e "s/defaults.pcm.card 0/defaults.pcm.card 1/g" /usr/share/alsa/alsa.conf
 fi
 
 
 package_check() {
 	if [ "`dpkg -s $1 | grep Status | grep installed | wc -l`" -eq "1" ]; then
-		echo -e "\e[92m$1 is installed";
+		echo -e "\e[92m$1 is installed\e[39m";
 	else
-		echo -e "\e[91mPackage $1 is not installed.";
-		echo -e "\e[96mInstalling now...";
+		echo -e "\e[91mPackage $1 is not installed.\e[39m";
+		echo -e "\e[96mInstalling now...\e[39m";
 		apt install -y $1
 	fi
 }
@@ -136,17 +136,17 @@ package_check libavcodec-dev
 package_check python3-pip
 
 if [ "`which pip3 | wc -l`" -eq "1" ]; then
-        echo -e "\e[92mFound pip3";
+        echo -e "\e[92mFound pip3\e[39m";
 else
-        echo -e "\e[91mpip3 not found";
+        echo -e "\e[91mpip3 not found\e[39m";
         exit 11
 fi
 
 python_check() {
 	if [ "`pip3 list --disable-pip-version-check 2>/dev/null | grep $1 | wc -l`" -gt "0" ]; then
-		echo -e "\e[92mFound python package $1";
+		echo -e "\e[92mFound python package $1\e[39m";
 	else
-		echo -e "\e[91mPython package $1 not found. Installing ...";
+		echo -e "\e[91mPython package $1 not found. Installing ...\e[39m";
 		pip3 install $1
 	fi
 }
@@ -167,9 +167,9 @@ python_check redis
 
 python_import() {
 	if python3 -c "import $1" &> /dev/null; then
-		echo -e "\e[92mPython import $1 successful";
+		echo -e "\e[92mPython import $1 successful\e[39m";
 	else
-		echo -e "\e[91mPython import $1 failed";
+		echo -e "\e[91mPython import $1 failed\e[39m";
 		exit 13
 	fi
 }
@@ -195,11 +195,11 @@ python_import jinja2
 python_import aiohttp_jinja2
 python_import socketio
 
-if [ "$reboot_required" -eq "yes" ]; then
-    echo -e "\e[96mA reboot seems required";
-    echo -e "\e[91mPlease save open documents and reboot"
+if [ "$reboot_required" = "yes" ]; then
+    echo -e "\e[96mA reboot seems required\e[39m";
+    echo -e "\e[91mPlease save open documents and reboot\e[39m"
 fi
 
-if [ "$connect_usbsound" -eq "yes" ]; then
-    echo -e "\e[91mThe USB sound card seems not connected. Please connect.";
+if [ "$connect_usbsound" = "yes" ]; then
+    echo -e "\e[91mThe USB sound card seems not connected. Please connect.\e[39m";
 fi
