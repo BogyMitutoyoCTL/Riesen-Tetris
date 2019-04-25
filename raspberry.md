@@ -12,57 +12,39 @@ Damit das Riesen-Tetris programmierbar und spielbar wird, müssen einige Dinge b
 8. Sollte die SD Karte vom Raspberry voll sein könnt ihr auch einige Sachen darauf löschen, die wir nicht brauchen.
 9. PyCharm mit "sudo" laufen lassen, damit kein Fehler "Permission denied" kommt wenn ihr auf LED Matrix zugreifen wollt...
 
-zu 1.) mit `sudo raspi-config` kann das Konfigurationsprogramm für den Raspberry gestartet werden. Unter dem Punkt "Interfacing" gibt es den Punkt "SPI". SPI muss aktiviert werden.
+zu 1.) wird vom Shell-Script `check.sh` überprüft und ggf. aktiviert. 
 
-zu 2.) ebenfalls mit `sudo raspi-config` kann SSH aktiviert werden. Der Punkt befindet sich ebenfalls unter "Interfacing".
+zu 2.) kann mit `sudo raspi-config` aktiviert werden. Der Punkt SSH befindet sich unter "Interfacing".
 
-zu 3.) ein `sudo apt-get install libjpeg-dev zlib1g-dev` stellt die nötigen Pakete bereit, damit das Pillow-Paket für Python erfolgreich installiert werden kann.
+zu 3.) wird vom Shell-Script `check.sh` überprüft und ggf. installiert.
 
-zu 4.) ALSA (Advanced Liux Sound System) übernimmt die Verwaltung der Soundkarten. Mit `cat /proc/asound/modules` und `cat /proc/asound/cards` können die Soundkarten aufgelistet werden. Zu Beginn müssten zwei Soundkarten gefunden werden: die eingebaute BCM2835 und die externe USB Audio-Karte.
+zu 4.) wird vom Shell-Script `check.sh` überprüft und ggf. aktiviert.
 
-Um die interne Soundkarte zu deaktivieren wird die Konfigurationsdatei angepasst mit `sudo nano /boot/config.txt` und der Eintrag ganz am Ende der Datei geändert in `dtparam=audio=off`.
+zu 5.) wird vom Skript `pycharm.sh` überprüft und ggf. umgestellt.
 
-Um die Default-Soundkarte auf USB umzustellen wird `sudo nano /usr/share/alsa/alsa.conf` aufgerufen und die Einträge `defaults.ctl.card` sowie `defaults.pcm.card` jeweils auf `1` gesetzt.
-
-zu 5.) Hier gibt es zwei Möglichkeiten: a) [Oracle Java auf eine neuere Version bringen](https://gist.github.com/ribasco/fff7d30b31807eb02b32bcf35164f11f) oder b) die [Ice-T Version von Java verwenden](https://raspberrypi.stackexchange.com/questions/79500/pycharm-2017-3-3-hangs).
-
-zu 6.) Mit `sudo apt-get install python-dev libsdl-image1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev   libsdl1.2-dev libsmpeg-dev python-numpy subversion libportmidi-dev ffmpeg libswscale-dev libavformat-dev libavcodec-dev` werden die nötigen Abhängigkeiten für PyGame installiert.
+zu 6.) wird vom Shell-Script `check.sh` überprüft und ggf. installiert.
 
 zu 7.) PyCharm kann die Passwörter auch in einer KeePass-Datei speichern. Diese Option lässt sich unter "Settings/Appearence/System Settings/Passwords" umstellen.
 
 zu 8.) hier könnt ihr lesen wie ihr wieder Platz auf der SD Karte schafft: https://raspberry.tips/faq/raspberry-pi-speicherplatz-voll-sd-karte-aufraeumen
 
-zu 9.) Um PyCharm mit "sudo" zu starten, müsst ihr die Schaltfläche ändern, mit der ihr PyCharm aufruft. Im Schaltflächen Editor gibt es 3 Zeilen, die ihr seht wenn Ihr die Schaltfläche bearbeitet. In der mittleren Zeile steht der Programmaufruf. Dort schreibt ihr einfach "sudo" davor. (ohne Anführungszeichen natürlich)
+zu 9.) wird vom Skript `pycharm.sh` eingerichtet.
 
+## Python Pakete
 
-sudo pip3 install -r requirements.txt
+Grundsätzlich können Paketanforderungen bei Python in eine Datei geschrieben werden. Dann können alle Abhängigkeiten mit einem einzigen Befehl installiert werden:
 
-erster Befehl: "chmod +x /home/pi/Riesen-Tetris/MAIN.py"
-zweiter Befehl: "sudo nano /lib/systemd/system/LED.service "
-in folgende Datei muss:
-"
-[Unit]
-Description=LED
-Wants=network-online.target
-After=network-online.target
+    sudo pip3 install -r requirements.txt
 
-[Service]
-Type=simple
-ExecStart=/home/pi/Riesen-Tetris/MAIN.py
-WorkingDirectory=/home/pi/Riesen-Tetris/
-StandardOutput=syslog
-StandardError=syslog
-SyslogIdentifier=tetris
-Restart=always
-RestartSec=15
-User=root 
-Group=root
+## Tetris Service
 
-[Install]
-WantedBy=multi-user.target
-Alias=LED.service
-"
+Scripte ausführbar machen:
 
-dritter Befehl: "sudo systemctl daemon-reload"
-vierter Befehl: "sudo systemctl enable LED.service"
-letzer Befehl: "sudo systemctl start LED.service" 
+    chmod +x /home/pi/Riesen-Tetris/start_main.sh
+    chmod +x /home/pi/Riesen-Tetris/stop_main.sh
+    
+Service anlegen, aktivieren und starten: wird übernommen vom Skript `installservice.sh`:
+
+    cd service
+    chmod +x installservice.sh
+    sudo ./installservice.sh
