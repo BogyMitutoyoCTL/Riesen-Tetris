@@ -64,7 +64,7 @@ if [ "`cat /boot/config.txt | grep ^dtparam=audio=off$ | wc -l`" -eq "1" ]; then
 else
 	echo -e "\e[91mInternal sound card still active.\e[39m";
 	echo -e "\e[96mDisabling it in /boot/config.txt.\e[39m";
-	sed -i -e "s/dtparam=audio=off/dtparam=audio=off/g" /boot/config.txt
+	sed -i -e "s/dtparam=audio=on/dtparam=audio=off/g" /boot/config.txt
     reboot_required=yes
 fi
 
