@@ -22,8 +22,8 @@ fi
 
 if [ "`cat /etc/java-8-openjdk/accessibility.properties | grep ^assistive_technologies | wc -l`" -eq "1" ]; then
     # Back up config file
-    cp /etc/java-8-openjdk/accessibility.properties /etc/java-8-openjdk/accessibility.properties$(date +%Y%m%d)
-    sed -i -e "s/^assistive_technologies/#assistive_technologies/g" /etc/java-8-openjdk/accessibility.properties
+    sudo cp /etc/java-8-openjdk/accessibility.properties /etc/java-8-openjdk/accessibility.properties$(date +%Y%m%d)
+    sudo sed -i -e "s/^assistive_technologies/#assistive_technologies/g" /etc/java-8-openjdk/accessibility.properties
 fi
 
 # Download
@@ -59,9 +59,9 @@ EOF
     else
         cp ~/.local/share/applications/pycharm.desktop ~/.local/share/applications/alacarte-made.desktop
     fi
+    lxpanelctl restart
 fi
 
-lxpanelctl restart
 
 # Install
 sudo ~/pycharm/bin/pycharm.sh &
