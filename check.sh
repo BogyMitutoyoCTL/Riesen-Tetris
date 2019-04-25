@@ -28,7 +28,7 @@ cp /boot/config.txt /boot/config.txt$(date +%Y%m%d)
 cp /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.conf$(date +%Y%m%d)
 
 # SPI checks
-if [ "`raspi-config nonint get_spi`" -eq "1" ]; then
+if [ "`raspi-config nonint get_spi`" -eq "0" ]; then
     echo -e "\e[92mSPI seems enabled (reported by raspi-config).\e[39m";
 else
     echo -e "\e[91mSPI seems disabled (reported by raspi-config). Enabling now.\e[39m";
