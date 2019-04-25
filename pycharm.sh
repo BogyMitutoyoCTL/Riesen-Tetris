@@ -64,4 +64,4 @@ fi
 lxpanelctl restart
 
 # Install
-sudo ~/pycharm/bin/pycharm.sh
+sudo ~/pycharm/bin/pycharm.sh &
