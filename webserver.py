@@ -1,10 +1,13 @@
+import json
+
 import redis
 from aiohttp import web
-import json
 import os
 import jinja2
 import aiohttp_jinja2
 import socketio
+
+from highscorelist import Highscorelist
 
 r = redis.StrictRedis(host='localhost', port=6379)
 
@@ -31,6 +34,11 @@ async def clock(request):
     return {}
 
 @aiohttp_jinja2.template('index.html')
+async def binaryclock(request):
+    r.publish('game_action', "start_binary")
+    return {}
+
+@aiohttp_jinja2.template('index.html')
 async def rainbowclock(request):
     r.publish('game_action', "start_clock_rainbow")
     return {}
@@ -52,9 +60,17 @@ async def control(request):
 
 @aiohttp_jinja2.template('highscores.html')
 async def highscores(request):
-    app['highscore'] = [{'point': 20, 'name': "TW", 'date': '2019-02-11'}]
+    scores = Highscorelist("Tetris")
+    scores.load()
+    app['highscore'] = scores.highscores
     return {}
 
+@aiohttp_jinja2.template('highscores.html')
+async def snakescores(request):
+    scores = Highscorelist("Snake")
+    scores.load()
+    app['highscore'] = scores.highscores
+    return {}
 
 @aiohttp_jinja2.template('control_snake.html')
 async def control_snake(request):
@@ -174,8 +190,10 @@ async def print_disconnect_message_control(sid):
 app.router.add_get('/', index, name='index')
 app.router.add_get('/control.html', control, name='control')
 app.router.add_get('/highscores.html', highscores, name='highscores')
+app.router.add_get('/snakescores.html', snakescores, name='snakescores')
 app.router.add_get('/control_snake.html', control_snake, name='control_snake')
 app.router.add_get('/clock.html', clock, name='clock')
+app.router.add_get('/binaryclock.html', binaryclock, name='binaryclock')
 app.router.add_get('/startscreen.html', startscreen, name='startscreen')
 app.router.add_get('/rainbowclock.html', rainbowclock, name='rainbowclock')
 app.router.add_get('/snow.html', snow, name='snow')

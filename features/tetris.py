@@ -1,10 +1,13 @@
 import threading
+import time
 from copy import deepcopy
 import pygame
 import game_sound
+from Score import Score
 from block import TetrisBlock
 from features.feature import Feature
-from painter import RGB_Field_Painter
+from field import Field
+from painter import RGB_Field_Painter, Led_Matrix_Painter
 from highscorelist import *
 
 lock = threading.Lock()

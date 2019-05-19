@@ -54,7 +54,7 @@ class Clock(Feature):
         self.rgb_field_painter.draw(self.field_leds)
         self.led_matrix_painter.show_Text(self.get_date_string())
 
-        time.sleep(0.2)
+        time.sleep(0.05)
 
     def start(self, playername: str = None):
         self.field_leds.set_all_pixels_to_black()

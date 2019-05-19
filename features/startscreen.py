@@ -16,7 +16,7 @@ class Startscreen(Feature):
         self.new_block()
 
     def new_block(self):
-        self.current_block = TetrisBlock.get_random_block()
+        self.current_block = TetrisBlock.get_random_block().double_size()
 
         self.block_position_x = 1
         self.block_position_y = -8
