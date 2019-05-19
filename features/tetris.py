@@ -19,10 +19,7 @@ class Tetris(Feature):
                  led_matrix_painter: Led_Matrix_Painter, highscorelist: Highscorelist):
         super(Tetris, self).__init__(field_leds, field_matrix, rgb_field_painter, led_matrix_painter,
                                      highscorelist)
-        self.next_block = TetrisBlock.get_random_block()
-        self.current_block = TetrisBlock.get_random_block()
         self.score = Score()
-        self.prepare_for_start()
         pygame.init()
         game_sound.init_mixer()
 
@@ -208,11 +205,16 @@ class Tetris(Feature):
     def prepare_for_start(self):
         self.set_all_fields_black()
 
+        self.next_block = TetrisBlock.get_random_block()
+        self.current_block = TetrisBlock.get_random_block()
+
         # Positionen block_today
         self.position_block_today_x = 3
         self.position_block_today_y = -self.current_block.get_line_of_first_pixel_from_bottom() - 2
 
         # self.draw_lines_for_test()
+
+        self.score.points = 0
 
     def stop(self) -> None:
         self.game_over = True
